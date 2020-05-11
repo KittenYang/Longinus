@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Longinus_Example' do
+  pod 'Longinus', :path => '../'
+
+  target 'Longinus_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
