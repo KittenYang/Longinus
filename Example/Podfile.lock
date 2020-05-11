@@ -1,0 +1,16 @@
+PODS:
+  - Longinus (0.1.0)
+
+DEPENDENCIES:
+  - Longinus (from `../`)
+
+EXTERNAL SOURCES:
+  Longinus:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Longinus: e988c16916b44efa52fea10f79dcb958c7fd63d5
+
+PODFILE CHECKSUM: 31b444d06c3fb47bfbe1b90796fb3dae4101f57f
+
+COCOAPODS: 1.9.1

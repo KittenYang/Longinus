@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Longinus
 
 class ViewController: UIViewController {
 
