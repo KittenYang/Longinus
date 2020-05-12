@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Longinus
 //
-//  Created by kittenyang@icloud.com on 05/11/2020.
-//  Copyright (c) 2020 kittenyang@icloud.com. All rights reserved.
+//  Created by KittenYang on 05/11/2020.
+//  Copyright (c) 2020 KittenYang. All rights reserved.
 //
 
 import UIKit

@@ -11,6 +11,18 @@
 		1DCE2EDD873ED67B1EFC96952BD3EBBB /* Pods-Longinus_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 508FE13D756C19FB34DFAC73753DDDDB /* Pods-Longinus_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4233A9697FA680B5D6BF48FC2AA9DC66 /* Pods-Longinus_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6ED3DEFB7B665B4E21A5FDD95AFDBE /* Pods-Longinus_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44D963933FA7BC58DACACEE19E7AB2FD /* Longinus-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CE8FF5175160432C0499EF7C1CF68BB /* Longinus-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5F853347246AF1790044987E /* DiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F853346246AF1790044987E /* DiskStorage.swift */; };
+		5F853349246AF8830044987E /* DispatchQueuePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F853348246AF8830044987E /* DispatchQueuePool.swift */; };
+		5F85844024697FEA00334B4C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85843F24697FEA00334B4C /* Image.swift */; };
+		5F8584442469889900334B4C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8584432469889900334B4C /* Result.swift */; };
+		5F8584462469B19E00334B4C /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8584452469B19E00334B4C /* Mutex.swift */; };
+		5F85844D246A5D4800334B4C /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85844C246A5D4800334B4C /* LinkedList.swift */; };
+		5F85844F246A5D6900334B4C /* Standard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85844E246A5D6900334B4C /* Standard.swift */; };
+		5F858451246A6B2300334B4C /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858450246A6B2300334B4C /* DiskCache.swift */; };
+		5F858453246A6F9D00334B4C /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858452246A6F9D00334B4C /* Cache.swift */; };
+		5FDBCB2E2469406E006AED9F /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB2D2469406E006AED9F /* LonginusCompatible.swift */; };
+		5FDBCB3024695926006AED9F /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB2F24695926006AED9F /* MemoryCache.swift */; };
+		5FDBCB3224696385006AED9F /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB3124696385006AED9F /* Cacheable.swift */; };
 		6EB32C98FCC07D20598B4F9C0183879E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		6F4CC85D21FDFFC1685A4C496E5692CC /* Pods-Longinus_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5068D075D186D1363A0E047F44BDCEB9 /* Pods-Longinus_Tests-dummy.m */; };
 		8B9DAB9C775C3AB88FB455F27ECB51EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
@@ -52,6 +64,18 @@
 		508FE13D756C19FB34DFAC73753DDDDB /* Pods-Longinus_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus_Tests-umbrella.h"; sourceTree = "<group>"; };
 		5207336B44E444D74567E9368EE2F549 /* Pods-Longinus_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus_Example.modulemap"; sourceTree = "<group>"; };
 		56EEAA6F9F058B9CC789EC00ABF77B3C /* Longinus-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Longinus-prefix.pch"; sourceTree = "<group>"; };
+		5F853346246AF1790044987E /* DiskStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskStorage.swift; sourceTree = "<group>"; };
+		5F853348246AF8830044987E /* DispatchQueuePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueuePool.swift; sourceTree = "<group>"; };
+		5F85843F24697FEA00334B4C /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		5F8584432469889900334B4C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		5F8584452469B19E00334B4C /* Mutex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mutex.swift; sourceTree = "<group>"; };
+		5F85844C246A5D4800334B4C /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		5F85844E246A5D6900334B4C /* Standard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Standard.swift; sourceTree = "<group>"; };
+		5F858450246A6B2300334B4C /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
+		5F858452246A6F9D00334B4C /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		5FDBCB2D2469406E006AED9F /* LonginusCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
+		5FDBCB2F24695926006AED9F /* MemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
+		5FDBCB3124696385006AED9F /* Cacheable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		6791D5591DAC0C8FC60DE6EE8188495E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		70303AFAB3C8480A677B6293E15B68AB /* Pods-Longinus_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7D47B43055CF362788D212A67EB8DD1E /* Pods_Longinus_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Longinus_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,11 +144,76 @@
 		580D2370208AB5A6E647B3CE73803EC5 /* Longinus */ = {
 			isa = PBXGroup;
 			children = (
+				5F85843E24697DFD00334B4C /* Image */,
+				5FDBCB0E246930F6006AED9F /* Cache */,
+				5FDBCB10246930F6006AED9F /* Extensions */,
+				5FDBCB0F246930F6006AED9F /* General */,
+				5FDBCB0D246930F6006AED9F /* Utility */,
 				37EF0A30C408DFDA1BB93C6073B0B760 /* Pod */,
 				6D1E81EAB28AF14A8EFD938169195D65 /* Support Files */,
 			);
 			name = Longinus;
 			path = ../..;
+			sourceTree = "<group>";
+		};
+		5F85843E24697DFD00334B4C /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				5F85843F24697FEA00334B4C /* Image.swift */,
+			);
+			name = Image;
+			path = Longinus/Classes/Image;
+			sourceTree = "<group>";
+		};
+		5F85844B246A5C8700334B4C /* LinkedList */ = {
+			isa = PBXGroup;
+			children = (
+				5F85844C246A5D4800334B4C /* LinkedList.swift */,
+				5F85844E246A5D6900334B4C /* Standard.swift */,
+			);
+			path = LinkedList;
+			sourceTree = "<group>";
+		};
+		5FDBCB0D246930F6006AED9F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				5F85844B246A5C8700334B4C /* LinkedList */,
+				5F8584432469889900334B4C /* Result.swift */,
+				5F8584452469B19E00334B4C /* Mutex.swift */,
+				5F853348246AF8830044987E /* DispatchQueuePool.swift */,
+			);
+			name = Utility;
+			path = Longinus/Classes/Utility;
+			sourceTree = "<group>";
+		};
+		5FDBCB0E246930F6006AED9F /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				5FDBCB3124696385006AED9F /* Cacheable.swift */,
+				5F858452246A6F9D00334B4C /* Cache.swift */,
+				5FDBCB2F24695926006AED9F /* MemoryCache.swift */,
+				5F858450246A6B2300334B4C /* DiskCache.swift */,
+				5F853346246AF1790044987E /* DiskStorage.swift */,
+			);
+			name = Cache;
+			path = Longinus/Classes/Cache;
+			sourceTree = "<group>";
+		};
+		5FDBCB0F246930F6006AED9F /* General */ = {
+			isa = PBXGroup;
+			children = (
+				5FDBCB2D2469406E006AED9F /* LonginusCompatible.swift */,
+			);
+			name = General;
+			path = Longinus/Classes/General;
+			sourceTree = "<group>";
+		};
+		5FDBCB10246930F6006AED9F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Extensions;
+			path = Longinus/Classes/Extensions;
 			sourceTree = "<group>";
 		};
 		6D1E81EAB28AF14A8EFD938169195D65 /* Support Files */ = {
@@ -314,6 +403,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 1100;
+				TargetAttributes = {
+					470D9BC3F2F4A0D92DD34F2A5F5D8771 = {
+						LastSwiftMigration = 1140;
+					};
+				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -372,7 +466,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F8584442469889900334B4C /* Result.swift in Sources */,
+				5FDBCB3024695926006AED9F /* MemoryCache.swift in Sources */,
+				5FDBCB2E2469406E006AED9F /* LonginusCompatible.swift in Sources */,
+				5FDBCB3224696385006AED9F /* Cacheable.swift in Sources */,
+				5F858453246A6F9D00334B4C /* Cache.swift in Sources */,
+				5F8584462469B19E00334B4C /* Mutex.swift in Sources */,
 				ACDA7B8B4A2B076303EB3A25B43052E2 /* Longinus-dummy.m in Sources */,
+				5F85844F246A5D6900334B4C /* Standard.swift in Sources */,
+				5F853347246AF1790044987E /* DiskStorage.swift in Sources */,
+				5F853349246AF8830044987E /* DispatchQueuePool.swift in Sources */,
+				5F85844D246A5D4800334B4C /* LinkedList.swift in Sources */,
+				5F85844024697FEA00334B4C /* Image.swift in Sources */,
+				5F858451246A6B2300334B4C /* DiskCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +646,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE1AE5B23398B9118353E473BF2A2E35 /* Longinus.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -695,6 +802,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 46356190495E63392864ACF08A5984B8 /* Longinus.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -715,6 +823,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
