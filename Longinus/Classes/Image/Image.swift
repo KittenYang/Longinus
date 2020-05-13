@@ -44,4 +44,12 @@ extension LonginusExtension where Base: UIImage {
         }
         return pixel * cgImage.bitsPerPixel / 8
     }
+    
+    var bytes: Int {
+        guard let cgImage = cgImage else {
+            return 1
+        }
+        return max(1, cgImage.height * cgImage.bytesPerRow)
+    }
 }
+

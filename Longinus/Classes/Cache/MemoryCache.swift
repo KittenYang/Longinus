@@ -27,7 +27,7 @@
 
 import Foundation
 
-public class MemoryCache<Key: Hashable, Value: Codable> {
+public class MemoryCache<Key: Hashable, Value> {
     
     let releaseQueue = DispatchQueue.global(qos: .utility)
     

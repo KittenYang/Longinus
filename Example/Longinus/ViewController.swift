@@ -17,7 +17,7 @@ class Account: Codable {
     }
 }
 
-struct User: Codable, Equatable {
+class User: Codable, Equatable {
     var isActive: Bool
     var account: Account
     var key: String = ""
@@ -32,6 +32,10 @@ struct User: Codable, Equatable {
             lhs.account.alias == rhs.account.alias &&
                 lhs.isActive == rhs.isActive
     }
+    
+    deinit {
+        print("user deinit in \(Thread.current)")
+    }
 }
 
  
@@ -39,20 +43,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let memoryCache = MemoryCache<String,User>()
-        DispatchQueue.concurrentPerform(iterations: 10000) { (index) in
-            let user = User(isActive: true, account: Account(alias: "alias\(index)"))
-            memoryCache.save(value: user, for: "abc\(index)")
-            print("write is \(index)")
-            
-            print(Thread.current)
-            
-            DispatchQueue.global().async {
-                print("read is \(index)")
-                let _ = memoryCache.query(key: "abc\(index)")
-            }
+    
+        let user = User(isActive: true, account: Account(alias: "kitten"))
+        DispatchQueue.global().async {
+            let _ = user // release in backgroud
         }
-        
         
     }
 

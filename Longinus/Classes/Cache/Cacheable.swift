@@ -44,7 +44,7 @@ public protocol Cacheable {
 }
 
 public protocol CacheStandard {
-    associatedtype Value: Codable
+    associatedtype Value
     associatedtype Key: Hashable
     func containsObject(key: Key) -> Bool
     mutating func query(key: Key) -> Value?
@@ -54,7 +54,7 @@ public protocol CacheStandard {
 }
 
 public protocol CacheAsyncStandard {
-    associatedtype Value: Codable
+    associatedtype Value
     associatedtype Key: Hashable
     func containsObject(key: Key, _ result: @escaping ((_ key: Key, _ contain: Bool) -> Void))
     mutating func query(key: Key, _ result: @escaping ((_ key: Key, _ value: Value?) -> Void))
@@ -122,4 +122,48 @@ public enum CacheAge {
         static let secondsInOneDay = 86_400
     }
     
+}
+
+public struct ImageCacheType: OptionSet {
+    public let rawValue: Int
+    
+    public static let none = ImageCacheType([])
+
+    public static let memory = ImageCacheType(rawValue: 1 << 0)
+    
+    public static let disk = ImageCacheType(rawValue: 1 << 1)
+
+    public static let all: ImageCacheType = [.memory, .disk]
+    
+    public init(rawValue: Int) { self.rawValue = rawValue }
+}
+
+
+public enum ImageCacheQueryCompletionResult {
+    
+    case none
+    
+    case memory(image: UIImage)
+
+    case disk(data: Data)
+
+    case all(image: UIImage, data: Data)
+}
+
+public protocol ImageCacheable: AnyObject {
+
+    func image(forKey key: String, cacheType: ImageCacheType, completion: @escaping (ImageCacheQueryCompletionResult) -> Void)
+
+    func diskDataExists(forKey key: String, completion: @escaping (Bool) -> Void)
+
+    func store(_ image: UIImage?,
+               data: Data?,
+               forKey key: String,
+               cacheType: ImageCacheType,
+               completion: @escaping (() -> Void))
+
+
+    func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping (() -> Void))
+
+    func clear(_ type: ImageCacheType, completion: @escaping (() -> Void))
 }

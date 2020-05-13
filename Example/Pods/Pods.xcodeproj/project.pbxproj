@@ -19,7 +19,7 @@
 		5F85844D246A5D4800334B4C /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85844C246A5D4800334B4C /* LinkedList.swift */; };
 		5F85844F246A5D6900334B4C /* Standard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85844E246A5D6900334B4C /* Standard.swift */; };
 		5F858451246A6B2300334B4C /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858450246A6B2300334B4C /* DiskCache.swift */; };
-		5F858453246A6F9D00334B4C /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858452246A6F9D00334B4C /* Cache.swift */; };
+		5F858453246A6F9D00334B4C /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858452246A6F9D00334B4C /* ImageCache.swift */; };
 		5FDBCB2E2469406E006AED9F /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB2D2469406E006AED9F /* LonginusCompatible.swift */; };
 		5FDBCB3024695926006AED9F /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB2F24695926006AED9F /* MemoryCache.swift */; };
 		5FDBCB3224696385006AED9F /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDBCB3124696385006AED9F /* Cacheable.swift */; };
@@ -72,7 +72,7 @@
 		5F85844C246A5D4800334B4C /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		5F85844E246A5D6900334B4C /* Standard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Standard.swift; sourceTree = "<group>"; };
 		5F858450246A6B2300334B4C /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
-		5F858452246A6F9D00334B4C /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		5F858452246A6F9D00334B4C /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		5FDBCB2D2469406E006AED9F /* LonginusCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
 		5FDBCB2F24695926006AED9F /* MemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
 		5FDBCB3124696385006AED9F /* Cacheable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				5FDBCB3124696385006AED9F /* Cacheable.swift */,
-				5F858452246A6F9D00334B4C /* Cache.swift */,
+				5F858452246A6F9D00334B4C /* ImageCache.swift */,
 				5FDBCB2F24695926006AED9F /* MemoryCache.swift */,
 				5F858450246A6B2300334B4C /* DiskCache.swift */,
 				5F853346246AF1790044987E /* DiskStorage.swift */,
@@ -470,7 +470,7 @@
 				5FDBCB3024695926006AED9F /* MemoryCache.swift in Sources */,
 				5FDBCB2E2469406E006AED9F /* LonginusCompatible.swift in Sources */,
 				5FDBCB3224696385006AED9F /* Cacheable.swift in Sources */,
-				5F858453246A6F9D00334B4C /* Cache.swift in Sources */,
+				5F858453246A6F9D00334B4C /* ImageCache.swift in Sources */,
 				5F8584462469B19E00334B4C /* Mutex.swift in Sources */,
 				ACDA7B8B4A2B076303EB3A25B43052E2 /* Longinus-dummy.m in Sources */,
 				5F85844F246A5D6900334B4C /* Standard.swift in Sources */,

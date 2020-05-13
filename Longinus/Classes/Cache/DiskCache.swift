@@ -69,6 +69,7 @@ public class DiskCache: DiskCacheable {
     
 }
 
+// MARK: CacheStandard
 extension DiskCache {
     public func containsObject(key: Key) -> Bool {
         return storage.dataExists(forKey: key)
@@ -91,6 +92,7 @@ extension DiskCache {
     }
 }
 
+// MARK: CacheAsyncStandard
 extension DiskCache {
     public func containsObject(key: Key, _ result: @escaping ((Key, Bool) -> Void)) {
         queue.async { [weak self] in
