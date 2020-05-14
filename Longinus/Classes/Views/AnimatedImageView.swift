@@ -1,8 +1,8 @@
 //
-//  LonginusCompatible.swift
+//  AnimatedImageView.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/11.
+//  Created by Qitao Yang on 2020/5/13.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -25,33 +25,8 @@
 //  THE SOFTWARE.
     
 
-import UIKit
+import Foundation
 
-public let LonginusPrefixID = "com.kittenyang.Longinus"
-public let lg_shareColorSpace = CGColorSpaceCreateDeviceRGB()
-public let lg_ScreenScale = UIScreen.main.scale
-
-public protocol LonginusCompatible { }
-
-public struct LonginusExtension<Base> {
-    public let base: Base
-    public init(_ base: Base) {
-        self.base = base
-    }
+public class AnimatedImageView: UIImageView {
+    
 }
-
-extension LonginusCompatible {
-    public var lg: LonginusExtension<Self> {
-        get { return LonginusExtension(self) }
-        set { }
-    }
-}
-
-extension UIImage: LonginusCompatible {}
-extension CGImage: LonginusCompatible {}
-extension UIImageView: LonginusCompatible {}
-extension CALayer: LonginusCompatible {}
-extension String: LonginusCompatible {}
-extension Data: LonginusCompatible {}
-extension UIImage.Orientation: LonginusCompatible {}
-extension CGImagePropertyOrientation: LonginusCompatible {}

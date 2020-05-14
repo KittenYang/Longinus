@@ -116,6 +116,16 @@ extension DiskCache {
         }
     }
     
+    public func save(_ dataWork: @escaping () -> Data?, forKey key: String, result: @escaping (() -> Void)) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            if let data = dataWork() {
+                self.save(value: data, for: key)
+            }
+            result()
+        }
+    }
+    
     public func remove(key: Key, _ result: @escaping ((Key) -> Void)) {
         queue.async { [weak self] in
             guard let self = self else { return }

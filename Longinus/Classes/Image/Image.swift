@@ -32,11 +32,15 @@ extension UIImage: CacheCostCalculable {
     public var cacheCost: Int { return lg.cost }
 }
 
+private var imageFormatKey: Void?
+private var imageEditKey: Void?
+
 extension LonginusExtension where Base: UIImage {
     var cgImage: CGImage? { return base.cgImage }
     var size: CGSize { return base.size }
     var scale: CGFloat { return base.scale }
     
+    // Bitmap memory cost with bytes.
     var cost: Int {
         let pixel = Int(size.width * size.height * scale * scale)
         guard let cgImage = cgImage else {
@@ -45,11 +49,59 @@ extension LonginusExtension where Base: UIImage {
         return pixel * cgImage.bitsPerPixel / 8
     }
     
-    var bytes: Int {
+    var bytes: Int64 {
         guard let cgImage = cgImage else {
             return 1
         }
-        return max(1, cgImage.height * cgImage.bytesPerRow)
+        return Int64(max(1, cgImage.height * cgImage.bytesPerRow))
+    }
+    
+    var imageFormat: ImageFormat? {
+        get { return getAssociatedObject(base, &imageFormatKey) }
+        set { setRetainedAssociatedObject(base, &imageFormatKey, newValue) }
+    }
+    
+    var lgImageEditKey: String? {
+        get { return getAssociatedObject(base, &imageEditKey) }
+        set { setRetainedAssociatedObject(base, &imageEditKey, newValue) }
+    }
+    
+}
+
+extension LonginusExtension where Base: CGImage {
+    var containsAlpha: Bool {
+        return !(base.alphaInfo == .none || base.alphaInfo == .noneSkipFirst || base.alphaInfo == .noneSkipLast)
     }
 }
 
+extension LonginusExtension where Base == UIImage.Orientation {
+    var cgImageOrientation: CGImagePropertyOrientation {
+        switch base {
+        case .up: return .up
+        case .down: return .down
+        case .left: return .left
+        case .right: return .right
+        case .upMirrored: return .upMirrored
+        case .downMirrored: return .downMirrored
+        case .leftMirrored: return .leftMirrored
+        case .rightMirrored: return .rightMirrored
+        default: return .up
+        }
+    }
+}
+
+extension LonginusExtension where Base == CGImagePropertyOrientation {
+    var uiImageOrientation: UIImage.Orientation {
+        switch base {
+        case .up: return .up
+        case .down: return .down
+        case .left: return .left
+        case .right: return .right
+        case .upMirrored: return .upMirrored
+        case .downMirrored: return .downMirrored
+        case .leftMirrored: return .leftMirrored
+        case .rightMirrored: return .downMirrored
+        default: return .up
+        }
+    }
+}

@@ -59,6 +59,7 @@ public protocol CacheAsyncStandard {
     func containsObject(key: Key, _ result: @escaping ((_ key: Key, _ contain: Bool) -> Void))
     mutating func query(key: Key, _ result: @escaping ((_ key: Key, _ value: Value?) -> Void))
     mutating func save(value: Value, for key: Key, _ result: @escaping (()->Void))
+    mutating func save(_ dataWork: @escaping () -> Data?, forKey key: String, result: @escaping (() -> Void))
     mutating func remove(key: Key, _ result: @escaping ((_ key: Key) -> Void))
     mutating func removeAll(_ result: @escaping (()->Void))
 }
@@ -163,7 +164,7 @@ public protocol ImageCacheable: AnyObject {
                completion: @escaping (() -> Void))
 
 
-    func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping (() -> Void))
+    func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping ((_ key: String) -> Void))
 
     func clear(_ type: ImageCacheType, completion: @escaping (() -> Void))
 }

@@ -43,8 +43,8 @@ public class MemoryCache<Key: Hashable, Value> {
     
     public private(set) var totalCost: Int = 0
     public var totalCount: Int {
-        return lock.locked { () -> (Int) in
-            return lru.count
+        return lock.locked { [weak self] () -> (Int) in
+            return self?.lru.count ?? 0
         }
     }
     public var shouldRemoveAllObjectsOnMemoryWarning: Bool = true
@@ -90,9 +90,9 @@ extension MemoryCache: MemoryCacheable {
     }
     
     public func query(key: Key) -> Value? {
-        return lock.locked { () -> (Value?) in
-            trimDict[key]?.updateAge()
-            return lru.value(for: key)
+        return lock.locked { [weak self] () -> (Value?) in
+            self?.trimDict[key]?.updateAge()
+            return self?.lru.value(for: key)
         }
     }
     
@@ -102,26 +102,29 @@ extension MemoryCache: MemoryCacheable {
     }
     
     public func save(value: Value, for key: Key, cost: Int = 0) {
-        lock.locked {
-            trimDict[key] = TrimNode(cost: cost)
-            totalCost += cost
+        lock.locked { [weak self] in
+            guard let `self` = self else {
+                return
+            }
+            self.trimDict[key] = TrimNode(cost: cost)
+            self.totalCost += cost
             
-            lru.push(value, for: key)
+            self.lru.push(value, for: key)
             
-            if totalCost > costLimit {
-                queue.async { [weak self] in
+            if self.totalCost > self.costLimit {
+                self.queue.async { [weak self] in
                     guard let self = self else { return }
                     self.trimToCost(self.costLimit)
                 }
             }
-            if totalCount > countLimit {
-                let trailNode = lru.removeTrail()
-                if releaseAsynchronously {
-                    let queue = releaseOnMainThread ? DispatchQueue.main : releaseQueue
+            if self.totalCount > self.countLimit {
+                let trailNode = self.lru.removeTrail()
+                if self.releaseAsynchronously {
+                    let queue = self.releaseOnMainThread ? DispatchQueue.main : self.releaseQueue
                     queue.async {
                         let _ = trailNode?.key //hold and release in queue
                     }
-                } else if (releaseOnMainThread && pthread_main_np() == 0) {
+                } else if (self.releaseOnMainThread && pthread_main_np() == 0) {
                     DispatchQueue.main.async {
                         let _ = trailNode?.key //hold and release in queue
                     }
@@ -132,17 +135,19 @@ extension MemoryCache: MemoryCacheable {
     
     // MARK: - remove
     public func remove(key: Key) {
-        lock.locked {
-            if let node = trimDict[key] {
-                totalCost -= node.cost
-                lru.remove(for: key)
-                trimDict.removeValue(forKey: key)
-                if releaseAsynchronously {
-                    let queue = releaseOnMainThread ? DispatchQueue.main : releaseQueue
+        lock.locked { [weak self] in
+            
+            if let self = self,
+                let node = trimDict[key] {
+                self.totalCost -= node.cost
+                self.lru.remove(for: key)
+                self.trimDict.removeValue(forKey: key)
+                if self.releaseAsynchronously {
+                    let queue = self.releaseOnMainThread ? DispatchQueue.main : self.releaseQueue
                     queue.async {
                         let _ = node //hold and release in queue
                     }
-                } else if (releaseOnMainThread && pthread_main_np() == 0) {
+                } else if (self.releaseOnMainThread && pthread_main_np() == 0) {
                     DispatchQueue.main.async {
                         let _ = node //hold and release in queue
                     }
@@ -152,17 +157,17 @@ extension MemoryCache: MemoryCacheable {
     }
     
     public func removeAll() {
-        lock.locked {
-            trimDict.removeAll()
-            totalCost = 0
-            lru.removeAll()
+        lock.locked { [weak self] in
+            self?.trimDict.removeAll()
+            self?.totalCost = 0
+            self?.lru.removeAll()
         }
     }
     
     public func setCostLimit(_ cost: Int) {
-        lock.locked {
-            costLimit = cost
-            queue.async { [weak self] in
+        lock.locked { [weak self] in
+            self?.costLimit = cost
+            self?.queue.async { [weak self] in
                 guard let self = self else { return }
                 self.trimToCost(cost)
             }
@@ -170,9 +175,9 @@ extension MemoryCache: MemoryCacheable {
     }
     
     public func setCountLimit(_ count: Int) {
-        lock.locked {
-            countLimit = count
-            queue.async { [weak self] in
+        lock.locked { [weak self] in
+            self?.countLimit = count
+            self?.queue.async { [weak self] in
                 guard let self = self else { return }
                 self.trimToCount(count)
             }
@@ -180,9 +185,9 @@ extension MemoryCache: MemoryCacheable {
     }
     
     public func setAgeLimit(_ age: CacheAge) {
-        lock.locked {
-            ageLimit = age
-            queue.async { [weak self] in
+        lock.locked { [weak self] in
+            self?.ageLimit = age
+            self?.queue.async { [weak self] in
                 guard let self = self else { return }
                 self.trimToAge(age)
             }
@@ -190,9 +195,10 @@ extension MemoryCache: MemoryCacheable {
     }
     
     private func removeLast() {
-        lock.locked {
-            if let key = lru.removeTrail()?.key, let cost = trimDict.removeValue(forKey: key)?.cost {
-                totalCost -= cost
+        lock.locked { [weak self] in
+            if let self = self,
+                let key = self.lru.removeTrail()?.key, let cost = self.trimDict.removeValue(forKey: key)?.cost {
+                self.totalCost -= cost
             }
         }
     }
@@ -200,11 +206,14 @@ extension MemoryCache: MemoryCacheable {
 
 extension MemoryCache: AutoTrimable {
     public func trimToCount(_ countLimit: Int) {
-        lock.locked {
+        lock.locked { [weak self] in
+            guard let self = self else {
+                return
+            }
             if countLimit <= 0 {
                 self.removeAll()
                 return
-            } else if lru.count <= countLimit {
+            } else if self.lru.count <= countLimit {
                 return
             }
         }
@@ -225,11 +234,14 @@ extension MemoryCache: AutoTrimable {
     }
     
     public func trimToCost(_ costLimit: Int) {
-        lock.locked {
+        lock.locked { [weak self] in
+            guard let self = self else {
+                return
+            }
             if costLimit <= 0 {
                 self.removeAll()
                 return
-            } else if totalCost <= costLimit {
+            } else if self.totalCost <= costLimit {
                 return
             }
         }
@@ -249,7 +261,10 @@ extension MemoryCache: AutoTrimable {
     }
     
     public func trimToAge(_ ageLimit: CacheAge) {
-        self.lock.locked {
+        self.lock.locked { [weak self] in
+            guard let self = self else {
+                return
+            }
             if ageLimit.timeInterval <= 0 {
                 self.removeAll()
                 return

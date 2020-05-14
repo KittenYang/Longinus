@@ -1,8 +1,8 @@
 //
-//  LonginusCompatible.swift
+//  Runtime.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/11.
+//  Created by Qitao Yang on 2020/5/13.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -25,33 +25,12 @@
 //  THE SOFTWARE.
     
 
-import UIKit
+import Foundation
 
-public let LonginusPrefixID = "com.kittenyang.Longinus"
-public let lg_shareColorSpace = CGColorSpaceCreateDeviceRGB()
-public let lg_ScreenScale = UIScreen.main.scale
-
-public protocol LonginusCompatible { }
-
-public struct LonginusExtension<Base> {
-    public let base: Base
-    public init(_ base: Base) {
-        self.base = base
-    }
+func getAssociatedObject<T>(_ object: Any, _ key: UnsafeRawPointer) -> T? {
+    return objc_getAssociatedObject(object, key) as? T
 }
 
-extension LonginusCompatible {
-    public var lg: LonginusExtension<Self> {
-        get { return LonginusExtension(self) }
-        set { }
-    }
+func setRetainedAssociatedObject<T>(_ object: Any, _ key: UnsafeRawPointer, _ value: T) {
+    objc_setAssociatedObject(object, key, value, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 }
-
-extension UIImage: LonginusCompatible {}
-extension CGImage: LonginusCompatible {}
-extension UIImageView: LonginusCompatible {}
-extension CALayer: LonginusCompatible {}
-extension String: LonginusCompatible {}
-extension Data: LonginusCompatible {}
-extension UIImage.Orientation: LonginusCompatible {}
-extension CGImagePropertyOrientation: LonginusCompatible {}

@@ -1,8 +1,8 @@
 //
-//  LonginusCompatible.swift
+//  DeviceExtension.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/11.
+//  Created by Qitao Yang on 2020/5/13.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -27,31 +27,24 @@
 
 import UIKit
 
-public let LonginusPrefixID = "com.kittenyang.Longinus"
-public let lg_shareColorSpace = CGColorSpaceCreateDeviceRGB()
-public let lg_ScreenScale = UIScreen.main.scale
-
-public protocol LonginusCompatible { }
-
-public struct LonginusExtension<Base> {
-    public let base: Base
-    public init(_ base: Base) {
-        self.base = base
+extension UIDevice: LonginusCompatible { }
+extension LonginusExtension where Base: UIDevice {
+    static var totalMemory: Int64 {
+        return Int64(ProcessInfo().physicalMemory)
+    }
+    
+    static var freeMemory: Int64 {
+        let host_port = mach_host_self()
+        var page_size: vm_size_t = 0
+        guard host_page_size(host_port, &page_size) == KERN_SUCCESS else { return -1 }
+        var host_size = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.size / MemoryLayout<integer_t>.size)
+        let hostInfo = vm_statistics_t.allocate(capacity: 1)
+        let kern = hostInfo.withMemoryRebound(to: integer_t.self, capacity: Int(host_size)) {
+            host_statistics(host_port, HOST_VM_INFO, $0, &host_size)
+        }
+        let vm_stat = hostInfo.move()
+        hostInfo.deallocate()
+        guard kern == KERN_SUCCESS else { return -1 }
+        return Int64(page_size) * Int64(vm_stat.free_count)
     }
 }
-
-extension LonginusCompatible {
-    public var lg: LonginusExtension<Self> {
-        get { return LonginusExtension(self) }
-        set { }
-    }
-}
-
-extension UIImage: LonginusCompatible {}
-extension CGImage: LonginusCompatible {}
-extension UIImageView: LonginusCompatible {}
-extension CALayer: LonginusCompatible {}
-extension String: LonginusCompatible {}
-extension Data: LonginusCompatible {}
-extension UIImage.Orientation: LonginusCompatible {}
-extension CGImagePropertyOrientation: LonginusCompatible {}

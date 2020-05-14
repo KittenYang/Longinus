@@ -31,7 +31,7 @@ public class ImageCache: ImageCacheable {
 
     public let memoryCache: MemoryCache<String, UIImage>
     public let diskCache: DiskCache?
-    //    public weak var imageCoder: BBImageCoder?
+    public weak var imageCoder: ImageCodeable?
     
     init(path: String, sizeThreshold: Int) {
         memoryCache = MemoryCache()
@@ -87,25 +87,35 @@ public class ImageCache: ImageCacheable {
             if let currentData = data {
                 return currentDiskCache.save(value: currentData, for: key, completion)
             }
-//            return currentDiskCache.store({ [weak self] () -> Data? in
-//                guard let self = self else { return nil }
-//                if let currentImage = image,
-//                    let coder = self.imageCoder,
-//                    let data = coder.encodedData(with: currentImage, format: currentImage.bb_imageFormat ?? .unknown) {
-//                    return data
-//                }
-//                return nil
-//            }, forKey: key, completion: completion)
+            return currentDiskCache.save({ [weak self] () -> Data? in
+                guard let self = self else { return nil }
+                if let currentImage = image,
+                    let coder = self.imageCoder,
+                    let data = coder.encodedData(with: currentImage, format: currentImage.lg.imageFormat ?? .unknown) {
+                    return data
+                }
+                return nil
+            }, forKey: key, result: completion)
         }
         completion()
     }
     
-    public func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping  () -> Void) {
-        
+    public func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping  (String) -> Void) {
+        if cacheType.contains(.memory) { memoryCache.remove(key: key) }
+        if cacheType.contains(.disk),
+            let currentDiskCache = diskCache {
+            return currentDiskCache.remove(key: key, completion)
+        }
+        completion(key)
     }
     
     public func clear(_ type: ImageCacheType, completion: @escaping (() -> Void)) {
-        
+        if type.contains(.memory) { memoryCache.removeAll() }
+        if type.contains(.disk),
+            let currentDiskCache = diskCache {
+            return currentDiskCache.removeAll(completion)
+        }
+        completion()
     }
 
 }
