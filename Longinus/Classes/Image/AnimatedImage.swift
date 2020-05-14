@@ -27,8 +27,218 @@
 
 import UIKit
 
+extension LonginusExtension where Base: AnimatedImage {
+    /// Editor editing image frames
+    public var transformer: ImageTransformer? {
+        get {
+            base.lock.wait()
+            let t = base.transformer
+            base.lock.signal()
+            return t
+        }
+        set {
+            base.lock.wait()
+            if newValue?.key != transformer?.key {
+                transformer = newValue
+                base.cachedFrameCount = 0
+            }
+            base.lock.signal()
+        }
+    }
+    
+    
+    public var originalImageData: Data { return base.decoder.imageData! }
+    public var frameCount: Int { return base.frameCount }
+    public var loopCount: Int { return base.loopCount }
+    public var maxCacheSize: Int64 {
+        get {
+            base.lock.wait()
+            let m = base.maxCacheSize!
+            base.lock.signal()
+            return m
+        }
+        set {
+            base.lock.wait()
+            if newValue >= 0 {
+                base.autoUpdateMaxCacheSize = false
+                base.maxCacheSize = newValue
+            } else {
+                base.autoUpdateMaxCacheSize = true
+                base.updateCacheSize()
+            }
+            base.lock.signal()
+        }
+    }
+    
+    
+    /// Current cache size in bytes
+    public var currentCacheSize: Int64 {
+        base.lock.wait()
+        let s = base.currentCacheSize!
+        base.lock.signal()
+        return s
+    }
+    
+    public func imageFrame(at index: Int, decodeIfNeeded: Bool) -> UIImage? {
+        if index >= frameCount { return nil }
+        base.lock.wait()
+        let cacheImage = base.frames[index].image
+        let transformer = base.transformer
+        base.lock.signal()
+        return base.imageFrame(at: index,
+                          cachedImage: cacheImage,
+                          transformer: transformer,
+                          decodeIfNeeded: decodeIfNeeded)
+    }
+    
+    public func duration(at index: Int) -> TimeInterval? {
+        if index >= frameCount { return nil }
+        base.lock.wait()
+        let duration = base.frames[index].duration
+        base.lock.signal()
+        return duration
+    }
+ 
+    public func updateCacheSizeIfNeeded() {
+        base.lock.wait()
+        defer { base.lock.signal() }
+        if !base.autoUpdateMaxCacheSize { return }
+        base.updateCacheSize()
+    }
+    
+    public func preloadImageFrame(fromIndex startIndex: Int) {
+        if startIndex >= base.frameCount { return }
+        base.lock.wait()
+        let shouldReturn = (base.preloadTask != nil || base.cachedFrameCount >= frameCount)
+        base.lock.signal()
+        if shouldReturn { return }
+        let sentinel = base.sentinel
+        let work: () -> Void = { [weak base] in
+            guard let base = base, sentinel == base.sentinel else { return }
+            base.lock.wait()
+            let cleanCache = (base.currentCacheSize > base.maxCacheSize)
+            base.lock.signal()
+            if cleanCache {
+                for i in 0..<base.frameCount {
+                    let index = (startIndex + base.frameCount * 2 - i - 2) % base.frameCount // last second frame of start index
+                    var shouldBreak = false
+                    base.lock.wait()
+                    if let oldImage = base.frames[index].image {
+                        base.frames[index].image = nil
+                        base.cachedFrameCount -= 1
+                        base.currentCacheSize -= oldImage.lg.bytes
+                        shouldBreak = (self.currentCacheSize <= base.maxCacheSize)
+                    }
+                    base.lock.signal()
+                    if shouldBreak { break }
+                }
+                return
+            }
+            for i in 0..<base.frameCount {
+                let index = (startIndex + i) % base.frameCount
+                if let image = base.lg.imageFrame(at: index, decodeIfNeeded: true) {
+                    if sentinel != base.sentinel { return }
+                    var shouldBreak = false
+                    base.lock.wait()
+                    if let oldImage = base.frames[index].image {
+                        if oldImage.lg.lgImageEditKey != image.lg.lgImageEditKey {
+                            if self.currentCacheSize + image.lg.bytes - oldImage.lg.bytes <= self.maxCacheSize {
+                                base.frames[index].image = image
+                                base.cachedFrameCount += 1
+                                base.currentCacheSize += image.lg.bytes - oldImage.lg.bytes
+                            } else {
+                                shouldBreak = true
+                            }
+                        }
+                    } else if self.currentCacheSize + image.lg.bytes <= base.maxCacheSize {
+                        base.frames[index].image = image
+                        base.cachedFrameCount += 1
+                        base.currentCacheSize += image.lg.bytes
+                    } else {
+                        shouldBreak = true
+                    }
+                    base.lock.signal()
+                    if shouldBreak { break }
+                }
+            }
+            base.lock.wait()
+            if sentinel == base.sentinel { base.preloadTask = nil }
+            base.lock.signal()
+        }
+        base.lock.wait()
+        base.preloadTask = work
+        DispatchQueuePool.default.async(work: work)
+        base.lock.signal()
+    }
+    
+    /// Preload all image frames synchronously
+    public func preloadAllImageFrames() {
+        base.lock.wait()
+        base.autoUpdateMaxCacheSize = false
+        base.maxCacheSize = .max
+        base.cachedFrameCount = 0
+        base.currentCacheSize = 0
+        for i in 0..<base.frames.count {
+            if let image = base.imageFrame(at: i,
+                                      cachedImage: base.frames[i].image,
+                                      transformer: base.transformer,
+                                      decodeIfNeeded: true) {
+                base.frames[i].image = image
+                base.cachedFrameCount += 1
+                base.currentCacheSize += image.lg.bytes
+            }
+        }
+        base.lock.signal()
+    }
+    
+    public func didAddToView(_ view: AnimatedImageView) {
+        base.views.add(view)
+    }
+    
+    public func didRemoveFromView(_ view: AnimatedImageView) {
+        base.views.remove(view)
+        if base.views.count <= 0 {
+            cancelPreloadTask()
+            clearAsynchronously(completion: nil)
+        }
+    }
+    
+    /// Cancels asynchronous preload task
+    public func cancelPreloadTask() {
+        base.lock.wait()
+        if base.preloadTask != nil {
+            OSAtomicIncrement32(&base.sentinel)
+            base.preloadTask = nil
+        }
+        base.lock.signal()
+    }
+    
+    /// Removes all image frames from cache asynchronously
+    ///
+    /// - Parameter completion: a closure called when clearing is finished
+    public func clearAsynchronously(completion: (() -> Void)?) {
+        DispatchQueuePool.default.async { [weak base] in
+            guard let base = base else { return }
+            base.lg.clear()
+            completion?()
+        }
+    }
+    
+    /// Removes all image frames from cache synchronously
+    public func clear() {
+        base.lock.wait()
+        for i in 0..<base.frames.count {
+            base.frames[i].image = nil
+        }
+        base.cachedFrameCount = 0
+        base.currentCacheSize = 0
+        base.lock.signal()
+    }
+    
+}
+
 public class AnimatedImage: UIImage {
-    private struct AnimatedImageFrame {
+    fileprivate struct AnimatedImageFrame {
         fileprivate var image: UIImage? {
             didSet {
                 if let currentImage = image {
@@ -41,73 +251,23 @@ public class AnimatedImage: UIImage {
         
         fileprivate var bytes: Int64? { return image?.lg.bytes }
     }
-    
-    /// Editor editing image frames
-    public var lg_transformer: ImageTransformer? {
-        get {
-            lock.wait()
-            let t = transformer
-            lock.signal()
-            return t
-        }
-        set {
-            lock.wait()
-            if newValue?.key != transformer?.key {
-                transformer = newValue
-                cachedFrameCount = 0
-            }
-            lock.signal()
-        }
-    }
-    
-    public var lg_originalImageData: Data { return decoder.imageData! }
-    public var lg_frameCount: Int { return frameCount }
-    public var lg_loopCount: Int { return loopCount }
-    public var lg_maxCacheSize: Int64 {
-        get {
-            lock.wait()
-            let m = maxCacheSize!
-            lock.signal()
-            return m
-        }
-        set {
-            lock.wait()
-            if newValue >= 0 {
-                autoUpdateMaxCacheSize = false
-                maxCacheSize = newValue
-            } else {
-                autoUpdateMaxCacheSize = true
-                updateCacheSize()
-            }
-            lock.signal()
-        }
-    }
 
-    /// Current cache size in bytes
-    public var lg_currentCacheSize: Int64 {
-        lock.wait()
-        let s = currentCacheSize!
-        lock.signal()
-        return s
-    }
-    
-    private var transformer: ImageTransformer?
-    private(set) var frameCount: Int!
-    private(set) var loopCount: Int!
-    private(set) var maxCacheSize: Int64!
-    private(set) var currentCacheSize: Int64!
-    private(set) var autoUpdateMaxCacheSize: Bool!
-    private(set) var cachedFrameCount: Int!
-    private var frames: [AnimatedImageFrame]!
-    private(set) var decoder: AnimatedImageCodeable!
-    private(set) var views: NSHashTable<AnimatedImageView>!
-    private(set) var lock: DispatchSemaphore!
-    private(set) var sentinel: Int32!
-    private(set) var preloadTask: (() -> Void)?
-    
+    fileprivate var transformer: ImageTransformer?
+    fileprivate(set) var frameCount: Int!
+    fileprivate(set) var loopCount: Int!
+    fileprivate(set) var maxCacheSize: Int64!
+    fileprivate(set) var currentCacheSize: Int64!
+    fileprivate(set) var autoUpdateMaxCacheSize: Bool!
+    fileprivate(set) var cachedFrameCount: Int!
+    fileprivate var frames: [AnimatedImageFrame]!
+    fileprivate(set) var decoder: AnimatedImageCodeable!
+    fileprivate(set) var views: NSHashTable<AnimatedImageView>!
+    fileprivate(set) var lock: DispatchSemaphore!
+    fileprivate(set) var sentinel: Int32!
+    fileprivate(set) var preloadTask: (() -> Void)?
     
     deinit {
-        lg_cancelPreloadTask()
+        lg.cancelPreloadTask()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -158,191 +318,36 @@ public class AnimatedImage: UIImage {
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: .UIApplicationDidEnterBackground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
     }
-    
-    public func lg_imageFrame(at index: Int, decodeIfNeeded: Bool) -> UIImage? {
-        if index >= frameCount { return nil }
-        lock.wait()
-        let cacheImage = frames[index].image
-        let transformer = self.transformer
-        lock.signal()
-        return imageFrame(at: index,
-                          cachedImage: cacheImage,
-                          transformer: transformer,
-                          decodeIfNeeded: decodeIfNeeded)
-    }
-    
-    public func lg_duration(at index: Int) -> TimeInterval? {
-        if index >= frameCount { return nil }
-        lock.wait()
-        let duration = frames[index].duration
-        lock.signal()
-        return duration
-    }
-    
-    public func lg_updateCacheSizeIfNeeded() {
-        lock.wait()
-        defer { lock.signal() }
-        if !autoUpdateMaxCacheSize { return }
-        updateCacheSize()
-    }
-    
-    public func bb_preloadImageFrame(fromIndex startIndex: Int) {
-        if startIndex >= frameCount { return }
-        lock.wait()
-        let shouldReturn = (preloadTask != nil || cachedFrameCount >= frameCount)
-        lock.signal()
-        if shouldReturn { return }
-        let sentinel = self.sentinel
-        let work: () -> Void = { [weak self] in
-            guard let self = self, sentinel == self.sentinel else { return }
-            self.lock.wait()
-            let cleanCache = (self.currentCacheSize > self.maxCacheSize)
-            self.lock.signal()
-            if cleanCache {
-                for i in 0..<self.frameCount {
-                    let index = (startIndex + self.frameCount * 2 - i - 2) % self.frameCount // last second frame of start index
-                    var shouldBreak = false
-                    self.lock.wait()
-                    if let oldImage = self.frames[index].image {
-                        self.frames[index].image = nil
-                        self.cachedFrameCount -= 1
-                        self.currentCacheSize -= oldImage.lg.bytes
-                        shouldBreak = (self.currentCacheSize <= self.maxCacheSize)
-                    }
-                    self.lock.signal()
-                    if shouldBreak { break }
-                }
-                return
-            }
-            for i in 0..<self.frameCount {
-                let index = (startIndex + i) % self.frameCount
-                if let image = self.lg_imageFrame(at: index, decodeIfNeeded: true) {
-                    if sentinel != self.sentinel { return }
-                    var shouldBreak = false
-                    self.lock.wait()
-                    if let oldImage = self.frames[index].image {
-                        if oldImage.lg.lgImageEditKey != image.lg.lgImageEditKey {
-                            if self.currentCacheSize + image.lg.bytes - oldImage.lg.bytes <= self.maxCacheSize {
-                                self.frames[index].image = image
-                                self.cachedFrameCount += 1
-                                self.currentCacheSize += image.lg.bytes - oldImage.lg.bytes
-                            } else {
-                                shouldBreak = true
-                            }
-                        }
-                    } else if self.currentCacheSize + image.lg.bytes <= self.maxCacheSize {
-                        self.frames[index].image = image
-                        self.cachedFrameCount += 1
-                        self.currentCacheSize += image.lg.bytes
-                    } else {
-                        shouldBreak = true
-                    }
-                    self.lock.signal()
-                    if shouldBreak { break }
-                }
-            }
-            self.lock.wait()
-            if sentinel == self.sentinel { self.preloadTask = nil }
-            self.lock.signal()
-        }
-        lock.wait()
-        preloadTask = work
-        DispatchQueuePool.default.async(work: work)
-        lock.signal()
-    }
-    
-    /// Preload all image frames synchronously
-    public func bb_preloadAllImageFrames() {
-        lock.wait()
-        autoUpdateMaxCacheSize = false
-        maxCacheSize = .max
-        cachedFrameCount = 0
-        currentCacheSize = 0
-        for i in 0..<frames.count {
-            if let image = imageFrame(at: i,
-                                      cachedImage: frames[i].image,
-                                      transformer: transformer,
-                                      decodeIfNeeded: true) {
-                frames[i].image = image
-                cachedFrameCount += 1
-                currentCacheSize += image.lg.bytes
-            }
-        }
-        lock.signal()
-    }
-    
-    public func lg_didAddToView(_ view: AnimatedImageView) {
-        views.add(view)
-    }
-    
-    public func lg_didRemoveFromView(_ view: AnimatedImageView) {
-        views.remove(view)
-        if views.count <= 0 {
-            lg_cancelPreloadTask()
-            lg_clearAsynchronously(completion: nil)
-        }
-    }
-    
-    /// Cancels asynchronous preload task
-    public func lg_cancelPreloadTask() {
-        lock.wait()
-        if preloadTask != nil {
-            OSAtomicIncrement32(&sentinel)
-            preloadTask = nil
-        }
-        lock.signal()
-    }
-    
-    /// Removes all image frames from cache asynchronously
-    ///
-    /// - Parameter completion: a closure called when clearing is finished
-    public func lg_clearAsynchronously(completion: (() -> Void)?) {
-        DispatchQueuePool.default.async { [weak self] in
-            guard let self = self else { return }
-            self.lg_clear()
-            completion?()
-        }
-    }
-    
-    /// Removes all image frames from cache synchronously
-    public func lg_clear() {
-        lock.wait()
-        for i in 0..<frames.count {
-            frames[i].image = nil
-        }
-        cachedFrameCount = 0
-        currentCacheSize = 0
-        lock.signal()
-    }
+
     
 }
 
 // MARK: Notifications
 extension AnimatedImage {
     @objc private func didReceiveMemoryWarning() {
-        lg_cancelPreloadTask()
-        lg_clearAsynchronously { [weak self] in
+        lg.cancelPreloadTask()
+        lg.clearAsynchronously { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                 guard let self = self else { return }
-                self.lg_updateCacheSizeIfNeeded()
+                self.lg.updateCacheSizeIfNeeded()
             }
         }
     }
     
     @objc private func didEnterBackground() {
-        lg_cancelPreloadTask()
-        lg_clear()
+        lg.cancelPreloadTask()
+        lg.clear()
     }
     
     @objc private func didBecomeActive() {
-        lg_updateCacheSizeIfNeeded()
+        lg.updateCacheSizeIfNeeded()
     }
 }
 
 
 extension AnimatedImage {
-    private func imageFrame(at index: Int,
+    fileprivate func imageFrame(at index: Int,
                             cachedImage: UIImage?,
                             transformer imageTransformer: ImageTransformer?,
                             decodeIfNeeded: Bool) -> UIImage? {
@@ -380,7 +385,7 @@ extension AnimatedImage {
         return nil
     }
     
-    private func updateCacheSize() {
+    fileprivate func updateCacheSize() {
         let total = Int64(Double(LonginusExtension<UIDevice>.totalMemory) * 0.2)
         let free = Int64(Double(LonginusExtension<UIDevice>.freeMemory) * 0.6)
         maxCacheSize = min(total, free)

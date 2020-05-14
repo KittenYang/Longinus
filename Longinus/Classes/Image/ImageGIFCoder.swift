@@ -95,7 +95,7 @@ extension ImageGIFCoder: ImageCodeable {
         if format != .GIF { return nil }
         if let animatedImage = image as? AnimatedImage,
             animatedImage.lg.imageFormat == .GIF {
-            return animatedImage.lg_originalImageData
+            return animatedImage.lg.originalImageData
         }
         var sourceImages: [CGImage] = []
         if let images = image.images {

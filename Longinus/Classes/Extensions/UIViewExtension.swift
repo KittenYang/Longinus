@@ -27,7 +27,6 @@
 
 import Foundation
 
-extension UIView: LonginusCompatible {}
 extension LonginusExtension where Base: UIView {
     public enum FillContentMode {
         /// Aligns center and aspect fill

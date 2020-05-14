@@ -30,7 +30,7 @@ import Foundation
 public class LonginusManager {
     
     public static let shared: LonginusManager = { () -> LonginusManager in
-        let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! + "/com.kittenyang.Longinus"
+        let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! + "/\(LonginusPrefixID)"
         return LonginusManager(cachePath: path, sizeThreshold: 20 * 1024)
     }()
     
@@ -41,9 +41,9 @@ public class LonginusManager {
     private var tasks: Set<ImageLoadTask>
     private var preloadTasks: Set<ImageLoadTask>
     private var taskLock: Mutex
+    private var urlBlacklistLock: Mutex
     private var taskSentinel: Int32
     private var urlBlacklist: Set<URL>
-    private var urlBlacklistLock: Mutex
     
     public var currentTaskCount: Int {
         taskLock.locked { [weak self] () -> (Int) in
@@ -76,16 +76,16 @@ public class LonginusManager {
         preloadTasks = Set()
         taskSentinel = 0
         taskLock = Mutex()
-        urlBlacklist = Set()
         urlBlacklistLock = Mutex()
+        urlBlacklist = Set()
     }
     
     @discardableResult
     public func loadImage(with resource: ImageWebCacheResourceable,
                           options: ImageOptions = .none,
                           transformer: ImageTransformer? = nil,
-                          progress: ImageDownloaderProgress? = nil,
-                          completion: @escaping ImageManagerCompletion) -> ImageLoadTask {
+                          progress: ImageDownloaderProgressBlock? = nil,
+                          completion: @escaping ImageManagerCompletionBlock) -> ImageLoadTask {
         let task = newLoadTask()
         taskLock.locked { [weak self] in
             self?.tasks.insert(task)
@@ -136,8 +136,8 @@ public class LonginusManager {
                 remove(loadTask: task)
                 finished = true
             } else if !options.contains(.queryDataWhenInMemory) {
-                if let animatedImage = currentImage as? AnimatedImage {
-                    animatedImage.lg_transformer = transformer
+                if var animatedImage = currentImage as? AnimatedImage {
+                    animatedImage.lg.transformer = transformer
                     complete(with: task,
                              completion: completion,
                              image: animatedImage,
@@ -319,7 +319,7 @@ extension LonginusManager {
                         forTask task: ImageLoadTask,
                         resource: ImageWebCacheResourceable,
                         transform: ImageTransformer?,
-                        completion: @escaping ImageManagerCompletion) {
+                        completion: @escaping ImageManagerCompletionBlock) {
         if options.contains(.preload) {
             complete(with: task,
                      completion: completion,
@@ -337,8 +337,8 @@ extension LonginusManager {
             guard let self = self, let task = task, !task.isCancelled else { return }
             let decodedImage = self.imageCoder.decodedImage(with: data)
             if let currentEditor = transform {
-                if let animatedImage = decodedImage as? AnimatedImage {
-                    animatedImage.lg_transformer = currentEditor
+                if var animatedImage = decodedImage as? AnimatedImage {
+                    animatedImage.lg.transformer = currentEditor
                     self.complete(with: task,
                                   completion: completion,
                                   image: animatedImage,
@@ -410,8 +410,8 @@ extension LonginusManager {
                                options: ImageOptions,
                                task: ImageLoadTask,
                                transformer: ImageTransformer?,
-                               progress: ImageDownloaderProgress?,
-                               completion: @escaping ImageManagerCompletion) {
+                               progress: ImageDownloaderProgressBlock?,
+                               completion: @escaping ImageManagerCompletionBlock) {
         task.downloadTask = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
             guard let self = self, let task = task, !task.isCancelled else { return }
             if let currentData = data {
@@ -451,7 +451,7 @@ extension LonginusManager {
     }
     
     private func complete(with task: ImageLoadTask,
-                          completion: @escaping ImageManagerCompletion,
+                          completion: @escaping ImageManagerCompletionBlock,
                           image: UIImage?,
                           data: Data?,
                           cacheType: ImageCacheType) {
@@ -463,7 +463,7 @@ extension LonginusManager {
                  cacheType: cacheType)
     }
     
-    private func complete(with task: ImageLoadTask, completion: @escaping ImageManagerCompletion, error: Error) {
+    private func complete(with task: ImageLoadTask, completion: @escaping ImageManagerCompletionBlock, error: Error) {
         complete(with: task,
                  completion: completion,
                  image: nil,
@@ -473,7 +473,7 @@ extension LonginusManager {
     }
     
     private func complete(with task: ImageLoadTask,
-                          completion: @escaping ImageManagerCompletion,
+                          completion: @escaping ImageManagerCompletionBlock,
                           image: UIImage?,
                           data: Data?,
                           error: Error?,

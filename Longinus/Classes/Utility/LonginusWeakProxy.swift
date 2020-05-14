@@ -1,8 +1,8 @@
 //
-//  LonginusCompatible.swift
+//  LonginusWeakProxy.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/11.
+//  Created by Qitao Yang on 2020/5/14.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -25,33 +25,22 @@
 //  THE SOFTWARE.
     
 
-import UIKit
+import Foundation
 
-public let LonginusPrefixID = "com.kittenyang.Longinus"
-public let lg_shareColorSpace = CGColorSpaceCreateDeviceRGB()
-public let lg_ScreenScale = UIScreen.main.scale
-
-public protocol LonginusCompatible { }
-
-public struct LonginusExtension<Base> {
-    public let base: Base
-    public init(_ base: Base) {
-        self.base = base
+public class LonginusWeakProxy: NSObject {
+    
+    private weak var target: NSObjectProtocol?
+    
+    public init(target: NSObjectProtocol) {
+        self.target = target
     }
-}
-
-extension LonginusCompatible {
-    public var lg: LonginusExtension<Self> {
-        get { return LonginusExtension(self) }
-        set { }
+    
+    public override func responds(to aSelector: Selector!) -> Bool {
+        return (target?.responds(to: aSelector) ?? false) || super.responds(to: aSelector)
     }
+    
+    public override func forwardingTarget(for aSelector: Selector!) -> Any? {
+        return target
+    }
+    
 }
-
-extension UIImage: LonginusCompatible {}
-extension UIView: LonginusCompatible {}
-extension CGImage: LonginusCompatible {}
-extension CALayer: LonginusCompatible {}
-extension String: LonginusCompatible {}
-extension Data: LonginusCompatible {}
-extension UIImage.Orientation: LonginusCompatible {}
-extension CGImagePropertyOrientation: LonginusCompatible {}

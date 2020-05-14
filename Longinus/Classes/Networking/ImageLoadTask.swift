@@ -50,7 +50,7 @@ public class ImageLoadTask: NSObject { // If not subclass NSObject, there is mem
     public func cancel() {
         lock.locked { [weak self] in
             guard let self = self else { return }
-            if cancelled {
+            if self.cancelled {
                 return
             }
         }

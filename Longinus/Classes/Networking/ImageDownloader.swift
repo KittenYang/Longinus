@@ -28,9 +28,9 @@
 import Foundation
 
 public let LonginusImageErrorDomain: String = "LonginusImageErrorDomain"
-public typealias ImageDownloaderProgress = (Data?, Int, UIImage?) -> Void
-public typealias ImageDownloaderCompletion = (Data?, Error?) -> Void
-public typealias ImageManagerCompletion = (UIImage?, Data?, Error?, ImageCacheType) -> Void
+public typealias ImageDownloaderProgressBlock = (Data?, Int, UIImage?) -> Void
+public typealias ImageDownloaderCompletionBlock = (Data?, Error?) -> Void
+public typealias ImageManagerCompletionBlock = (UIImage?, Data?, Error?, ImageCacheType) -> Void
 public typealias ImagePreloadProgress = (_ successCount: Int, _ finishCount: Int, _ total: Int) -> Void
 public typealias ImagePreloadCompletion = (_ successCount: Int, _ total: Int) -> Void
 
@@ -38,8 +38,8 @@ public protocol ImageDownloadTaskable {
     var sentinel: Int32 { get }
     var url: URL { get }
     var isCancelled: Bool { get }
-    var progress: ImageDownloaderProgress? { get }
-    var completion: ImageDownloaderCompletion { get }
+    var progress: ImageDownloaderProgressBlock? { get }
+    var completion: ImageDownloaderCompletionBlock { get }
     
     func cancel()
 }
@@ -47,8 +47,8 @@ public protocol ImageDownloadTaskable {
 public protocol ImageDownloadable: AnyObject {
     func downloadImage(with url: URL,
                        options: ImageOptions,
-                       progress: ImageDownloaderProgress?,
-                       completion: @escaping ImageDownloaderCompletion) -> ImageDownloadTaskable
+                       progress: ImageDownloaderProgressBlock?,
+                       completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable
     func cancel(task: ImageDownloadTaskable)
     func cancel(url: URL)
     func cancelPreloading()
@@ -59,10 +59,10 @@ private class ImageDefaultDownloadTask: ImageDownloadTaskable {
     private(set) var sentinel: Int32
     private(set) var url: URL
     private(set) var isCancelled: Bool
-    private(set) var progress: ImageDownloaderProgress?
-    private(set) var completion: ImageDownloaderCompletion
+    private(set) var progress: ImageDownloaderProgressBlock?
+    private(set) var completion: ImageDownloaderCompletionBlock
     
-    init(sentinel: Int32, url: URL, progress: ImageDownloaderProgress?, completion: @escaping ImageDownloaderCompletion) {
+    init(sentinel: Int32, url: URL, progress: ImageDownloaderProgressBlock?, completion: @escaping ImageDownloaderCompletionBlock) {
         self.sentinel = sentinel
         self.url = url
         self.isCancelled = false
@@ -77,7 +77,7 @@ public class MergeTaskImageDownloader {
     public var donwloadTimeout: TimeInterval
     public weak var imageCoder: ImageCodeable?
 
-    public lazy var generateDownloadTask: (URL, ImageDownloaderProgress?, @escaping ImageDownloaderCompletion) -> ImageDownloadTaskable = {
+    public lazy var generateDownloadTask: (URL, ImageDownloaderProgressBlock?, @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable = {
         ImageDefaultDownloadTask(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
     }
     
@@ -160,8 +160,8 @@ extension MergeTaskImageDownloader: ImageDownloadable {
     @discardableResult
     public func downloadImage(with url: URL,
                               options: ImageOptions = .none,
-                              progress: ImageDownloaderProgress? = nil,
-                              completion: @escaping ImageDownloaderCompletion) -> ImageDownloadTaskable {
+                              progress: ImageDownloaderProgressBlock? = nil,
+                              completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable {
         let task = generateDownloadTask(url, progress, completion)
         lock.wait()
         if options.contains(.preload) { preloadTasks[task.sentinel] = task }

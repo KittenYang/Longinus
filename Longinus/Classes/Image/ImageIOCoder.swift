@@ -107,3 +107,52 @@ public extension ImageIOCoder {
         }
     }
 }
+
+extension ImageIOCoder: ImageProgressiveCodeable {
+    public func canIncrementallyDecode(_ data: Data) -> Bool {
+        switch data.lg.imageFormat {
+        case .JPEG, .PNG:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    public func incrementallyDecodedImage(with data: Data, finished: Bool) -> UIImage? {
+        if imageSource == nil {
+            imageSource = CGImageSourceCreateIncremental(nil)
+        }
+        guard let source = imageSource else { return nil }
+        CGImageSourceUpdateData(source, data as CFData, finished)
+        var image: UIImage?
+        if imageWidth <= 0 || imageHeight <= 0,
+            let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString : AnyObject] {
+            if let width = properties[kCGImagePropertyPixelWidth] as? Int {
+                imageWidth = width
+            }
+            if let height = properties[kCGImagePropertyPixelHeight] as? Int {
+                imageHeight = height
+            }
+            if let rawValue = properties[kCGImagePropertyOrientation] as? UInt32,
+                let orientation = CGImagePropertyOrientation(rawValue: rawValue) {
+                imageOrientation = orientation.lg.uiImageOrientation
+            }
+        }
+        if imageWidth > 0 && imageHeight > 0,
+            let cgimage = CGImageSourceCreateImageAtIndex(source, 0, nil) {
+            image = UIImage(cgImage: cgimage, scale: 1, orientation: imageOrientation)
+            image?.lg.imageFormat = data.lg.imageFormat
+        }
+        if finished {
+            imageSource = nil
+            imageWidth = 0
+            imageHeight = 0
+            imageOrientation = .up
+        }
+        return image
+    }
+    
+}
+    
+    
+
