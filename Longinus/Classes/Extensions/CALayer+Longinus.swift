@@ -41,11 +41,26 @@ extension LonginusExtension where Base: CALayer {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
             if let base = base { base.contents = image }
         }
+        
+        let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
+            guard let base = base else {
+                return
+            }
+            let transition = CATransition()
+            transition.duration = 0.2
+            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            transition.type = kCATransitionFade
+            base.add(transition, forKey: LonginusImageFadeAnimationKey)
+        }
+        
+        base.removeAnimation(forKey: LonginusImageFadeAnimationKey)
+        
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
                       editor: editor,
                       taskKey: imageLoadTaskKey,
+                      setShowTransition: setShowTransitionBlock,
                       setImage: setImageBlock,
                       progress: progress,
                       completion: completion)

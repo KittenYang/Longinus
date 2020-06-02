@@ -28,8 +28,10 @@
 import UIKit
 
 public typealias LonginusSetImageBlock = (UIImage?) -> Void
+public typealias LonginusSetShowTransitionBlock = (UIImage?) -> Void
 
 private var webCacheOperationKey: Void?
+public let LonginusImageFadeAnimationKey: String = "LonginusImageFadeAnimationKey"
 
 public protocol ImageWebCacheable: AnyObject {
     func setImage(with resource: ImageWebCacheResourceable?,
@@ -37,6 +39,7 @@ public protocol ImageWebCacheable: AnyObject {
                   options: ImageOptions,
                   editor: ImageTransformer?,
                   taskKey: String,
+                  setShowTransition: @escaping LonginusSetShowTransitionBlock,
                   setImage: @escaping LonginusSetImageBlock,
                   progress: ImageDownloaderProgressBlock?,
                   completion: ImageManagerCompletionBlock?)
@@ -49,15 +52,17 @@ public extension ImageWebCacheable {
         setRetainedAssociatedObject(self, &webCacheOperationKey, operation)
         return operation
     }
-    
+        
     func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
                   options: ImageOptions,
                   editor: ImageTransformer?,
                   taskKey: String,
+                  setShowTransition:@escaping LonginusSetShowTransitionBlock,
                   setImage: @escaping LonginusSetImageBlock,
                   progress: ImageDownloaderProgressBlock?,
                   completion: ImageManagerCompletionBlock?) {
+        
         let webCacheOperation = self.webCacheOperation
         webCacheOperation.task(forKey: taskKey)?.cancel()
         webCacheOperation.setDownloadProgress(0 ,forKey: taskKey)
@@ -116,7 +121,12 @@ public extension ImageWebCacheable {
         }
         let task = LonginusManager.shared.loadImage(with: resource, options: options, transformer: editor, progress: currentProgress) { [weak self] (image: UIImage?, data: Data?, error: Error?, cacheType: ImageCacheType) in
             guard let self = self else { return }
-            if let currentImage = image { setImage(currentImage) }
+            if let currentImage = image {
+                if options.contains(.imageWithFadeAnimation), let webCacheOperation = self.webCacheOperation.task(forKey: taskKey), webCacheOperation.sentinel == sentinel {
+                    setShowTransition(currentImage)
+                }
+                setImage(currentImage)
+            }
             if error == nil { self.webCacheOperation.setDownloadProgress(1, forKey: taskKey) }
             completion?(image, data, error, cacheType)
         }

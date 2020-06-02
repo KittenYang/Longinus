@@ -44,11 +44,28 @@ extension LonginusExtension where Base: UIButton {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
             if let base = base { base.setImage(image, for: state) }
         }
+        
+        let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
+            guard let base = base else {
+                return
+            }
+            if base.state == state {
+                let transition = CATransition()
+                transition.duration = 0.2
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                transition.type = kCATransitionFade
+                base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
+            }
+        }
+        
+        base.layer.removeAnimation(forKey: LonginusImageFadeAnimationKey)
+        
         base.setImage(with: resource,
                  placeholder: placeholder,
                  options: options,
                  editor: editor,
                  taskKey: imageLoadTaskKey(forState: state),
+                 setShowTransition: setShowTransitionBlock,
                  setImage: setImageBlock,
                  progress: progress,
                  completion: completion)
@@ -69,11 +86,28 @@ extension LonginusExtension where Base: UIButton {
         let setImage: LonginusSetImageBlock = { [weak base] (image) in
             if let base = base { base.setBackgroundImage(image, for: state) }
         }
+        
+        let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
+            guard let base = base else {
+                return
+            }
+            if base.state == state {
+                let transition = CATransition()
+                transition.duration = 0.2
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                transition.type = kCATransitionFade
+                base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
+            }
+        }
+        
+        base.layer.removeAnimation(forKey: LonginusImageFadeAnimationKey)
+        
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
                       editor: editor,
                       taskKey: backgroundImageLoadTaskKey(forState: state),
+                      setShowTransition: setShowTransitionBlock,
                       setImage: setImage,
                       progress: progress,
                       completion: completion)

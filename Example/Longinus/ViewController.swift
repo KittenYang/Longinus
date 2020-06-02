@@ -36,7 +36,7 @@ class LonginusExampleCell: UITableViewCell {
     }
     
     func updateImageWithURL(url: URL?) {
-        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload], editor: nil, progress: { (data, progress, image) in
+        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .imageWithFadeAnimation], editor: nil, progress: { (data, progress, image) in
             
         }) { (image, data, error, cacheType) in
             

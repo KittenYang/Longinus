@@ -60,6 +60,9 @@ public struct ImageOptions: OptionSet {
     /// Do not decode image
     public static let ignoreImageDecoding = ImageOptions(rawValue: 1 << 8)
     
+    /// Set the image to view with a fade animation.
+    public static let imageWithFadeAnimation = ImageOptions(rawValue: 1 << 9)
+    
     /// Preload image data and cache to disk
     internal static let preload = ImageOptions(rawValue: 1 << 32)
     

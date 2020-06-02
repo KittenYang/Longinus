@@ -36,13 +36,30 @@ extension LonginusExtension where Base: UIImageView {
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
-            if let base = base { base.image = image }
+            base?.image = image
         }
+        
+        let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
+            guard let base = base else {
+                return
+            }
+            if !base.isHighlighted {
+                let transition = CATransition()
+                transition.duration = 0.2
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                transition.type = kCATransitionFade
+                base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
+            }
+        }
+        
+        base.layer.removeAnimation(forKey: LonginusImageFadeAnimationKey)
+                
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
                       editor: editor,
                       taskKey: imageLoadTaskKey,
+                      setShowTransition: setShowTransitionBlock,
                       setImage: setImageBlock,
                       progress: progress,
                       completion: completion)
@@ -57,11 +74,28 @@ extension LonginusExtension where Base: UIImageView {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
             if let base = base { base.highlightedImage = image }
         }
+        
+        let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
+            guard let base = base else {
+                return
+            }
+            if base.isHighlighted {
+                let transition = CATransition()
+                transition.duration = 0.2
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                transition.type = kCATransitionFade
+                base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
+            }
+        }
+        
+        base.layer.removeAnimation(forKey: LonginusImageFadeAnimationKey)
+        
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
                       editor: editor,
                       taskKey: highlightedImageLoadTaskKey,
+                      setShowTransition: setShowTransitionBlock,
                       setImage: setImageBlock,
                       progress: progress,
                       completion: completion)
