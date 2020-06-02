@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
 extension UIImage: CacheCostCalculable {
     /// Cost of an image

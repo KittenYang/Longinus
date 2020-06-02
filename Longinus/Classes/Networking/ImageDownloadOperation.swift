@@ -25,9 +25,9 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
-public protocol ImageDownloadOperation: AnyObject {
+public protocol ImageDownloadOperateable: AnyObject {
     var url: URL { get }
     var dataTaskId: Int { get }
     var downloadTasks: [ImageDownloadTaskable] { get }
@@ -41,7 +41,7 @@ public protocol ImageDownloadOperation: AnyObject {
 }
 
 
-class MergeTaskImageDownloadOperation: NSObject, ImageDownloadOperation {
+class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     
     var url: URL { return request.url! }
     
@@ -124,7 +124,7 @@ class MergeTaskImageDownloadOperation: NSObject, ImageDownloadOperation {
     }
 }
 
-extension MergeTaskImageDownloadOperation: URLSessionTaskDelegate {
+extension ImageDownloadOperation: URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         stateLock.wait()
@@ -156,7 +156,7 @@ extension MergeTaskImageDownloadOperation: URLSessionTaskDelegate {
     
 }
 
-extension MergeTaskImageDownloadOperation: URLSessionDataDelegate {
+extension ImageDownloadOperation: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession,
                     dataTask: URLSessionDataTask,

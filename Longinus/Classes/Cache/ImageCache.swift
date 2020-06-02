@@ -1,5 +1,5 @@
 //
-//  ImageCache.swift
+//  ImageCacher.swift
 //  Longinus
 //
 //  Created by Qitao Yang on 2020/5/12.
@@ -25,9 +25,9 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
-public class ImageCache: ImageCacheable {
+public class ImageCacher: ImageCacheable {
 
     public let memoryCache: MemoryCache<String, UIImage>
     public let diskCache: DiskCache?
@@ -109,7 +109,7 @@ public class ImageCache: ImageCacheable {
         completion(key)
     }
     
-    public func clear(_ type: ImageCacheType, completion: @escaping (() -> Void)) {
+    public func remove(_ type: ImageCacheType, completion: @escaping (() -> Void)) {
         if type.contains(.memory) { memoryCache.removeAll() }
         if type.contains(.disk),
             let currentDiskCache = diskCache {

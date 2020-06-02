@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
 public let LonginusImageErrorDomain: String = "LonginusImageErrorDomain"
 public typealias ImageDownloaderProgressBlock = (Data?, Int, UIImage?) -> Void
@@ -73,7 +73,7 @@ private class ImageDefaultDownloadTask: ImageDownloadTaskable {
     func cancel() { isCancelled = true }
 }
 
-public class MergeTaskImageDownloader {
+public class ImageDownloader {
     public var donwloadTimeout: TimeInterval
     public weak var imageCoder: ImageCodeable?
 
@@ -81,7 +81,7 @@ public class MergeTaskImageDownloader {
         ImageDefaultDownloadTask(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
     }
     
-    public var generateDownloadOperation: (URLRequest, URLSession) -> ImageDownloadOperation
+    public var generateDownloadOperation: (URLRequest, URLSession) -> ImageDownloadOperateable
     
     public var currentDownloadCount: Int {
         lock.wait()
@@ -113,7 +113,7 @@ public class MergeTaskImageDownloader {
     
     private let operationQueue: ImageDownloadOperationQueue
     private var taskSentinel: Int32
-    private var urlOperations: [URL : ImageDownloadOperation]
+    private var urlOperations: [URL : ImageDownloadOperateable]
     private var preloadTasks: [Int32 : ImageDownloadTaskable]
     private var httpHeaders: [String : String]
     private let lock: DispatchSemaphore
@@ -123,14 +123,14 @@ public class MergeTaskImageDownloader {
         let queue = OperationQueue()
         queue.qualityOfService = .background
         queue.maxConcurrentOperationCount = 1
-        queue.name = "com.Kaibo.BBWebImage.download"
+        queue.name = "\(LonginusPrefixID).download"
         return URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: queue)
     }()
     
     public init(sessionConfiguration: URLSessionConfiguration) {
         donwloadTimeout = 15
         taskSentinel = 0
-        generateDownloadOperation = { MergeTaskImageDownloadOperation(request: $0, session: $1) }
+        generateDownloadOperation = { ImageDownloadOperation(request: $0, session: $1) }
         operationQueue = ImageDownloadOperationQueue()
         operationQueue.maxRunningCount = 6
         urlOperations = [:]
@@ -146,7 +146,7 @@ public class MergeTaskImageDownloader {
         lock.signal()
     }
     
-    fileprivate func operation(for url: URL) -> ImageDownloadOperation? {
+    fileprivate func operation(for url: URL) -> ImageDownloadOperateable? {
         lock.wait()
         let operation = urlOperations[url]
         lock.signal()
@@ -155,7 +155,7 @@ public class MergeTaskImageDownloader {
     
 }
 
-extension MergeTaskImageDownloader: ImageDownloadable {
+extension ImageDownloader: ImageDownloadable {
     
     @discardableResult
     public func downloadImage(with url: URL,
@@ -165,7 +165,7 @@ extension MergeTaskImageDownloader: ImageDownloadable {
         let task = generateDownloadTask(url, progress, completion)
         lock.wait()
         if options.contains(.preload) { preloadTasks[task.sentinel] = task }
-        var operation: ImageDownloadOperation? = urlOperations[url]
+        var operation: ImageDownloadOperateable? = urlOperations[url]
         if operation != nil {
             if !options.contains(.preload) {
                 operationQueue.upgradePreloadOperation(for: url)
@@ -243,9 +243,9 @@ extension MergeTaskImageDownloader: ImageDownloadable {
 
 
 private class ImageDownloadSessionDelegate: NSObject, URLSessionTaskDelegate {
-    private weak var downloader: MergeTaskImageDownloader?
+    private weak var downloader: ImageDownloader?
     
-    init(downloader: MergeTaskImageDownloader) {
+    init(downloader: ImageDownloader) {
         self.downloader = downloader
     }
     

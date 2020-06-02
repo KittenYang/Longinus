@@ -27,6 +27,65 @@
 
 import Foundation
 
-extension UIButton: ImageWebCacheable {
+extension UIButton: ImageWebCacheable {}
+extension LonginusExtension where Base: UIButton {
     
+    public func imageLoadTaskKey(forState state: UIControl.State) -> String {
+        return base.classForCoder.description() + "Image\(state.rawValue)"
+    }
+    
+    public func setImage(with resource: ImageWebCacheResourceable?,
+                         forState state: UIControl.State,
+                         placeholder: UIImage? = nil,
+                         options: ImageOptions = .none,
+                         editor: ImageTransformer? = nil,
+                         progress: ImageDownloaderProgressBlock? = nil,
+                         completion: ImageManagerCompletionBlock? = nil) {
+        let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
+            if let base = base { base.setImage(image, for: state) }
+        }
+        base.setImage(with: resource,
+                 placeholder: placeholder,
+                 options: options,
+                 editor: editor,
+                 taskKey: imageLoadTaskKey(forState: state),
+                 setImage: setImageBlock,
+                 progress: progress,
+                 completion: completion)
+    }
+    
+    public func cancelImageLoadTask(forState state: UIControl.State) {
+        let key = imageLoadTaskKey(forState: state)
+        base.webCacheOperation.task(forKey: key)?.cancel()
+    }
+    
+    public func setBackgroundImage(with resource: ImageWebCacheResourceable,
+                                   forState state: UIControl.State,
+                                   placeholder: UIImage? = nil,
+                                   options: ImageOptions = .none,
+                                   editor: ImageTransformer? = nil,
+                                   progress: ImageDownloaderProgressBlock? = nil,
+                                   completion: ImageManagerCompletionBlock? = nil) {
+        let setImage: LonginusSetImageBlock = { [weak base] (image) in
+            if let base = base { base.setBackgroundImage(image, for: state) }
+        }
+        base.setImage(with: resource,
+                      placeholder: placeholder,
+                      options: options,
+                      editor: editor,
+                      taskKey: backgroundImageLoadTaskKey(forState: state),
+                      setImage: setImage,
+                      progress: progress,
+                      completion: completion)
+    }
+    
+    public func cancelBackgroundImageLoadTask(forState state: UIControl.State) {
+        let key = backgroundImageLoadTaskKey(forState: state)
+        base.webCacheOperation.task(forKey: key)?.cancel()
+    }
+    
+    public func backgroundImageLoadTaskKey(forState state: UIControl.State) -> String {
+        return base.classForCoder.description() + "BackgroundImage\(state.rawValue)"
+    }
+
 }

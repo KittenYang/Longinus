@@ -25,15 +25,14 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
 public typealias LonginusSetImageBlock = (UIImage?) -> Void
 
 private var webCacheOperationKey: Void?
 
-/// BBWebCache defines image loading, editing and setting behaivors
 public protocol ImageWebCacheable: AnyObject {
-    func setImage(with resource: ImageWebCacheResourceable,
+    func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
                   options: ImageOptions,
                   editor: ImageTransformer?,
@@ -44,14 +43,14 @@ public protocol ImageWebCacheable: AnyObject {
 }
 
 public extension ImageWebCacheable {
-    var webCacheOperation: BBWebCacheOperation {
-        if let operation = objc_getAssociatedObject(self, &webCacheOperationKey) as? BBWebCacheOperation { return operation }
-        let operation = BBWebCacheOperation()
+    var webCacheOperation: ImageWebCacheOperation {
+        if let operation = objc_getAssociatedObject(self, &webCacheOperationKey) as? ImageWebCacheOperation { return operation }
+        let operation = ImageWebCacheOperation()
         setRetainedAssociatedObject(self, &webCacheOperationKey, operation)
         return operation
     }
     
-    func setImage(with resource: ImageWebCacheResourceable,
+    func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
                   options: ImageOptions,
                   editor: ImageTransformer?,
@@ -62,6 +61,12 @@ public extension ImageWebCacheable {
         let webCacheOperation = self.webCacheOperation
         webCacheOperation.task(forKey: taskKey)?.cancel()
         webCacheOperation.setDownloadProgress(0 ,forKey: taskKey)
+        guard let resource = resource else {
+            DispatchQueue.main.lg.safeSync { [weak self] in
+                if self != nil { setImage(placeholder) }
+            }
+            return
+        }
         if !options.contains(.ignorePlaceholder) {
             DispatchQueue.main.lg.safeSync { [weak self] in
                 if self != nil { setImage(placeholder) }
@@ -121,7 +126,7 @@ public extension ImageWebCacheable {
 }
 
 
-public class BBWebCacheOperation {
+public class ImageWebCacheOperation {
     private let weakTaskMap: NSMapTable<NSString, ImageLoadTask>
     private var downloadProgressDic: [String : Double]
     private var lock: Mutex
@@ -133,26 +138,28 @@ public class BBWebCacheOperation {
     }
     
     public func task(forKey key: String) -> ImageLoadTask? {
-        lock.locked { [weak self] in
-            return self?.weakTaskMap.object(forKey: key as NSString)
-        }
+        self.lock.lock()
+        let task = self.weakTaskMap.object(forKey: key as NSString)
+        self.lock.unlock()
+        return task
     }
     
     public func setTask(_ task: ImageLoadTask, forKey key: String) {
-        lock.locked { [weak self] in
-            return self?.weakTaskMap.setObject(task, forKey: key as NSString)
-        }
+        self.lock.lock()
+        self.weakTaskMap.setObject(task, forKey: key as NSString)
+        self.lock.unlock()
     }
     
     public func downloadProgress(forKey key: String) -> Double {
-        lock.locked { [weak self] in
-            return self?.downloadProgressDic[key] ?? 0
-        }
+        self.lock.lock()
+        let progress = self.downloadProgressDic[key] ?? 0
+        self.lock.unlock()
+        return progress
     }
     
     public func setDownloadProgress(_ downloadProgress: Double, forKey key: String) {
-        lock.locked { [weak self] in
-            self?.downloadProgressDic[key] = downloadProgress
-        }
+        self.lock.lock()
+        self.downloadProgressDic[key] = downloadProgress
+        self.lock.unlock()
     }
 }

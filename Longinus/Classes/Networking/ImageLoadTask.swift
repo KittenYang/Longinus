@@ -30,9 +30,10 @@ import Foundation
 /// ImageLoadTask defines an image loading task
 public class ImageLoadTask: NSObject { // If not subclass NSObject, there is memory leak (unknown reason)
     public var isCancelled: Bool {
-        lock.locked { [weak self]() -> (Bool) in
-            return self?.cancelled ?? false
-        }
+        lock.lock()
+        let cancel = self.cancelled
+        lock.unlock()
+        return cancel
     }
     public let sentinel: Int32
     public var downloadTask: ImageDownloadTaskable?
@@ -48,14 +49,13 @@ public class ImageLoadTask: NSObject { // If not subclass NSObject, there is mem
     
     /// Cancels current image loading task
     public func cancel() {
-        lock.locked { [weak self] in
-            guard let self = self else { return }
-            if self.cancelled {
-                return
-            }
+        let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
+        lock.lock()
+        if self.cancelled {
+            return unlock()
         }
         cancelled = true
-        lock.unlock()
+        unlock()
         
         if let task = downloadTask,
             let downloader = imageManager?.imageDownloader {

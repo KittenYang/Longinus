@@ -29,7 +29,7 @@ import UIKit
 
 extension UIImageView: ImageWebCacheable {}
 extension LonginusExtension where Base: UIImageView {
-    public func setImage(with resource: ImageWebCacheResourceable,
+    public func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
                          options: ImageOptions = .none,
                          editor: ImageTransformer? = nil,

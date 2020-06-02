@@ -25,31 +25,30 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
 public class ImageCoderManager {
     
     private var _coders: [ImageCodeable]
-    private var coderLock: pthread_mutex_t
+    private var coderLock: Mutex
     
     public var coders: [ImageCodeable] {
         get {
-            pthread_mutex_lock(&coderLock)
+            coderLock.lock()
             let currentCoders = _coders
-            pthread_mutex_unlock(&coderLock)
+            coderLock.unlock()
             return currentCoders
         }
         set {
-            pthread_mutex_lock(&coderLock)
+            coderLock.lock()
             _coders = newValue
-            pthread_mutex_unlock(&coderLock)
+            coderLock.unlock()
         }
     }
     
     init() {
         _coders = [ImageIOCoder(), ImageGIFCoder()]
-        coderLock = pthread_mutex_t()
-        pthread_mutex_init(&coderLock, nil)
+        coderLock = Mutex()
     }
     
 }

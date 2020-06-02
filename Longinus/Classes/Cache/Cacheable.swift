@@ -25,7 +25,7 @@
 //  THE SOFTWARE.
     
 
-import Foundation
+import UIKit
 
 // MARK: Cache
 
@@ -166,5 +166,5 @@ public protocol ImageCacheable: AnyObject {
 
     func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping ((_ key: String) -> Void))
 
-    func clear(_ type: ImageCacheType, completion: @escaping (() -> Void))
+    func remove(_ type: ImageCacheType, completion: @escaping (() -> Void))
 }

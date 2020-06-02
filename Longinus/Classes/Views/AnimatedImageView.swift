@@ -113,7 +113,7 @@ extension LonginusExtension where Base: AnimatedImageView {
 public class AnimatedImageView: UIImageView {
 
     
-    /// Set a BBAnimatedImage object to play animation
+    /// Set a AnimatedImage object to play animation
     public override var image: UIImage? {
         get { return super.image }
         set {
@@ -122,7 +122,7 @@ public class AnimatedImageView: UIImageView {
         }
     }
     
-    /// Set a BBAnimatedImage object to play animation
+    /// Set a AnimatedImage object to play animation
     public override var highlightedImage: UIImage? {
         get { return super.highlightedImage }
         set {

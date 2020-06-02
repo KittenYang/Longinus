@@ -31,9 +31,9 @@ private class ImageDownloadLinkedMapNode {
     fileprivate weak var prev: ImageDownloadLinkedMapNode?
     fileprivate weak var next: ImageDownloadLinkedMapNode?
     fileprivate var key: URL
-    fileprivate var value: ImageDownloadOperation
+    fileprivate var value: ImageDownloadOperateable
     
-    fileprivate init(key: URL, value: ImageDownloadOperation) {
+    fileprivate init(key: URL, value: ImageDownloadOperateable) {
         self.key = key
         self.value = value
     }
@@ -88,7 +88,7 @@ class ImageDownloadOperationQueue {
         currentRunningCount = 0
     }
     
-    func add(_ operation: ImageDownloadOperation, preload: Bool) {
+    func add(_ operation: ImageDownloadOperateable, preload: Bool) {
         if currentRunningCount < maxRunningCount {
             currentRunningCount += 1
             DispatchQueuePool.background.async { [weak self] in

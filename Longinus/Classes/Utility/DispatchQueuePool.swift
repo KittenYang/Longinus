@@ -30,11 +30,11 @@ import Foundation
 /// DispatchQueuePool holds mutiple serial queues to prevent concurrent queue increasing thread count. Control thread count manually.
 public class DispatchQueuePool {
 
-    public static let userInteractive = DispatchQueuePool(label: "com.kittenyang.Longinus.QueuePool.userInteractive", qos: .userInteractive)
-    public static let userInitiated = DispatchQueuePool(label: "com.kittenyang.Longinus.QueuePool.userInitiated", qos: .userInitiated)
-    public static let utility = DispatchQueuePool(label: "com.kittenyang.Longinus.QueuePool.utility", qos: .utility)
-    public static let `default` = DispatchQueuePool(label: "com.kittenyang.Longinus.QueuePool.default", qos: .default)
-    public static let background = DispatchQueuePool(label: "com.kittenyang.Longinus.QueuePool.background", qos: .background)
+    public static let userInteractive = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.userInteractive", qos: .userInteractive)
+    public static let userInitiated = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.userInitiated", qos: .userInitiated)
+    public static let utility = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.utility", qos: .utility)
+    public static let `default` = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.default", qos: .default)
+    public static let background = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.background", qos: .background)
     
     private let queues: [DispatchQueue]
     private var sentinel: Int32
