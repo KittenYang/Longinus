@@ -37,7 +37,7 @@ public protocol ImageWebCacheable: AnyObject {
     func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
                   options: ImageOptions,
-                  editor: ImageTransformer?,
+                  transformer: ImageTransformer?,
                   taskKey: String,
                   setShowTransition: @escaping LonginusSetShowTransitionBlock,
                   setImage: @escaping LonginusSetImageBlock,
@@ -56,7 +56,7 @@ public extension ImageWebCacheable {
     func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
                   options: ImageOptions,
-                  editor: ImageTransformer?,
+                  transformer: ImageTransformer?,
                   taskKey: String,
                   setShowTransition:@escaping LonginusSetShowTransitionBlock,
                   setImage: @escaping LonginusSetImageBlock,
@@ -89,9 +89,9 @@ public extension ImageWebCacheable {
                         return
                 }
                 var displayImage = partialImage
-                if let currentEditor = editor,
-                    var currentImage = currentEditor.edit(partialImage) {
-                    currentImage.lg.lgImageEditKey = currentEditor.key
+                if let currentTransformer = transformer,
+                    var currentImage = currentTransformer.transform(partialImage) {
+                    currentImage.lg.lgImageEditKey = currentTransformer.key
                     currentImage.lg.imageFormat = partialData.lg.imageFormat
                     displayImage = currentImage
                 } else if !options.contains(.ignoreImageDecoding),
@@ -119,7 +119,7 @@ public extension ImageWebCacheable {
                 }
             }
         }
-        let task = LonginusManager.shared.loadImage(with: resource, options: options, transformer: editor, progress: currentProgress) { [weak self] (image: UIImage?, data: Data?, error: Error?, cacheType: ImageCacheType) in
+        let task = LonginusManager.shared.loadImage(with: resource, options: options, transformer: transformer, progress: currentProgress) { [weak self] (image: UIImage?, data: Data?, error: Error?, cacheType: ImageCacheType) in
             guard let self = self else { return }
             if let currentImage = image {
                 if options.contains(.imageWithFadeAnimation), let webCacheOperation = self.webCacheOperation.task(forKey: taskKey), webCacheOperation.sentinel == sentinel {

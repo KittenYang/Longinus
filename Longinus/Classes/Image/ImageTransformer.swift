@@ -34,10 +34,10 @@ public var lg_shareCIContext: CIContext {
     var localContext = shareCIContext
     if localContext == nil {
         if #available(iOS 9.0, *) {
-            localContext = CIContext(options: [kCIContextWorkingColorSpace : lg_shareColorSpace])
+            localContext = CIContext(options: [CIContextOption.workingColorSpace : lg_shareColorSpace])
         } else {
             // CIContext.init(options:) will crash in iOS 8. So use other init
-            localContext = CIContext(eaglContext: EAGLContext(api: .openGLES2)!, options: [kCIContextWorkingColorSpace : lg_shareColorSpace])
+            localContext = CIContext(eaglContext: EAGLContext(api: .openGLES2)!, options: [CIContextOption.workingColorSpace : lg_shareColorSpace])
         }
         shareCIContext = localContext
     }
@@ -48,17 +48,17 @@ public func lg_clearCIContext() { shareCIContext = nil }
 
 public struct ImageTransformer {
     public var key: String
-    public var edit: ImageTransformMethod
+    public var transform: ImageTransformMethod
     
     /// Creates a ImageTransformer variable
     ///
     /// - Parameters:
-    ///   - key: identification of editor
+    ///   - key: identification of transformer
     ///   - needData: whether image data is necessary or not for editing
     ///   - edit: an edit image closure
-    public init(key: String, edit: @escaping ImageTransformMethod) {
+    public init(key: String, transform: @escaping ImageTransformMethod) {
         self.key = key
-        self.edit = edit
+        self.transform = transform
     }
 
 }
@@ -66,68 +66,68 @@ public struct ImageTransformer {
 // MARK: ImageTransformer Extension Methods
 extension ImageTransformer: LonginusCompatible {}
 extension LonginusExtension where Base == ImageTransformer {
-    static func imageEditorCrop(with rect: CGRect)  -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static func imageTransformerCrop(with rect: CGRect)  -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.croppedImage(with: rect) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).crop.rect=\(rect)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).crop.rect=\(rect)", transform: transform)
     }
     
-    static public func imageEditorResize(with size: CGSize) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerResize(with size: CGSize) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: size) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(size)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(size)", transform: transform)
     }
     
-    static public func imageEditorResize(with displaySize: CGSize, contentMode: UIView.ContentMode) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerResize(with displaySize: CGSize, contentMode: UIView.ContentMode) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: displaySize, contentMode: contentMode) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),contentMode=\(contentMode.rawValue)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),contentMode=\(contentMode.rawValue)", transform: transform)
     }
     
-    static public func imageEditorResize(with displaySize: CGSize, fillContentMode: LonginusExtension<UIView>.FillContentMode) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerResize(with displaySize: CGSize, fillContentMode: LonginusExtension<UIView>.FillContentMode) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: displaySize, fillContentMode: fillContentMode) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),fillContentMode=\(fillContentMode)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),fillContentMode=\(fillContentMode)", transform: transform)
     }
     
-    static public func imageEditorRotate(withAngle angle: CGFloat, fitSize: Bool) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerRotate(withAngle angle: CGFloat, fitSize: Bool) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.rotatedImage(withAngle: angle, fitSize: fitSize) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).rotate.angle=\(angle),fitSize=\(fitSize)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).rotate.angle=\(angle),fitSize=\(fitSize)", transform: transform)
     }
     
-    static public func imageEditorFlip(withHorizontal horizontal: Bool, vertical: Bool) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerFlip(withHorizontal horizontal: Bool, vertical: Bool) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.flippedImage(withHorizontal: horizontal, vertical: vertical) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).flip.horizontal=\(horizontal),vertical=\(vertical)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).flip.horizontal=\(horizontal),vertical=\(vertical)", transform: transform)
     }
 
-    static public func imageEditorTint(with color: UIColor, blendMode: CGBlendMode = .normal) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerTint(with color: UIColor, blendMode: CGBlendMode = .normal) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.tintedImage(with: color, blendMode: blendMode) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).tint.color=\(color),blendMode=\(blendMode.rawValue)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).tint.color=\(color),blendMode=\(blendMode.rawValue)", transform: transform)
     }
     
-    static public func imageEditorGradientlyTint(with colors: [UIColor],
+    static public func imageTransformerGradientlyTint(with colors: [UIColor],
                                              locations: [CGFloat],
                                              start: CGPoint = CGPoint(x: 0.5, y: 0),
                                              end: CGPoint = CGPoint(x: 0.5, y: 1),
                                              blendMode: CGBlendMode = .normal) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.gradientlyTintedImage(with: colors,
                                                                  locations: locations,
                                                                  start: start,
@@ -137,26 +137,26 @@ extension LonginusExtension where Base == ImageTransformer {
             }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).gradientlyTint.colors=\(colors),locations=\(locations),start=\(start),end=\(end),blendMode=\(blendMode.rawValue)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).gradientlyTint.colors=\(colors),locations=\(locations),start=\(start),end=\(end),blendMode=\(blendMode.rawValue)", transform: transform)
     }
     
-    static public func imageEditorOverlay(with overlayImage: UIImage, blendMode: CGBlendMode = .normal, alpha: CGFloat) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerOverlay(with overlayImage: UIImage, blendMode: CGBlendMode = .normal, alpha: CGFloat) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.overlaidImage(with: overlayImage, blendMode: blendMode, alpha: alpha) { return currentImage }
             return image
         }
-        return ImageTransformer(key: "\(LonginusPrefixID).overlay.image=\(overlayImage),blendMode=\(blendMode.rawValue),alpha=\(alpha)", edit: edit)
+        return ImageTransformer(key: "\(LonginusPrefixID).overlay.image=\(overlayImage),blendMode=\(blendMode.rawValue),alpha=\(alpha)", transform: transform)
     }
     
-    static func imageEditorCommon(with displaySize: CGSize,
-                                  fillContentMode:LonginusExtension<UIView>.FillContentMode = .center,
-                                  maxResolution: Int = 0,
-                                  corner: UIRectCorner = UIRectCorner(rawValue: 0),
-                                  cornerRadius: CGFloat = 0,
-                                  borderWidth: CGFloat = 0,
-                                  borderColor: UIColor? = nil,
-                                  backgroundColor: UIColor? = nil) -> ImageTransformer {
-        let edit: ImageTransformMethod = { (image) in
+    static public func imageTransformerCommon(with displaySize: CGSize,
+                                         fillContentMode:LonginusExtension<UIView>.FillContentMode = .center,
+                                         maxResolution: Int = 0,
+                                         corner: UIRectCorner = UIRectCorner(rawValue: 0),
+                                         cornerRadius: CGFloat = 0,
+                                         borderWidth: CGFloat = 0,
+                                         borderColor: UIColor? = nil,
+                                         backgroundColor: UIColor? = nil) -> ImageTransformer {
+        let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.commonEditedImage(with: displaySize,
                                                              fillContentMode: fillContentMode,
                                                              maxResolution: maxResolution,
@@ -170,7 +170,7 @@ extension LonginusExtension where Base == ImageTransformer {
             return image
         }
         let key = "\(LonginusPrefixID).common.displaySize=\(displaySize),fillContentMode=\(fillContentMode),maxResolution=\(maxResolution),corner=\(corner),cornerRadius=\(cornerRadius),borderWidth=\(borderWidth),borderColor=\(borderColor?.description ?? "nil"),backgroundColor=\(backgroundColor?.description ?? "nil")"
-        return ImageTransformer(key: key, edit: edit)
+        return ImageTransformer(key: key, transform: transform)
     }
 
 }

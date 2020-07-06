@@ -28,7 +28,7 @@
 import UIKit
 
 extension LonginusExtension where Base: AnimatedImage {
-    /// Editor editing image frames
+    /// ImageTransformer editing image frames
     public var transformer: ImageTransformer? {
         get {
             base.lock.wait()
@@ -314,9 +314,9 @@ public class AnimatedImage: UIImage {
         views = NSHashTable(options: .weakMemory)
         lock = DispatchSemaphore(value: 1)
         sentinel = 0
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: .UIApplicationDidReceiveMemoryWarning, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: .UIApplicationDidEnterBackground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     
@@ -352,17 +352,17 @@ extension AnimatedImage {
                             transformer imageTransformer: ImageTransformer?,
                             decodeIfNeeded: Bool) -> UIImage? {
         if let currentImage = cachedImage {
-            if let editor = transformer {
-                if currentImage.lg.lgImageEditKey == editor.key {
+            if let transformer = transformer {
+                if currentImage.lg.lgImageEditKey == transformer.key {
                     return currentImage
                 } else if decodeIfNeeded {
                     if currentImage.lg.lgImageEditKey == nil {
-                        var editedImage = editor.edit(currentImage)
-                        editedImage?.lg.lgImageEditKey = editor.key
+                        var editedImage = transformer.transform(currentImage)
+                        editedImage?.lg.lgImageEditKey = transformer.key
                         return editedImage
                     } else if let imageFrame = decoder.imageFrame(at: index, decompress: false) {
-                        var editedImage = editor.edit(imageFrame)
-                        editedImage?.lg.lgImageEditKey = editor.key
+                        var editedImage = transformer.transform(imageFrame)
+                        editedImage?.lg.lgImageEditKey = transformer.key
                         return editedImage
                     }
                 }
@@ -373,10 +373,10 @@ extension AnimatedImage {
             }
         }
         if !decodeIfNeeded { return nil }
-        if let editor = transformer {
+        if let transformer = transformer {
             if let imageFrame = decoder.imageFrame(at: index, decompress: false) {
-                var editedImage = editor.edit(imageFrame)
-                editedImage?.lg.lgImageEditKey = editor.key
+                var editedImage = transformer.transform(imageFrame)
+                editedImage?.lg.lgImageEditKey = transformer.key
                 return editedImage
             }
         } else {

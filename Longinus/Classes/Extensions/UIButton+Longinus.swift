@@ -38,7 +38,7 @@ extension LonginusExtension where Base: UIButton {
                          forState state: UIControl.State,
                          placeholder: UIImage? = nil,
                          options: ImageOptions = .none,
-                         editor: ImageTransformer? = nil,
+                         transformer: ImageTransformer? = nil,
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
@@ -52,8 +52,8 @@ extension LonginusExtension where Base: UIButton {
             if base.state == state {
                 let transition = CATransition()
                 transition.duration = 0.2
-                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                transition.type = kCATransitionFade
+                transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                transition.type = CATransitionType.fade
                 base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
             }
         }
@@ -63,7 +63,7 @@ extension LonginusExtension where Base: UIButton {
         base.setImage(with: resource,
                  placeholder: placeholder,
                  options: options,
-                 editor: editor,
+                 transformer: transformer,
                  taskKey: imageLoadTaskKey(forState: state),
                  setShowTransition: setShowTransitionBlock,
                  setImage: setImageBlock,
@@ -80,7 +80,7 @@ extension LonginusExtension where Base: UIButton {
                                    forState state: UIControl.State,
                                    placeholder: UIImage? = nil,
                                    options: ImageOptions = .none,
-                                   editor: ImageTransformer? = nil,
+                                   transformer: ImageTransformer? = nil,
                                    progress: ImageDownloaderProgressBlock? = nil,
                                    completion: ImageManagerCompletionBlock? = nil) {
         let setImage: LonginusSetImageBlock = { [weak base] (image) in
@@ -94,8 +94,8 @@ extension LonginusExtension where Base: UIButton {
             if base.state == state {
                 let transition = CATransition()
                 transition.duration = 0.2
-                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                transition.type = kCATransitionFade
+                transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                transition.type = CATransitionType.fade
                 base.layer.add(transition, forKey: LonginusImageFadeAnimationKey)
             }
         }
@@ -105,7 +105,7 @@ extension LonginusExtension where Base: UIButton {
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
-                      editor: editor,
+                      transformer: transformer,
                       taskKey: backgroundImageLoadTaskKey(forState: state),
                       setShowTransition: setShowTransitionBlock,
                       setImage: setImage,

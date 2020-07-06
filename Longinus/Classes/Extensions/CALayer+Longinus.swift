@@ -35,7 +35,7 @@ extension LonginusExtension where Base: CALayer {
     public func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
                          options: ImageOptions = .none,
-                         editor: ImageTransformer? = nil,
+                         transformer: ImageTransformer? = nil,
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
@@ -48,8 +48,8 @@ extension LonginusExtension where Base: CALayer {
             }
             let transition = CATransition()
             transition.duration = 0.2
-            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-            transition.type = kCATransitionFade
+            transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+            transition.type = CATransitionType.fade
             base.add(transition, forKey: LonginusImageFadeAnimationKey)
         }
         
@@ -58,7 +58,7 @@ extension LonginusExtension where Base: CALayer {
         base.setImage(with: resource,
                       placeholder: placeholder,
                       options: options,
-                      editor: editor,
+                      transformer: transformer,
                       taskKey: imageLoadTaskKey,
                       setShowTransition: setShowTransitionBlock,
                       setImage: setImageBlock,

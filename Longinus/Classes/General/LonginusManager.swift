@@ -147,8 +147,8 @@ public class LonginusManager {
                              cacheType: .memory)
                     remove(loadTask: task)
                     finished = true
-                } else if let currentEditor = transformer {
-                    if currentEditor.key == currentImage.lg.lgImageEditKey {
+                } else if let currentTransformer = transformer {
+                    if currentTransformer.key == currentImage.lg.lgImageEditKey {
                         complete(with: task,
                                  completion: completion,
                                  image: currentImage,
@@ -159,9 +159,9 @@ public class LonginusManager {
                     } else if currentImage.lg.lgImageEditKey == nil {
                         coderQueue.async { [weak self, weak task] in
                             guard let self = self, let task = task, !task.isCancelled else { return }
-                            if var image = currentEditor.edit(currentImage) {
+                            if var image = currentTransformer.transform(currentImage) {
                                 guard !task.isCancelled else { return }
-                                image.lg.lgImageEditKey = currentEditor.key
+                                image.lg.lgImageEditKey = currentTransformer.key
                                 image.lg.imageFormat = currentImage.lg.imageFormat
                                 self.complete(with: task,
                                               completion: completion,
@@ -230,7 +230,7 @@ public class LonginusManager {
                                 cacheType: (memoryImage != nil ? .all : .disk),
                                 forTask: task,
                                 resource: resource,
-                                transform: transformer,
+                                transformer: transformer,
                                 completion: completion)
                 case .none:
                     // Download
@@ -319,7 +319,7 @@ extension LonginusManager {
                         cacheType: ImageCacheType,
                         forTask task: ImageLoadTask,
                         resource: ImageWebCacheResourceable,
-                        transform: ImageTransformer?,
+                        transformer: ImageTransformer?,
                         completion: @escaping ImageManagerCompletionBlock) {
         if options.contains(.preload) {
             complete(with: task,
@@ -337,9 +337,9 @@ extension LonginusManager {
         self.coderQueue.async { [weak self, weak task] in
             guard let self = self, let task = task, !task.isCancelled else { return }
             let decodedImage = self.imageCoder.decodedImage(with: data)
-            if let currentEditor = transform {
+            if let currentTransformer = transformer {
                 if var animatedImage = decodedImage as? AnimatedImage {
-                    animatedImage.lg.transformer = currentEditor
+                    animatedImage.lg.transformer = currentTransformer
                     self.complete(with: task,
                                   completion: completion,
                                   image: animatedImage,
@@ -353,9 +353,9 @@ extension LonginusManager {
                                           completion:{
                     })
                 } else if let inputImage = decodedImage {
-                    if var image = currentEditor.edit(inputImage) {
+                    if var image = currentTransformer.transform(inputImage) {
                         guard !task.isCancelled else { return }
-                        image.lg.lgImageEditKey = currentEditor.key
+                        image.lg.lgImageEditKey = currentTransformer.key
                         image.lg.imageFormat = data.lg.imageFormat
                         self.complete(with: task,
                                       completion: completion,
@@ -426,7 +426,7 @@ extension LonginusManager {
                             cacheType: .none,
                             forTask: task,
                             resource: resource,
-                            transform: transformer,
+                            transformer: transformer,
                             completion: completion)
             } else if let currentError = error {
                 let code = (currentError as NSError).code

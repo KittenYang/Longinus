@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F826BCB24B30A69004B0354 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCA24B30A69004B0354 /* MainTableViewController.swift */; };
+		5F826BCD24B30E9B004B0354 /* ImageWallCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */; };
+		5F826BCF24B31D3B004B0354 /* ImageLinksPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */; };
 		5F858463246A7DA100334B4C /* MemoryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F858462246A7DA000334B4C /* MemoryCacheTests.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -35,6 +38,9 @@
 		3D75C0F59011FA4896555532 /* Pods_Longinus_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Longinus_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42759F65B7B1D70B32D09A44 /* Pods-Longinus_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Longinus_Example.release.xcconfig"; path = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example.release.xcconfig"; sourceTree = "<group>"; };
 		5D0244D932D1529537D74597 /* Pods-Longinus_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Longinus_Tests.release.xcconfig"; path = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		5F826BCA24B30A69004B0354 /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWallCollectionViewController.swift; sourceTree = "<group>"; };
+		5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLinksPool.swift; sourceTree = "<group>"; };
 		5F858462246A7DA000334B4C /* MemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCacheTests.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Longinus_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Longinus_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -108,6 +114,9 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */,
+				5F826BCA24B30A69004B0354 /* MainTableViewController.swift */,
+				5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -335,7 +344,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F826BCD24B30E9B004B0354 /* ImageWallCollectionViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				5F826BCB24B30A69004B0354 /* MainTableViewController.swift in Sources */,
+				5F826BCF24B31D3B004B0354 /* ImageLinksPool.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -490,7 +502,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -506,7 +518,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -527,7 +539,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Longinus_Example.app/Longinus_Example";
 			};
 			name = Debug;
@@ -545,7 +557,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Longinus_Example.app/Longinus_Example";
 			};
 			name = Release;

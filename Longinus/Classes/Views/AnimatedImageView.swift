@@ -174,7 +174,7 @@ public class AnimatedImageView: UIImageView {
     
     fileprivate var displayLink: CADisplayLink?
     fileprivate var animationDurationScale: Double = 1
-    fileprivate var runLoopMode: RunLoop.Mode = .commonModes
+    fileprivate var runLoopMode: RunLoop.Mode = RunLoop.Mode.common
     fileprivate var shouldUpdateLayer: Bool = true
     fileprivate var loopCount: Int = 0
     fileprivate var accumulatedTime: TimeInterval = 0
