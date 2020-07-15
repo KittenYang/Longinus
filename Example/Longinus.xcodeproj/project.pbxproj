@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F28365324BEAC5500A2E006 /* FPSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F28365224BEAC5500A2E006 /* FPSLabel.swift */; };
+		5F28365524BEAE0900A2E006 /* SafeDisplayLinkProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F28365424BEAE0900A2E006 /* SafeDisplayLinkProxy.swift */; };
 		5F826BCB24B30A69004B0354 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCA24B30A69004B0354 /* MainTableViewController.swift */; };
 		5F826BCD24B30E9B004B0354 /* ImageWallCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */; };
 		5F826BCF24B31D3B004B0354 /* ImageLinksPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */; };
@@ -38,6 +40,8 @@
 		3D75C0F59011FA4896555532 /* Pods_Longinus_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Longinus_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42759F65B7B1D70B32D09A44 /* Pods-Longinus_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Longinus_Example.release.xcconfig"; path = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example.release.xcconfig"; sourceTree = "<group>"; };
 		5D0244D932D1529537D74597 /* Pods-Longinus_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Longinus_Tests.release.xcconfig"; path = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		5F28365224BEAC5500A2E006 /* FPSLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSLabel.swift; sourceTree = "<group>"; };
+		5F28365424BEAE0900A2E006 /* SafeDisplayLinkProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeDisplayLinkProxy.swift; sourceTree = "<group>"; };
 		5F826BCA24B30A69004B0354 /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWallCollectionViewController.swift; sourceTree = "<group>"; };
 		5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLinksPool.swift; sourceTree = "<group>"; };
@@ -88,6 +92,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		5F28365124BEAC3B00A2E006 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				5F28365224BEAC5500A2E006 /* FPSLabel.swift */,
+				5F28365424BEAE0900A2E006 /* SafeDisplayLinkProxy.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +125,7 @@
 		607FACD21AFB9204008FA782 /* Example for Longinus */ = {
 			isa = PBXGroup;
 			children = (
+				5F28365124BEAC3B00A2E006 /* Utilities */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */,
@@ -346,6 +360,8 @@
 			files = (
 				5F826BCD24B30E9B004B0354 /* ImageWallCollectionViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				5F28365524BEAE0900A2E006 /* SafeDisplayLinkProxy.swift in Sources */,
+				5F28365324BEAC5500A2E006 /* FPSLabel.swift in Sources */,
 				5F826BCB24B30A69004B0354 /* MainTableViewController.swift in Sources */,
 				5F826BCF24B31D3B004B0354 /* ImageLinksPool.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,

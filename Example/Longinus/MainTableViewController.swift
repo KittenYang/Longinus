@@ -29,6 +29,10 @@ import UIKit
 
 class MainTableViewController: UITableViewController {
 
+    private lazy var fps: FPSLabel = {
+        let label = FPSLabel()
+        return label
+    }()
     private var menu = [(String, (() -> Void)?)]()
     
     override func viewDidLoad() {
@@ -47,6 +51,19 @@ class MainTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UITableViewCell")
         tableView.dataSource = self
         tableView.delegate = self
+    
+        if let window = UIApplication.shared.keyWindow {
+            fps.translatesAutoresizingMaskIntoConstraints = false
+            window.addSubview(fps)
+            let margins = window.layoutMarginsGuide
+            NSLayoutConstraint.activate([
+                fps.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -10.0),
+                fps.centerXAnchor.constraint(equalTo: margins.centerXAnchor),
+                fps.widthAnchor.constraint(equalToConstant: 60.0),
+                fps.heightAnchor.constraint(equalToConstant: 25.0)
+            ])
+        }
+        
     }
     
     /// MARK: UITableViewDataSource
