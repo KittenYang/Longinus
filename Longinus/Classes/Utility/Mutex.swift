@@ -107,32 +107,4 @@ public class Mutex {
         pthread_mutex_destroy(&self.mutex)
     }
 
-//    @discardableResult
-//    public final func locked<T>(_ block: () throws -> (T)) throws -> T {
-//        return try self.privateLocked(block)
-//    }
-//
-//    @discardableResult
-//    public final func locked<T>(_ block: () -> (T)) -> T {
-//        return try! self.privateLocked(block)
-//    }
-//
-//    @discardableResult
-//    public final func tryLock() -> Int32 {
-//        return pthread_mutex_trylock(&self.mutex)
-//    }
-//
-//
-//    /** Execute the given block while holding a lock to this mutex. */
-//    @discardableResult
-//    private final func privateLocked<T>(_ block: () throws -> (T)) throws -> T {
-//        self.lock()
-//
-//        defer {
-//            self.unlock()
-//        }
-//        let ret: T = try block()
-//        return ret
-//    }
-
 }

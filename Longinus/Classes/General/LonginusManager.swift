@@ -298,7 +298,7 @@ public class LonginusManager {
     /// Cancels all image loading tasks
     public func cancelAll() {
         taskLock.lock()
-        let currentTasks = Set<ImageLoadTask>()
+        let currentTasks = tasks
         taskLock.unlock()
         for task in currentTasks {
             task.cancel()
@@ -424,7 +424,7 @@ extension LonginusManager {
                                transformer: ImageTransformer?,
                                progress: ImageDownloaderProgressBlock?,
                                completion: @escaping ImageManagerCompletionBlock) {
-        task.downloadTask = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
+        task.downloadInfo = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
             guard let self = self, let task = task, !task.isCancelled else { return }
             if let currentData = data {
                 if options.contains(.retryFailedUrl) {

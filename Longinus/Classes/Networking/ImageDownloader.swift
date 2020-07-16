@@ -34,7 +34,7 @@ public typealias ImageManagerCompletionBlock = (UIImage?, Data?, Error?, ImageCa
 public typealias ImagePreloadProgress = (_ successCount: Int, _ finishCount: Int, _ total: Int) -> Void
 public typealias ImagePreloadCompletion = (_ successCount: Int, _ total: Int) -> Void
 
-public protocol ImageDownloadTaskable {
+public protocol ImageDownloadInfo {
     var sentinel: Int32 { get }
     var url: URL { get }
     var isCancelled: Bool { get }
@@ -48,14 +48,14 @@ public protocol ImageDownloadable: AnyObject {
     func downloadImage(with url: URL,
                        options: ImageOptions,
                        progress: ImageDownloaderProgressBlock?,
-                       completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable
-    func cancel(task: ImageDownloadTaskable)
+                       completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadInfo
+    func cancel(info: ImageDownloadInfo)
     func cancel(url: URL)
     func cancelPreloading()
     func cancelAll()
 }
 
-private class ImageDefaultDownloadTask: ImageDownloadTaskable {
+private class ImageDefaultDownload: ImageDownloadInfo {
     private(set) var sentinel: Int32
     private(set) var url: URL
     private(set) var isCancelled: Bool
@@ -77,8 +77,8 @@ public class ImageDownloader {
     public var donwloadTimeout: TimeInterval
     public weak var imageCoder: ImageCodeable?
 
-    public lazy var generateDownloadTask: (URL, ImageDownloaderProgressBlock?, @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable = {
-        ImageDefaultDownloadTask(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
+    public lazy var generateDownloadInfo: (URL, ImageDownloaderProgressBlock?, @escaping ImageDownloaderCompletionBlock) -> ImageDownloadInfo = {
+        ImageDefaultDownload(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
     }
     
     public var generateDownloadOperation: (URLRequest, URLSession, ImageOptions) -> ImageDownloadOperateable
@@ -92,7 +92,7 @@ public class ImageDownloader {
     
     public var currentPreloadTaskCount: Int {
         lock.wait()
-        let count = preloadTasks.count
+        let count = preloadInfos.count
         lock.signal()
         return count
     }
@@ -114,7 +114,7 @@ public class ImageDownloader {
     private let operationQueue: ImageDownloadOperationQueue
     private var taskSentinel: Int32
     private var urlOperations: [URL : ImageDownloadOperateable]
-    private var preloadTasks: [Int32 : ImageDownloadTaskable]
+    private var preloadInfos: [Int32 : ImageDownloadInfo]
     private var httpHeaders: [String : String]
     private let lock: DispatchSemaphore
     private let sessionConfiguration: URLSessionConfiguration
@@ -134,7 +134,7 @@ public class ImageDownloader {
         operationQueue = ImageDownloadOperationQueue()
         operationQueue.maxRunningCount = 6
         urlOperations = [:]
-        preloadTasks = [:]
+        preloadInfos = [:]
         httpHeaders = ["Accept" : "image/*;q=0.8"]
         lock = DispatchSemaphore(value: 1)
         self.sessionConfiguration = sessionConfiguration
@@ -161,10 +161,10 @@ extension ImageDownloader: ImageDownloadable {
     public func downloadImage(with url: URL,
                               options: ImageOptions = .none,
                               progress: ImageDownloaderProgressBlock? = nil,
-                              completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadTaskable {
-        let task = generateDownloadTask(url, progress, completion)
+                              completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadInfo {
+        let info = generateDownloadInfo(url, progress, completion)
         lock.wait()
-        if options.contains(.preload) { preloadTasks[task.sentinel] = task }
+        if options.contains(.preload) { preloadInfos[info.sentinel] = info }
         var operation: ImageDownloadOperateable? = urlOperations[url]
         if operation != nil {
             if !options.contains(.preload) {
@@ -178,13 +178,13 @@ extension ImageDownloader: ImageDownloadable {
             request.allHTTPHeaderFields = httpHeaders
             request.httpShouldUsePipelining = true
             let newOperation = generateDownloadOperation(request, session, options)
-            if options.contains(.progressiveDownload) { newOperation.imageCoder = imageCoder }
+            if options.contains(.progressiveDownload) || options.contains(.progressiveBlur) { newOperation.imageCoder = imageCoder }
             newOperation.completion = { [weak self, weak newOperation] in
                 guard let self = self else { return }
                 self.lock.wait()
                 self.urlOperations.removeValue(forKey: url)
-                if let tasks = newOperation?.downloadTasks {
-                    for task in tasks { self.preloadTasks.removeValue(forKey: task.sentinel) }
+                if let infos = newOperation?.downloadInfos {
+                    for info in infos { self.preloadInfos.removeValue(forKey: info.sentinel) }
                 }
                 self.operationQueue.removeOperation(forKey: url)
                 self.lock.signal()
@@ -193,20 +193,20 @@ extension ImageDownloader: ImageDownloadable {
             operationQueue.add(newOperation, preload: options.contains(.preload))
             operation = newOperation
         }
-        operation?.add(task: task)
+        operation?.add(info: info)
         lock.signal()
-        return task
+        return info
     }
     
-    public func cancel(task: ImageDownloadTaskable) {
-        task.cancel()
+    public func cancel(info: ImageDownloadInfo) {
+        info.cancel()
         lock.wait()
-        let operation = urlOperations[task.url]
+        let operation = urlOperations[info.url]
         lock.signal()
         if let operation = operation {
             var allCancelled = true
-            let tasks = operation.downloadTasks
-            for task in tasks where !task.isCancelled {
+            let infos = operation.downloadInfos
+            for info in infos where !info.isCancelled {
                 allCancelled = false
                 break
             }
@@ -223,10 +223,10 @@ extension ImageDownloader: ImageDownloadable {
     
     public func cancelPreloading() {
         lock.wait()
-        let tasks = preloadTasks
+        let infos = preloadInfos
         lock.signal()
-        for (_, task) in tasks {
-            cancel(task: task)
+        for (_, info) in infos {
+            cancel(info: info)
         }
     }
     

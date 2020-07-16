@@ -44,7 +44,7 @@ class LonginusExampleCell: UITableViewCell {
                                     borderColor: .white,
                                     backgroundColor: .green)
         
-        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .imageWithFadeAnimation, .ignoreAnimatedImage], transformer: nil, progress: { (data, progress, image) in
+        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation, .ignoreAnimatedImage], transformer: transformer, progress: { (data, progress, image) in
             
         }) { (image, data, error, cacheType) in
             

@@ -79,7 +79,7 @@ public extension ImageWebCacheable {
         }
         var currentProgress = progress
         var sentinel: Int32 = 0
-        if options.contains(.progressiveDownload) {
+        if options.contains(.progressiveDownload) || options.contains(.progressiveBlur) {
             currentProgress = { [weak self] (data, expectedSize, image) in
                 guard let self = self else { return }
                 guard let partialData = data,
@@ -99,13 +99,27 @@ public extension ImageWebCacheable {
                     displayImage = currentImage
                 }
                 let downloadProgress = min(1, Double(partialData.count) / Double(expectedSize))
+                if options.contains(.progressiveBlur) {
+                    webCacheOperation.progressiveDisplayCount += 1
+                    var radius: CGFloat = 32
+                    if expectedSize > 0 {
+                        let divide: CGFloat = (3 * CGFloat(downloadProgress) + 0.6)
+                        let factor: CGFloat = 1.0 / divide - 0.25
+                        radius = radius * factor
+                    } else {
+                        radius /= CGFloat(webCacheOperation.progressiveDisplayCount)
+                    }
+                    displayImage = displayImage.lg.image(byBlurRadius: radius, tintColor: nil, tintMode: .normal, saturation: 1.0, maskImage: nil) ?? displayImage
+                }
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     let webCacheOperation = self.webCacheOperation
                     guard let task = webCacheOperation.task(forKey: taskKey),
                         task.sentinel == sentinel,
                         !task.isCancelled,
-                        webCacheOperation.downloadProgress(forKey: taskKey) < downloadProgress else { return }
+                        webCacheOperation.downloadProgress(forKey: taskKey) < downloadProgress else {
+                            return
+                    }
                     setImage(displayImage)
                     webCacheOperation.setDownloadProgress(downloadProgress, forKey: taskKey)
                 }
@@ -140,6 +154,7 @@ public class ImageWebCacheOperation {
     private let weakTaskMap: NSMapTable<NSString, ImageLoadTask>
     private var downloadProgressDic: [String : Double]
     private var lock: Mutex
+    var progressiveDisplayCount: Int = 0
     
     public init() {
         weakTaskMap = NSMapTable(keyOptions: .strongMemory, valueOptions: .weakMemory)

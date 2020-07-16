@@ -30,12 +30,12 @@ import UIKit
 public protocol ImageDownloadOperateable: AnyObject {
     var url: URL { get }
     var dataTaskId: Int { get }
-    var downloadTasks: [ImageDownloadTaskable] { get }
+    var downloadInfos: [ImageDownloadInfo] { get }
     var imageCoder: ImageCodeable? { get set }
     var completion: (() -> Void)? { get set }
     
     init(request: URLRequest, session: URLSession, options: ImageOptions)
-    func add(task: ImageDownloadTaskable)
+    func add(info: ImageDownloadInfo)
     func start()
     func cancel()
 }
@@ -59,7 +59,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     
     private let request: URLRequest
     private let session: URLSession
-    private var tasks: [ImageDownloadTaskable]
+    private var infos: [ImageDownloadInfo]
     private var dataTask: URLSessionTask?
     private let taskLock: DispatchSemaphore
     private let stateLock: DispatchSemaphore
@@ -75,9 +75,9 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         return DispatchQueuePool.userInitiated.currentQueue
     }()
     
-    var downloadTasks: [ImageDownloadTaskable] {
+    var downloadInfos: [ImageDownloadInfo] {
         taskLock.wait()
-        let currentTasks = tasks
+        let currentTasks = infos
         taskLock.signal()
         return currentTasks
     }
@@ -86,7 +86,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         self.request = request
         self.session = session
         self.options = options
-        tasks = []
+        infos = []
         taskLock = DispatchSemaphore(value: 1)
         stateLock = DispatchSemaphore(value: 1)
         expectedSize = 0
@@ -95,9 +95,9 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         downloadFinished = false
     }
     
-    func add(task: ImageDownloadTaskable) {
+    func add(info: ImageDownloadInfo) {
         taskLock.wait()
-        tasks.append(task)
+        infos.append(info)
         taskLock.signal()
     }
     
@@ -112,9 +112,6 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
             }
             return
         } // Completion call back will not be called when task is cancelled
-        LonginusManager.sharedApplication?.beginBackgroundTask(expirationHandler: {
-            
-        })
         dataTask = session.dataTask(with: request)
         dataTask?.resume()
         if let url = request.url {
@@ -176,10 +173,10 @@ extension ImageDownloadOperation: URLSessionTaskDelegate {
     
     private func complete(withData data: Data?, error: Error?) {
         taskLock.wait()
-        let currentTasks = tasks
+        let currentInfos = infos
         taskLock.signal()
-        for task in currentTasks where !task.isCancelled {
-            task.completion(data, error)
+        for info in currentInfos where !info.isCancelled {
+            info.completion(data, error)
         }
     }
     
@@ -240,13 +237,13 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
                           expectedSize: Int,
                           image: UIImage?) {
         taskLock.wait()
-        let currentTasks = tasks
+        let currentInfos = infos
         taskLock.signal()
         stateLock.wait()
         defer { stateLock.signal() }
         if downloadFinished { return }
-        for task in currentTasks where !task.isCancelled {
-            task.progress?(data, expectedSize, image)
+        for info in currentInfos where !info.isCancelled {
+            info.progress?(data, expectedSize, image)
         }
     }
     

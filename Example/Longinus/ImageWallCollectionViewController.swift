@@ -88,6 +88,6 @@ class ImageWallCell: UICollectionViewCell {
                                borderWidth: 1.0,
                                borderColor: .white,
                                backgroundColor: .green)
-        imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
+        imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
     }
 }
