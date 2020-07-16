@@ -82,8 +82,31 @@ public class MemoryCache<Key: Hashable, Value> {
         self.shouldAutoTrim = self.autoTrimInterval > 0
         
         if shouldAutoTrim { autoTrim() }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidReceiveMemoryWarningNotification), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: Notification Methods
+    @objc private func appDidReceiveMemoryWarningNotification() {
+        self.didReceiveMemoryWarningBlock?(self)
+        if self.shouldRemoveAllObjectsOnMemoryWarning {
+            self.removeAll()
+        }
+    }
+
+    @objc private func appDidEnterBackgroundNotification() {
+        self.didEnterBackgroundBlock?(self)
+        if self.shouldRemoveAllObjectsWhenEnteringBackground {
+            self.removeAll()
+        }
+    }
+    
 }
 
 extension MemoryCache: MemoryCacheable {
