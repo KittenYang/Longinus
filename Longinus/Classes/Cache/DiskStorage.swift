@@ -345,9 +345,9 @@ extension DiskStorage {
 }
 
 extension LonginusExtension where Base == String {
-    var utf8: UnsafePointer<Int8>? { return (self.base as NSString).utf8String }
+    var utf8: UnsafePointer<Int8>? { return (base as NSString).utf8String }
     var md5: String {
-        guard let data = self.base.data(using: .utf8) else { return self.base }
+        guard let data = base.data(using: .utf8) else { return base }
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
         _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
             return CC_MD5(bytes.baseAddress, CC_LONG(data.count), &digest)

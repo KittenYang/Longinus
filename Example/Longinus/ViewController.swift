@@ -36,16 +36,20 @@ class LonginusExampleCell: UITableViewCell {
     }
     
     func updateImageWithURL(url: URL?) {
+        let radius: CGFloat = min(webImageView.frame.width, webImageView.frame.height)
         let transformer = LonginusExtension<ImageTransformer>
-            .imageTransformerCommon(with: webImageView.frame.size,
-                                    corner: .allCorners,
-                                    cornerRadius: 5.0,
-                                    borderWidth: 1.0,
-                                    borderColor: .white,
-                                    backgroundColor: .green)
-        
-        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation, .ignoreAnimatedImage], transformer: transformer, progress: { (data, progress, image) in
-            
+            .imageTransformerCommon(with: CGSize(width: radius, height: radius),
+                                    fillContentMode: .center,
+                                    corner: [.allCorners],
+                                    cornerRadius: radius/2,
+                                    borderWidth: 2.0,
+                                    borderColor: UIColor.white,
+                                    backgroundColor: UIColor.gray)
+        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation/*, .ignoreAnimatedImage*/], transformer: transformer, progress: { (data, expectedSize, image) in
+            if let partialData = data, let url = url {
+                let progress = min(1, Double(partialData.count) / Double(expectedSize))
+                print("\(url.absoluteString): \(progress)")
+            }
         }) { (image, data, error, cacheType) in
             
         }

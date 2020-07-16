@@ -28,7 +28,7 @@
 import UIKit
 
 public let LonginusImageErrorDomain: String = "LonginusImageErrorDomain"
-public typealias ImageDownloaderProgressBlock = (Data?, Int, UIImage?) -> Void
+public typealias ImageDownloaderProgressBlock = (Data?, _ expectedSize: Int, UIImage?) -> Void
 public typealias ImageDownloaderCompletionBlock = (Data?, Error?) -> Void
 public typealias ImageManagerCompletionBlock = (UIImage?, Data?, Error?, ImageCacheType) -> Void
 public typealias ImagePreloadProgress = (_ successCount: Int, _ finishCount: Int, _ total: Int) -> Void
