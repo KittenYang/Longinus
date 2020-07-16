@@ -58,6 +58,7 @@ public struct ImageOptions: OptionSet {
     public static let ignorePlaceholder = ImageOptions(rawValue: 1 << 7)
     
     /// Do not decode image
+    /// This may used for image downloading without display.
     public static let ignoreImageDecoding = ImageOptions(rawValue: 1 << 8)
     
     /// Set the image to view with a fade animation.
@@ -66,6 +67,8 @@ public struct ImageOptions: OptionSet {
     public static let showNetworkActivity = ImageOptions(rawValue: 1 << 10)
     
     public static let progressiveBlur = ImageOptions(rawValue: 1 << 11)
+    
+    public static let ignoreAnimatedImage = ImageOptions(rawValue: 1 << 12)
     
     /// Preload image data and cache to disk
     internal static let preload = ImageOptions(rawValue: 1 << 32)

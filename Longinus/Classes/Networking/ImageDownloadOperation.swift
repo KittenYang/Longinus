@@ -112,6 +112,9 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
             }
             return
         } // Completion call back will not be called when task is cancelled
+        LonginusManager.sharedApplication?.beginBackgroundTask(expirationHandler: {
+            
+        })
         dataTask = session.dataTask(with: request)
         dataTask?.resume()
         if let url = request.url {

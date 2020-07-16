@@ -337,8 +337,13 @@ extension LonginusManager {
         }
         self.coderQueue.async { [weak self, weak task] in
             guard let self = self, let task = task, !task.isCancelled else { return }
-            let decodedImage = self.imageCoder.decodedImage(with: data)
+            var decodedImage = self.imageCoder.decodedImage(with: data)
             if let currentTransformer = transformer {
+                if let animatedImage = decodedImage as? AnimatedImage {
+                    if options.contains(.ignoreAnimatedImage) {
+                        decodedImage = animatedImage.lg.imageFrame(at: 0, decodeIfNeeded: !options.contains(.ignoreImageDecoding))
+                    }
+                }
                 if var animatedImage = decodedImage as? AnimatedImage {
                     animatedImage.lg.transformer = currentTransformer
                     self.complete(with: task,
@@ -384,6 +389,11 @@ extension LonginusManager {
                 if !options.contains(.ignoreImageDecoding),
                     let decompressedImage = self.imageCoder.decompressedImage(with: image, data: data) {
                     image = decompressedImage
+                }
+                if let animatedImage = image as? AnimatedImage, options.contains(.ignoreAnimatedImage) {
+                    if let firstFrame = animatedImage.lg.imageFrame(at: 0, decodeIfNeeded: !options.contains(.ignoreImageDecoding)) {
+                        image = firstFrame
+                    }
                 }
                 self.complete(with: task,
                               completion: completion,
@@ -489,14 +499,14 @@ extension LonginusManager {
     }
 }
 
-struct ImageApplicationNetworkIndicatorInfo {
-    var count: Int = 0
-    var timer: Timer?
-}
-
 // MARK: Network Indicator
 private var networkIndicatorInfoKey: Void?
 extension LonginusManager {
+
+    struct ImageApplicationNetworkIndicatorInfo {
+        var count: Int = 0
+        var timer: Timer?
+    }
     
     private static var networkIndicatorInfo: ImageApplicationNetworkIndicatorInfo? {
         get {
