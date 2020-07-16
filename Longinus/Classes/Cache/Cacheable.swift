@@ -79,7 +79,7 @@ protocol AutoTrimable: class {
 
 extension AutoTrimable {
     func autoTrim() {
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + autoTrimInterval) {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + autoTrimInterval) {
             self.trimToAge(self.ageLimit)
             self.trimToCost(self.costLimit)
             self.trimToCount(self.countLimit)

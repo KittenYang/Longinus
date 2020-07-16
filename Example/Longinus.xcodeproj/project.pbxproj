@@ -127,9 +127,9 @@
 			children = (
 				5F28365124BEAC3B00A2E006 /* Utilities */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */,
 				5F826BCA24B30A69004B0354 /* MainTableViewController.swift */,
+				5F826BCE24B31D3B004B0354 /* ImageLinksPool.swift */,
+				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				5F826BCC24B30E9B004B0354 /* ImageWallCollectionViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,

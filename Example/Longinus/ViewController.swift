@@ -15,8 +15,8 @@ class LonginusExampleCell: UITableViewCell {
     static let cellHeight: CGFloat = 200.0
     
     lazy var webImageView: AnimatedImageView = {
-        let imgv = AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
-        imgv.contentMode = .scaleAspectFill
+        var imgv = AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
+        imgv.contentMode = .scaleAspectFit
         imgv.clipsToBounds = true
         return imgv
     }()
@@ -36,7 +36,15 @@ class LonginusExampleCell: UITableViewCell {
     }
     
     func updateImageWithURL(url: URL?) {
-        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .imageWithFadeAnimation], transformer: nil, progress: { (data, progress, image) in
+        let transformer = LonginusExtension<ImageTransformer>
+            .imageTransformerCommon(with: webImageView.frame.size,
+                                    corner: .allCorners,
+                                    cornerRadius: 5.0,
+                                    borderWidth: 1.0,
+                                    borderColor: .white,
+                                    backgroundColor: .green)
+        
+        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .imageWithFadeAnimation], transformer: transformer, progress: { (data, progress, image) in
             
         }) { (image, data, error, cacheType) in
             
@@ -54,7 +62,7 @@ class ViewController: UIViewController {
         self.navigationController?.title = "Longinus"
         let reloadButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reload))
         self.navigationItem.rightBarButtonItem = reloadButtonItem
-        self.view.backgroundColor = UIColor(white: 0.217, alpha: 1.0)
+        self.view.backgroundColor = UIColor.white
         tableView.register(LonginusExampleCell.self, forCellReuseIdentifier: LonginusExampleCell.nameOfClass)
     }
     
@@ -75,7 +83,7 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ImageLinksPool.imageLinks.count * 3
+        return ImageLinksPool.imageLinks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

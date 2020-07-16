@@ -34,7 +34,7 @@ public protocol ImageDownloadOperateable: AnyObject {
     var imageCoder: ImageCodeable? { get set }
     var completion: (() -> Void)? { get set }
     
-    init(request: URLRequest, session: URLSession)
+    init(request: URLRequest, session: URLSession, options: ImageOptions)
     func add(task: ImageDownloadTaskable)
     func start()
     func cancel()
@@ -69,6 +69,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     private var cancelled: Bool
     private var finished: Bool
     private var downloadFinished: Bool
+    private var options: ImageOptions
     
     private lazy var coderQueue: DispatchQueue = {
         return DispatchQueuePool.userInitiated.currentQueue
@@ -81,9 +82,10 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         return currentTasks
     }
     
-    required init(request: URLRequest, session: URLSession) {
+    required init(request: URLRequest, session: URLSession, options: ImageOptions) {
         self.request = request
         self.session = session
+        self.options = options
         tasks = []
         taskLock = DispatchSemaphore(value: 1)
         stateLock = DispatchSemaphore(value: 1)
@@ -102,15 +104,34 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     func start() {
         stateLock.wait()
         defer { stateLock.signal() }
-        if cancelled || finished { return } // Completion call back will not be called when task is cancelled
+        if cancelled || finished {
+            if let url = request.url {
+                if !url.isFileURL && options.contains(.showNetworkActivity) {
+                    LonginusManager.decrementNetworkActivityCount()
+                }
+            }
+            return
+        } // Completion call back will not be called when task is cancelled
         dataTask = session.dataTask(with: request)
         dataTask?.resume()
+        if let url = request.url {
+            if !url.isFileURL && options.contains(.showNetworkActivity) {
+                LonginusManager.incrementNetworkActivityCount()
+            }
+        }
     }
     
     func cancel() {
         stateLock.wait()
         defer { stateLock.signal() }
-        if finished { return }
+        if finished {
+            if let url = request.url {
+                if !url.isFileURL && options.contains(.showNetworkActivity) {
+                    LonginusManager.decrementNetworkActivityCount()
+                }
+            }
+            return
+        }
         cancelled = true
         dataTask?.cancel()
         done()
@@ -119,6 +140,11 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     private func done() {
         finished = true
         dataTask = nil
+        if let url = request.url {
+            if !url.isFileURL && options.contains(.showNetworkActivity) {
+                LonginusManager.decrementNetworkActivityCount()
+            }
+        }
         completion?()
         completion = nil
     }
@@ -172,11 +198,13 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
         }
     }
     
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+    func urlSession(_ session: URLSession,
+                    dataTask: URLSessionDataTask,
+                    didReceive data: Data) {
         if imageData == nil { imageData = Data(capacity: expectedSize) }
         imageData?.append(data)
         guard let currentImageData = imageData else { return }
-
+        
         if let coder = imageCoder,
             imageProgressiveCoder == nil {
             if let coderManager = coder as? ImageCoderManager {
@@ -205,7 +233,9 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
         }
     }
     
-    func progress(with data: Data?, expectedSize: Int, image: UIImage?) {
+    private func progress(with data: Data?,
+                          expectedSize: Int,
+                          image: UIImage?) {
         taskLock.wait()
         let currentTasks = tasks
         taskLock.signal()

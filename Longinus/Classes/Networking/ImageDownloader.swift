@@ -81,7 +81,7 @@ public class ImageDownloader {
         ImageDefaultDownloadTask(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
     }
     
-    public var generateDownloadOperation: (URLRequest, URLSession) -> ImageDownloadOperateable
+    public var generateDownloadOperation: (URLRequest, URLSession, ImageOptions) -> ImageDownloadOperateable
     
     public var currentDownloadCount: Int {
         lock.wait()
@@ -130,7 +130,7 @@ public class ImageDownloader {
     public init(sessionConfiguration: URLSessionConfiguration) {
         donwloadTimeout = 15
         taskSentinel = 0
-        generateDownloadOperation = { ImageDownloadOperation(request: $0, session: $1) }
+        generateDownloadOperation = { ImageDownloadOperation(request: $0, session: $1, options: $2) }
         operationQueue = ImageDownloadOperationQueue()
         operationQueue.maxRunningCount = 6
         urlOperations = [:]
@@ -177,7 +177,7 @@ extension ImageDownloader: ImageDownloadable {
             request.httpShouldHandleCookies = options.contains(.handleCookies)
             request.allHTTPHeaderFields = httpHeaders
             request.httpShouldUsePipelining = true
-            let newOperation = generateDownloadOperation(request, session)
+            let newOperation = generateDownloadOperation(request, session, options)
             if options.contains(.progressiveDownload) { newOperation.imageCoder = imageCoder }
             newOperation.completion = { [weak self, weak newOperation] in
                 guard let self = self else { return }

@@ -38,8 +38,8 @@ extension LonginusExtension where Base: AnimatedImage {
         }
         set {
             base.lock.wait()
-            if newValue?.key != transformer?.key {
-                transformer = newValue
+            if newValue?.key != base.transformer?.key {
+                base.transformer = newValue
                 base.cachedFrameCount = 0
             }
             base.lock.signal()
@@ -127,7 +127,7 @@ extension LonginusExtension where Base: AnimatedImage {
                         base.frames[index].image = nil
                         base.cachedFrameCount -= 1
                         base.currentCacheSize -= oldImage.lg.bytes
-                        shouldBreak = (self.currentCacheSize <= base.maxCacheSize)
+                        shouldBreak = (base.currentCacheSize <= base.maxCacheSize)
                     }
                     base.lock.signal()
                     if shouldBreak { break }
@@ -142,7 +142,7 @@ extension LonginusExtension where Base: AnimatedImage {
                     base.lock.wait()
                     if let oldImage = base.frames[index].image {
                         if oldImage.lg.lgImageEditKey != image.lg.lgImageEditKey {
-                            if self.currentCacheSize + image.lg.bytes - oldImage.lg.bytes <= self.maxCacheSize {
+                            if base.currentCacheSize + image.lg.bytes - oldImage.lg.bytes <= base.maxCacheSize {
                                 base.frames[index].image = image
                                 base.cachedFrameCount += 1
                                 base.currentCacheSize += image.lg.bytes - oldImage.lg.bytes
@@ -150,7 +150,7 @@ extension LonginusExtension where Base: AnimatedImage {
                                 shouldBreak = true
                             }
                         }
-                    } else if self.currentCacheSize + image.lg.bytes <= base.maxCacheSize {
+                    } else if base.currentCacheSize + image.lg.bytes <= base.maxCacheSize {
                         base.frames[index].image = image
                         base.cachedFrameCount += 1
                         base.currentCacheSize += image.lg.bytes

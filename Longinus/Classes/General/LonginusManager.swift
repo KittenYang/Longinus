@@ -307,6 +307,7 @@ public class LonginusManager {
 
 }
 
+// MARK: Helper
 extension LonginusManager {
     private func newLoadTask() -> ImageLoadTask {
         let task = ImageLoadTask(sentinel: OSAtomicIncrement32(&taskSentinel))
@@ -347,10 +348,10 @@ extension LonginusManager {
                                   cacheType: cacheType)
                     let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
                     self.imageCacher.store(animatedImage,
-                                          data: data,
-                                          forKey: resource.cacheKey,
-                                          cacheType: storeCacheType,
-                                          completion:{
+                                           data: data,
+                                           forKey: resource.cacheKey,
+                                           cacheType: storeCacheType,
+                                           completion:{
                     })
                 } else if let inputImage = decodedImage {
                     if var image = currentTransformer.transform(inputImage) {
@@ -364,10 +365,10 @@ extension LonginusManager {
                                       cacheType: cacheType)
                         let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
                         self.imageCacher.store(image,
-                                              data: data,
-                                              forKey: resource.cacheKey,
-                                              cacheType: storeCacheType,
-                                              completion:{})
+                                               data: data,
+                                               forKey: resource.cacheKey,
+                                               cacheType: storeCacheType,
+                                               completion:{})
                     } else {
                         self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "No edited image"]))
                     }
@@ -391,10 +392,10 @@ extension LonginusManager {
                               cacheType: cacheType)
                 let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
                 self.imageCacher.store(image,
-                                      data: data,
-                                      forKey: resource.cacheKey,
-                                      cacheType: storeCacheType,
-                                      completion: {})
+                                       data: data,
+                                       forKey: resource.cacheKey,
+                                       cacheType: storeCacheType,
+                                       completion: {})
             } else {
                 if cacheType == .none {
                     self.urlBlacklistLock.lock()
@@ -464,7 +465,9 @@ extension LonginusManager {
                  cacheType: cacheType)
     }
     
-    private func complete(with task: ImageLoadTask, completion: @escaping ImageManagerCompletionBlock, error: Error) {
+    private func complete(with task: ImageLoadTask,
+                          completion: @escaping ImageManagerCompletionBlock,
+                          error: Error) {
         complete(with: task,
                  completion: completion,
                  image: nil,
@@ -485,3 +488,74 @@ extension LonginusManager {
         }
     }
 }
+
+struct ImageApplicationNetworkIndicatorInfo {
+    var count: Int = 0
+    var timer: Timer?
+}
+
+// MARK: Network Indicator
+private var networkIndicatorInfoKey: Void?
+extension LonginusManager {
+    
+    private static var networkIndicatorInfo: ImageApplicationNetworkIndicatorInfo? {
+        get {
+            return getAssociatedObject(self, &networkIndicatorInfoKey)
+        }
+        set {
+            setRetainedAssociatedObject(self, &networkIndicatorInfoKey, newValue)
+        }
+    }
+    
+    public static let sharedApplication: UIApplication? = { () -> UIApplication? in
+        var isAppExtension: Bool = false
+        DispatchQueue.once {
+            let bundleUrl: URL = Bundle.main.bundleURL
+            let bundlePathExtension: String = bundleUrl.pathExtension
+            isAppExtension = bundlePathExtension == "appex"
+        }
+        return isAppExtension ? nil : UIApplication.shared
+    }()
+    
+    
+    @objc private static func delaySetActivity(timer: Timer?) {
+        guard let app = sharedApplication, let visiable = timer?.userInfo as? Bool else { return }
+        if app.isNetworkActivityIndicatorVisible != visiable {
+            app.isNetworkActivityIndicatorVisible = visiable
+        }
+        timer?.invalidate()
+    }
+    
+    private static func changeNetworkActivityCount(delta: Int) {
+        if sharedApplication == nil { return }
+        let block: ()->Void = {
+            var info = networkIndicatorInfo ?? ImageApplicationNetworkIndicatorInfo()
+            networkIndicatorInfo = info
+            var count = info.count
+            count += delta
+            info.count = count
+            info.timer?.invalidate()
+            info.timer = Timer(timeInterval: (1/30.0), target: self, selector: #selector(delaySetActivity(timer:)), userInfo: info.count > 0, repeats: false)
+            RunLoop.main.add(info.timer!, forMode: .common)
+        }
+        if Thread.isMainThread {
+            block()
+        } else {
+            DispatchQueue.main.async { block() }
+        }
+    }
+
+    static func incrementNetworkActivityCount() {
+        changeNetworkActivityCount(delta: 1)
+    }
+
+    static func decrementNetworkActivityCount() {
+        changeNetworkActivityCount(delta: -1)
+    }
+
+    static func currentNetworkActivityCount() -> Int {
+        return networkIndicatorInfo?.count ?? 0
+    }
+
+}
+

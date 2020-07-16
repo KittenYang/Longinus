@@ -54,8 +54,7 @@ public struct ImageTransformer {
     ///
     /// - Parameters:
     ///   - key: identification of transformer
-    ///   - needData: whether image data is necessary or not for editing
-    ///   - edit: an edit image closure
+    ///   - transform: an transform image closure
     public init(key: String, transform: @escaping ImageTransformMethod) {
         self.key = key
         self.transform = transform

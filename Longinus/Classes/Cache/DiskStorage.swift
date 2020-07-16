@@ -236,7 +236,7 @@ public class DiskStorage {
     }
     
     public func trim(toAge age: CacheAge) {
-        if age.timeInterval == .greatestFiniteMagnitude { return }
+        if age.timeInterval == .infinity { return }
         if age.timeInterval <= 0 { return clear() }
         ioLock.wait()
         let time = Date().timeIntervalSince1970 - age.timeInterval

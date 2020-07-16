@@ -35,21 +35,10 @@ enum AnimatedImageViewType {
     case hilightedAnimationImages
 }
 
-private var autoStartAnimationKey: Void?
 private var currentFrameIndexKey: Void?
 
 extension LonginusExtension where Base: AnimatedImageView {
-    public var autoStartAnimation: Bool {
-        get {
-            let box: Box<Bool>? = getAssociatedObject(base, &autoStartAnimationKey)
-            return box?.value ?? false
-        }
-        set {
-            let box = Box(newValue)
-            setRetainedAssociatedObject(base, &autoStartAnimationKey, box)
-        }
-    }
-    
+
     public var animationDurationScale: Double {
         get { return base.animationDurationScale }
         set { if newValue > 0 { base.animationDurationScale = newValue } }
@@ -72,7 +61,7 @@ extension LonginusExtension where Base: AnimatedImageView {
             runLoopMode = newValue
         }
     }
-    
+
     public fileprivate(set) var currentFrameIndex: Int {
         get {
             let box: Box<Int>? = getAssociatedObject(base, &currentFrameIndexKey)
@@ -83,8 +72,8 @@ extension LonginusExtension where Base: AnimatedImageView {
             setRetainedAssociatedObject(base, &currentFrameIndexKey, box)
         }
     }
-    
-    
+
+
     /// Sets the current animated image frame index
     ///
     /// - Parameters:
@@ -106,12 +95,13 @@ extension LonginusExtension where Base: AnimatedImageView {
         }
         return true
     }
-    
-    
+
+
 }
 
 public class AnimatedImageView: UIImageView {
 
+    public var autoStartAnimation: Bool = true
     
     /// Set a AnimatedImage object to play animation
     public override var image: UIImage? {
@@ -121,7 +111,7 @@ public class AnimatedImageView: UIImageView {
             setImage(newValue, withType: .image)
         }
     }
-    
+
     /// Set a AnimatedImage object to play animation
     public override var highlightedImage: UIImage? {
         get { return super.highlightedImage }
@@ -130,7 +120,7 @@ public class AnimatedImageView: UIImageView {
             setImage(newValue, withType: .hilightedImage)
         }
     }
-    
+
     public override var animationImages: [UIImage]? {
         get { return super.animationImages }
         set {
@@ -138,7 +128,7 @@ public class AnimatedImageView: UIImageView {
             setImage(newValue, withType: .animationImages)
         }
     }
-    
+
     public override var highlightedAnimationImages: [UIImage]? {
         get { return super.highlightedAnimationImages }
         set {
@@ -146,7 +136,7 @@ public class AnimatedImageView: UIImageView {
             setImage(newValue, withType: .hilightedAnimationImages)
         }
     }
-    
+
     public override var isAnimating: Bool {
         switch currentType {
         case .none: return false
@@ -156,7 +146,7 @@ public class AnimatedImageView: UIImageView {
         default: return super.isAnimating
         }
     }
-    
+
     private var currentType: AnimatedImageViewType {
         var type: AnimatedImageViewType = .none
         if isHighlighted {
@@ -169,9 +159,11 @@ public class AnimatedImageView: UIImageView {
         }
         return type
     }
-    
-    fileprivate var imageForCurrentType: Any? { return image(forType: currentType) }
-    
+
+    fileprivate var imageForCurrentType: Any? {
+        return image(forType: currentType)
+    }
+
     fileprivate var displayLink: CADisplayLink?
     fileprivate var animationDurationScale: Double = 1
     fileprivate var runLoopMode: RunLoop.Mode = RunLoop.Mode.common
@@ -179,7 +171,7 @@ public class AnimatedImageView: UIImageView {
     fileprivate var loopCount: Int = 0
     fileprivate var accumulatedTime: TimeInterval = 0
     fileprivate var currentLayerContent: CGImage?
-    
+
     deinit {
         displayLink?.invalidate()
     }
@@ -205,7 +197,7 @@ public class AnimatedImageView: UIImageView {
         animatedImage?.lg.updateCacheSizeIfNeeded()
         didMove()
     }
-    
+
     private func resetAnimation() {
         loopCount = 0
         var m_lg = lg
@@ -214,7 +206,7 @@ public class AnimatedImageView: UIImageView {
         currentLayerContent = nil
         shouldUpdateLayer = true
     }
-    
+
     @objc fileprivate func displayLinkRefreshed(_ link: CADisplayLink) {
         guard let currentImage = imageForCurrentType as? AnimatedImage else { return }
         if shouldUpdateLayer,
@@ -244,7 +236,7 @@ public class AnimatedImageView: UIImageView {
             }
         }
     }
-    
+
     private func image(forType type: AnimatedImageViewType) -> Any? {
         switch type {
         case .none: return nil
@@ -255,7 +247,6 @@ public class AnimatedImageView: UIImageView {
         }
     }
 
-    
     public override func startAnimating() {
         switch currentType {
         case .image, .hilightedImage:
@@ -270,22 +261,22 @@ public class AnimatedImageView: UIImageView {
             super.startAnimating()
         }
     }
-    
+
     public override func stopAnimating() {
         super.stopAnimating()
         displayLink?.isPaused = true
     }
-    
+
     public override func didMoveToSuperview() {
         didMove()
     }
-    
+
     public override func didMoveToWindow() {
         didMove()
     }
-    
+
     private func didMove() {
-        if lg.autoStartAnimation {
+        if autoStartAnimation {
             if superview != nil && window != nil {
                 startAnimating()
             } else {
@@ -293,9 +284,9 @@ public class AnimatedImageView: UIImageView {
             }
         }
     }
-    
+
     // MARK: - Layer delegate
-    
+
     public override func display(_ layer: CALayer) {
         if let content = currentLayerContent { layer.contents = content }
     }

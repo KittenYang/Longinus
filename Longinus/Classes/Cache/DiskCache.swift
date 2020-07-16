@@ -61,7 +61,7 @@ public class DiskCache: DiskCacheable {
         self.countLimit = Int.max
         self.costLimit = Int.max
         self.ageLimit = .never
-        self.autoTrimInterval = 5
+        self.autoTrimInterval = 60
         self.shouldAutoTrim = true
         
         if shouldAutoTrim { autoTrim() }

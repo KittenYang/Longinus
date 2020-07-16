@@ -102,6 +102,7 @@ class ImageDownloadOperationQueue {
         }
     }
     
+    /// run next operation
     func removeOperation(forKey key: URL) {
         if let node = waitingQueue.dic[key] {
             waitingQueue.remove(node)

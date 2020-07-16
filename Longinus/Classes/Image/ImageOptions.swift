@@ -63,6 +63,10 @@ public struct ImageOptions: OptionSet {
     /// Set the image to view with a fade animation.
     public static let imageWithFadeAnimation = ImageOptions(rawValue: 1 << 9)
     
+    public static let showNetworkActivity = ImageOptions(rawValue: 1 << 10)
+    
+    public static let progressiveBlur = ImageOptions(rawValue: 1 << 11)
+    
     /// Preload image data and cache to disk
     internal static let preload = ImageOptions(rawValue: 1 << 32)
     
