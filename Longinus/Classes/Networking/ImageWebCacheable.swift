@@ -105,7 +105,7 @@ public extension ImageWebCacheable {
                     if expectedSize > 0 {
                         let divide: CGFloat = (3 * CGFloat(downloadProgress) + 0.6)
                         let factor: CGFloat = 1.0 / divide - 0.25
-                        radius = radius * factor
+                        radius *= factor
                     } else {
                         radius /= CGFloat(webCacheOperation.progressiveDisplayCount)
                     }

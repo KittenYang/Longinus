@@ -37,9 +37,9 @@ public class LonginusManager {
     public private(set) var imageCacher: ImageCacher
     public private(set) var imageDownloader: ImageDownloadable
     public private(set) var imageCoder: ImageCodeable
+    public private(set) var preloadTasks: [String: ImageLoadTask] //Set<ImageLoadTask>
     private let coderQueue: DispatchQueuePool
     private var tasks: Set<ImageLoadTask>
-    private var preloadTasks: Set<ImageLoadTask>
     private var taskLock: Mutex
     private var urlBlacklistLock: Mutex
     private var taskSentinel: Int32
@@ -75,7 +75,7 @@ public class LonginusManager {
         imageCoder = coder
         coderQueue = DispatchQueuePool.userInitiated
         tasks = Set()
-        preloadTasks = Set()
+        preloadTasks = [:]
         taskSentinel = 0
         taskLock = Mutex()
         urlBlacklistLock = Mutex()
@@ -91,7 +91,7 @@ public class LonginusManager {
         let task = newLoadTask()
         taskLock.lock()
         self.tasks.insert(task)
-        if options.contains(.preload) { self.preloadTasks.insert(task) }
+        if options.contains(.preload) { self.preloadTasks[resource.cacheKey] = task }
         taskLock.unlock()
         
         if !options.contains(.retryFailedUrl) {
@@ -280,17 +280,26 @@ public class LonginusManager {
     func remove(loadTask: ImageLoadTask) {
         taskLock.lock()
         self.tasks.remove(loadTask)
-        self.preloadTasks.remove(loadTask)
+        if let urlString = loadTask.downloadInfo?.url.absoluteString {
+            self.preloadTasks.removeValue(forKey: urlString)
+        }
         taskLock.unlock()
 
     }
-    
+
+    public func cancelPreloading(url: String) {
+        taskLock.lock()
+        let currentTask = preloadTasks[url]
+        taskLock.unlock()
+        currentTask?.cancel()
+    }
+
     /// Cancels image preloading tasks
     public func cancelPreloading() {
         taskLock.lock()
         let currentTasks = preloadTasks
         taskLock.unlock()
-        for task in currentTasks {
+        for task in currentTasks.values {
             task.cancel()
         }
     }

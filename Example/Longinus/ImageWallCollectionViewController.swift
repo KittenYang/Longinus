@@ -41,6 +41,9 @@ class ImageWallCollectionViewController: UICollectionViewController {
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
         self.collectionView!.collectionViewLayout = layout
         self.collectionView!.register(ImageWallCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        if #available(iOS 10.0, *) {
+            self.collectionView.prefetchDataSource = self
+        }
     }
 
 
@@ -63,6 +66,28 @@ class ImageWallCollectionViewController: UICollectionViewController {
 
 }
 
+// MARK: UICollectionViewDataSourcePrefetching
+@available(iOS 10.0, *)
+extension ImageWallCollectionViewController: UICollectionViewDataSourcePrefetching {
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let prefetechImageLinks = indexPaths.compactMap({ return ImageLinksPool.originLink(forIndex: $0.item + 1) })
+        LonginusManager.shared.preload(prefetechImageLinks, options: .none, progress: { (successCount, finishCount, total) in
+            print("Preload progress. success count = \(successCount), finish count = \(finishCount), total = \(total)")
+        }) { (successCount, total) in
+            print("Preload completion. success count = \(successCount), total = \(total)")
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { (indexPath) in
+            if let urlString = ImageLinksPool.originLink(forIndex: indexPath.item)?.absoluteString {
+                LonginusManager.shared.cancelPreloading(url: urlString)
+            }
+        }
+    }
+
+}
 
 class ImageWallCell: UICollectionViewCell {
     private var imageView: UIImageView!
