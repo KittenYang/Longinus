@@ -73,9 +73,7 @@ extension ImageWallCollectionViewController: UICollectionViewDataSourcePrefetchi
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let prefetechImageLinks = indexPaths.compactMap({ return ImageLinksPool.thumbnailLink(forIndex: $0.item + 1) })
         LonginusManager.shared.preload(prefetechImageLinks, options: .none, progress: { (successCount, finishCount, total) in
-            print("Preload progress. success count = \(successCount), finish count = \(finishCount), total = \(total)")
         }) { (successCount, total) in
-            print("Preload completion. success count = \(successCount), total = \(total)")
         }
     }
     
