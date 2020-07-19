@@ -136,7 +136,7 @@ public extension ImageWebCacheable {
         let task = LonginusManager.shared.loadImage(with: resource, options: options, transformer: transformer, progress: currentProgress) { [weak self] (image: UIImage?, data: Data?, error: Error?, cacheType: ImageCacheType) in
             guard let self = self else { return }
             if let currentImage = image {
-                if options.contains(.imageWithFadeAnimation), let webCacheOperation = self.webCacheOperation.task(forKey: taskKey), webCacheOperation.sentinel == sentinel {
+                if options.contains(.imageWithFadeAnimation), let webCacheOperationTask = self.webCacheOperation.task(forKey: taskKey), webCacheOperationTask.sentinel == sentinel {
                     setShowTransition(currentImage)
                 }
                 setImage(currentImage)

@@ -37,9 +37,6 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue(label: "hello", qos: .default, target: DispatchQueue.global(qos: .default)).async {
-            print("当前线程:\(Thread.current), hello")
-        }
         let common = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(ViewController.loadFromNib(), animated: true) }
         }

@@ -32,8 +32,6 @@ public class DiskCache: DiskCacheable {
 
     public typealias Key = String
     public typealias Value = Data
-
-    static var diskCount: Int = 0
     
     private var storage: KVStorage<Key>?//DiskStorage
     private let sizeThreshold: Int32
@@ -82,7 +80,7 @@ public class DiskCache: DiskCacheable {
         }
         ioLock = DispatchSemaphore(value: 1)
         sizeThreshold = threshold
-        queue = DispatchQueuePool.default //DispatchQueue(label: LonginusPrefixID + ".disk", attributes: .concurrent)
+        queue = DispatchQueuePool.default
         self.countLimit = Int32.max
         self.costLimit = Int32.max
         self.ageLimit = .never
@@ -113,10 +111,7 @@ extension DiskCache {
     public func query(key: Key) -> Value? {
         _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
         let value = storage?.itemValueForKey(key: key)
-        DiskCache.diskCount += 1
-        let newCount = DiskCache.diskCount
         ioLock.signal()
-        print("获取 disk 缓存：\(newCount) 个")
         return value
     }
     

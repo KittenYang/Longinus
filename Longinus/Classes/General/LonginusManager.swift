@@ -223,27 +223,29 @@ public class LonginusManager {
         } else {
             // Get disk data
             self.imageCacher.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
-                guard let self = self, let task = task, !task.isCancelled else { return }
-                switch result {
-                case let .disk(data: data):
-                    self.handle(imageData: data,
-                                options: options,
-                                cacheType: (memoryImage != nil ? .all : .disk),
-                                forTask: task,
-                                resource: resource,
-                                transformer: transformer,
-                                completion: completion)
-                case .none:
-                    // Download
-                    self.downloadImage(with: resource,
-                                       options: options,
-                                       task: task,
-                                       transformer: transformer,
-                                       progress: progress,
-                                       completion: completion)
-                default:
-                    print("Error: illegal query disk data result")
-                    break
+                DispatchQueue.main.lg.safeAsync {
+                    guard let self = self, let task = task, !task.isCancelled else { return }
+                    switch result {
+                    case let .disk(data: data):
+                        self.handle(imageData: data,
+                                    options: options,
+                                    cacheType: (memoryImage != nil ? .all : .disk),
+                                    forTask: task,
+                                    resource: resource,
+                                    transformer: transformer,
+                                    completion: completion)
+                    case .none:
+                        // Download
+                        self.downloadImage(with: resource,
+                                           options: options,
+                                           task: task,
+                                           transformer: transformer,
+                                           progress: progress,
+                                           completion: completion)
+                    default:
+                        print("Error: illegal query disk data result")
+                        break
+                    }                    
                 }
             }
         }
@@ -338,7 +340,9 @@ extension LonginusManager {
                      data: data,
                      cacheType: cacheType)
             if cacheType == .none {
-                imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk) {
+                self.coderQueue.async { [weak self] in
+                    self?.imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk) {
+                    }
                 }
             }
             remove(loadTask: task)
