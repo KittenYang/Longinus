@@ -44,3 +44,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+//extension AppDelegate: MatrixPluginListenerDelegate {
+//    func onReport(_ issue: MatrixIssue!) {
+//        print(issue)
+//    }
+//}

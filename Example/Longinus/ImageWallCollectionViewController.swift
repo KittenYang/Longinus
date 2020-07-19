@@ -58,7 +58,7 @@ class ImageWallCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageWallCell
-        if let url = ImageLinksPool.originLink(forIndex: indexPath.item + 1) {
+        if let url = ImageLinksPool.thumbnailLink(forIndex: indexPath.item + 1) {
             cell.updateUIWith(url)
         }
         return cell
@@ -71,7 +71,7 @@ class ImageWallCollectionViewController: UICollectionViewController {
 extension ImageWallCollectionViewController: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let prefetechImageLinks = indexPaths.compactMap({ return ImageLinksPool.originLink(forIndex: $0.item + 1) })
+        let prefetechImageLinks = indexPaths.compactMap({ return ImageLinksPool.thumbnailLink(forIndex: $0.item + 1) })
         LonginusManager.shared.preload(prefetechImageLinks, options: .none, progress: { (successCount, finishCount, total) in
             print("Preload progress. success count = \(successCount), finish count = \(finishCount), total = \(total)")
         }) { (successCount, total) in
@@ -81,7 +81,7 @@ extension ImageWallCollectionViewController: UICollectionViewDataSourcePrefetchi
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { (indexPath) in
-            if let urlString = ImageLinksPool.originLink(forIndex: indexPath.item)?.absoluteString {
+            if let urlString = ImageLinksPool.thumbnailLink(forIndex: indexPath.item)?.absoluteString {
                 LonginusManager.shared.cancelPreloading(url: urlString)
             }
         }
@@ -110,6 +110,6 @@ class ImageWallCell: UICollectionViewCell {
             .imageTransformerCommon(with: imageView.frame.size,
                                borderWidth: 2.0,
                                borderColor: .white)
-        imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveDownload, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
+        imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
     }
 }

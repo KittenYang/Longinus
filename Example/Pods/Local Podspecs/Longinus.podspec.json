@@ -9,10 +9,10 @@
     "file": "LICENSE"
   },
   "authors": {
-    "kittenyang@icloud.com": "kittenyang@icloud.com"
+    "KittenYang": "kittenyang@icloud.com"
   },
   "source": {
-    "git": "https://github.com/kittenyang@icloud.com/Longinus.git",
+    "git": "https://github.com/KittenYang/Longinus.git",
     "tag": "0.1.0"
   },
   "platforms": {

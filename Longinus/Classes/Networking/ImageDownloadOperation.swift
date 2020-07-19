@@ -71,8 +71,8 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     private var downloadFinished: Bool
     private var options: ImageOptions
     
-    private lazy var coderQueue: DispatchQueue = {
-        return DispatchQueuePool.userInitiated.currentQueue
+    private lazy var progressiveCoderQueue: DispatchQueuePool = {
+        return DispatchQueuePool.userInitiated
     }()
     
     var downloadInfos: [ImageDownloadInfo] {
@@ -223,7 +223,7 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
         if let progressiveCoder = imageProgressiveCoder {
             let size = expectedSize
             let finished = currentImageData.count >= size
-            coderQueue.async { [weak self] in
+            progressiveCoderQueue.async { [weak self] in
                 guard let self = self, !self.cancelled, !self.finished else { return }
                 let image = progressiveCoder.incrementallyDecodedImage(with: currentImageData, finished: finished)
                 self.progress(with: currentImageData, expectedSize: size, image: image)

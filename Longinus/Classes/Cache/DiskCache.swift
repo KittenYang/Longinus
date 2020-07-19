@@ -27,21 +27,25 @@
 
 import Foundation
 
+
 public class DiskCache: DiskCacheable {
 
     public typealias Key = String
     public typealias Value = Data
 
-    private let storage: DiskStorage
-    private let sizeThreshold: Int
-    private let queue: DispatchQueuePool
+    static var diskCount: Int = 0
     
-    private(set) var costLimit: Int
-    private(set) var countLimit: Int
+    private var storage: KVStorage<Key>?//DiskStorage
+    private let sizeThreshold: Int32
+    private let queue: DispatchQueuePool
+    private let ioLock: DispatchSemaphore
+    
+    private(set) var costLimit: Int32
+    private(set) var countLimit: Int32
     private(set) var ageLimit: CacheAge
     private(set) var autoTrimInterval: TimeInterval
     
-    var shouldAutoTrim: Bool {
+    public var shouldAutoTrim: Bool {
         didSet {
             if oldValue == shouldAutoTrim { return }
             if shouldAutoTrim {
@@ -49,22 +53,51 @@ public class DiskCache: DiskCacheable {
             }
         }
     }
+    
+    public var totalCount: Int32 {
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        let count = storage?.totalItemCount ?? 0
+        defer { ioLock.signal() }
+        return count
+    }
+    
+    public var totalCost: Int32 {
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        let count = storage?.totalItemSize ?? 0
+        defer { ioLock.signal() }
+        return count
+    }
 
-    required public init?(path: String, sizeThreshold threshold: Int) {
-        if let currentStorage = DiskStorage(path: path) {
+    required public init?(path: String, sizeThreshold threshold: Int32) {
+        var type = KVStorageType.automatic
+        if threshold == 0 {
+            type = .file
+        } else if threshold == Int32.max {
+            type = .sqlite
+        }
+        if let currentStorage = KVStorage<Key>(path: path, type: type) {
             storage = currentStorage
         } else {
             return nil
         }
+        ioLock = DispatchSemaphore(value: 1)
         sizeThreshold = threshold
-        queue = DispatchQueuePool.utility
-        self.countLimit = Int.max
-        self.costLimit = Int.max
+        queue = DispatchQueuePool.default //DispatchQueue(label: LonginusPrefixID + ".disk", attributes: .concurrent)
+        self.countLimit = Int32.max
+        self.costLimit = Int32.max
         self.ageLimit = .never
         self.autoTrimInterval = 60
         self.shouldAutoTrim = true
         
         if shouldAutoTrim { autoTrim() }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillBeTerminated), name: UIApplication.willTerminateNotification, object: nil)
+    }
+    
+    @objc private func appWillBeTerminated() {
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage = nil
+        ioLock.signal()
     }
     
 }
@@ -72,23 +105,37 @@ public class DiskCache: DiskCacheable {
 // MARK: CacheStandard
 extension DiskCache {
     public func containsObject(key: Key) -> Bool {
-        return storage.dataExists(forKey: key)
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        defer { ioLock.signal() }
+        return storage?.containItemforKey(key: key) ?? false
     }
     
     public func query(key: Key) -> Value? {
-        return storage.data(forKey: key)
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        let value = storage?.itemValueForKey(key: key)
+        DiskCache.diskCount += 1
+        let newCount = DiskCache.diskCount
+        ioLock.signal()
+        print("获取 disk 缓存：\(newCount) 个")
+        return value
     }
     
     public func save(value: Value, for key: Key) {
-        storage.store(value, forKey: key, type: (value.count > sizeThreshold ? .file : .sqlite))
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.save(key: key, value: value, filename: (value.count > sizeThreshold) ? key.lg.md5 : nil)
+        ioLock.signal()
     }
     
     public func remove(key: Key) {
-        storage.removeData(forKey: key)
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.remove(forKey: key)
+        ioLock.signal()
     }
     
     public func removeAll() {
-        storage.clear()
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.remove(allItems: ())
+        ioLock.signal()
     }
 }
 
@@ -146,15 +193,21 @@ extension DiskCache {
 extension DiskCache: AutoTrimable {
     
     func trimToAge(_ age: CacheAge) {
-        self.storage.trim(toAge: age)
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.remove(earlierThan: age.timeInterval)
+        ioLock.signal()
     }
     
-    func trimToCost(_ cost: Int) {
-        self.storage.trim(toCost: cost)
+    func trimToCost(_ cost: Int32) {
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.remove(toFitSize: cost)
+        ioLock.signal()
     }
     
-    func trimToCount(_ count: Int) {
-        self.storage.trim(toCount: count)
+    func trimToCount(_ count: Int32) {
+        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        storage?.remove(toFitCount: count)
+        ioLock.signal()
     }
     
 }

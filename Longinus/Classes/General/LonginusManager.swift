@@ -29,6 +29,7 @@ import UIKit
 
 public class LonginusManager {
     
+    // sizeThreshold: 20KB
     public static let shared: LonginusManager = { () -> LonginusManager in
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! + "/\(LonginusPrefixID)"
         return LonginusManager(cachePath: path, sizeThreshold: 20 * 1024)
@@ -59,7 +60,7 @@ public class LonginusManager {
         return count
     }
     
-    public convenience init(cachePath: String, sizeThreshold: Int) {
+    public convenience init(cachePath: String, sizeThreshold: Int32) {
         let cache = ImageCacher(path: cachePath, sizeThreshold: sizeThreshold)
         let downloader = ImageDownloader(sessionConfiguration: URLSessionConfiguration.default)
         let coder = ImageCoderManager()
@@ -221,7 +222,7 @@ public class LonginusManager {
             }
         } else {
             // Get disk data
-            imageCacher.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
+            self.imageCacher.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
                 guard let self = self, let task = task, !task.isCancelled else { return }
                 switch result {
                 case let .disk(data: data):
@@ -284,7 +285,6 @@ public class LonginusManager {
             self.preloadTasks.removeValue(forKey: urlString)
         }
         taskLock.unlock()
-
     }
 
     public func cancelPreloading(url: String) {

@@ -34,10 +34,10 @@ public class MemoryCache<Key: Hashable, Value> {
     private let lock: Mutex = Mutex()
     private var lru = LinkedList<Key, Value>()
     private var trimDict = [Key:TrimNode]()
-    private let queue = DispatchQueue(label: "\(LonginusPrefixID).cache.memory")
+    private let ioQueue = DispatchQueuePool.default
     
-    private(set) var countLimit: Int
-    private(set) var costLimit: Int
+    private(set) var countLimit: Int32
+    private(set) var costLimit: Int32
     private(set) var ageLimit: CacheAge
     private(set) var autoTrimInterval: TimeInterval
     
@@ -73,7 +73,7 @@ public class MemoryCache<Key: Hashable, Value> {
         return lru.last
     }
     
-    public init(countLimit: Int = Int.max, costLimit: Int = Int.max, ageLimit: CacheAge = .never, autoTrimInterval: TimeInterval = 5) {
+    public init(countLimit: Int32 = Int32.max, costLimit: Int32 = Int32.max, ageLimit: CacheAge = .never, autoTrimInterval: TimeInterval = 5) {
         self.totalCost = 0
         self.countLimit = countLimit
         self.costLimit = costLimit
@@ -135,7 +135,7 @@ extension MemoryCache: MemoryCacheable {
         self.lru.push(value, for: key)
         
         if self.totalCost > self.costLimit {
-            self.queue.async { [weak self] in
+            self.ioQueue.async { [weak self] in
                 guard let self = self else { return }
                 self.trimToCost(self.costLimit)
             }
@@ -185,19 +185,19 @@ extension MemoryCache: MemoryCacheable {
         lock.unlock()
     }
     
-    public func setCostLimit(_ cost: Int) {
+    public func setCostLimit(_ cost: Int32) {
         lock.lock()
         self.costLimit = cost
-        self.queue.async { [weak self] in
+        self.ioQueue.async { [weak self] in
             self?.trimToCost(cost)
         }
         lock.unlock()
     }
     
-    public func setCountLimit(_ count: Int) {
+    public func setCountLimit(_ count: Int32) {
         lock.lock()
         self.countLimit = count
-        self.queue.async { [weak self] in
+        self.ioQueue.async { [weak self] in
             self?.trimToCount(count)
         }
         lock.unlock()
@@ -206,7 +206,7 @@ extension MemoryCache: MemoryCacheable {
     public func setAgeLimit(_ age: CacheAge) {
         lock.lock()
         self.ageLimit = age
-        self.queue.async { [weak self] in
+        self.ioQueue.async { [weak self] in
             self?.trimToAge(age)
         }
         lock.unlock()
@@ -223,7 +223,7 @@ extension MemoryCache: MemoryCacheable {
 }
 
 extension MemoryCache: AutoTrimable {
-    public func trimToCount(_ countLimit: Int) {
+    public func trimToCount(_ countLimit: Int32) {
         let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
         lock.lock()
         if countLimit <= 0 {
@@ -249,7 +249,7 @@ extension MemoryCache: AutoTrimable {
         }
     }
     
-    public func trimToCost(_ costLimit: Int) {
+    public func trimToCost(_ costLimit: Int32) {
         let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
         lock.lock()
         if costLimit <= 0 {
@@ -288,7 +288,7 @@ extension MemoryCache: AutoTrimable {
             if self.lock.trylock() == 0 {
                 if let lastNodeKey = lru.index(before: lru.endIndex).node?.key,
                     let lastTrimNode = trimDict[lastNodeKey],
-                    now - lastTrimNode.age > ageLimit.timeInterval {
+                    now - lastTrimNode.age > TimeInterval(ageLimit.timeInterval) {
                     self.removeLast()
                 } else {
                     return unlock()

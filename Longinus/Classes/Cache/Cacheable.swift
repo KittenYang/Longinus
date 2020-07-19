@@ -34,7 +34,7 @@ public protocol MemoryCacheable: CacheStandard {
 }
 
 public protocol DiskCacheable: CacheStandard, CacheAsyncStandard {
-    init?(path: String, sizeThreshold threshold: Int) 
+    init?(path: String, sizeThreshold threshold: Int32) 
 }
 
 public protocol Cacheable {
@@ -66,15 +66,15 @@ public protocol CacheAsyncStandard {
 
 // MARK: - Trim
 protocol AutoTrimable: class {
-    var countLimit: Int { get }
-    var costLimit: Int { get }
+    var countLimit: Int32 { get }
+    var costLimit: Int32 { get }
     var ageLimit: CacheAge { get }
     var autoTrimInterval: TimeInterval { get }
     var shouldAutoTrim: Bool { get set }
     
     func trimToAge(_ age: CacheAge)
-    func trimToCost(_ cost: Int)
-    func trimToCount(_ count: Int)
+    func trimToCost(_ cost: Int32)
+    func trimToCount(_ count: Int32)
 }
 
 extension AutoTrimable {
@@ -94,24 +94,24 @@ public protocol CacheCostCalculable {
 
 public enum CacheAge {
     case never
-    case seconds(TimeInterval)
-    case minutes(Int)
-    case hours(Int)
-    case days(Int)
+    case seconds(Int32)
+    case minutes(Int32)
+    case hours(Int32)
+    case days(Int32)
     case expired
     
     var isExpired: Bool {
         return timeInterval <= 0
     }
     
-    var timeInterval: TimeInterval {
+    var timeInterval: Int32 {
         switch self {
-        case .never: return .infinity
+        case .never: return .max
         case .seconds(let seconds): return seconds
-        case .minutes(let minutes): return TimeInterval(TimeConstants.secondsInOneMinute) * TimeInterval(minutes)
-        case .hours(let hours): return TimeInterval(TimeConstants.secondsInOneHour) * TimeInterval(hours)
-        case .days(let days): return TimeInterval(TimeConstants.secondsInOneDay) * TimeInterval(days)
-        case .expired: return -(.infinity)
+        case .minutes(let minutes): return Int32(TimeConstants.secondsInOneMinute) * minutes
+        case .hours(let hours): return Int32(TimeConstants.secondsInOneHour) * hours
+        case .days(let days): return Int32(TimeConstants.secondsInOneDay) * days
+        case .expired: return -(.max)
         }
     }
     

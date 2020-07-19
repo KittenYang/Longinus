@@ -33,7 +33,7 @@ public class ImageCacher: ImageCacheable {
     public let diskCache: DiskCache?
     public weak var imageCoder: ImageCodeable?
     
-    init(path: String, sizeThreshold: Int) {
+    init(path: String, sizeThreshold: Int32) {
         memoryCache = MemoryCache()
         diskCache = DiskCache(path: path, sizeThreshold: sizeThreshold)
     }

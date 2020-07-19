@@ -111,7 +111,7 @@ public extension ImageWebCacheable {
                     }
                     displayImage = displayImage.lg.image(byBlurRadius: radius, tintColor: nil, tintMode: .normal, saturation: 1.0, maskImage: nil) ?? displayImage
                 }
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.lg.safeSync { [weak self] in
                     guard let self = self else { return }
                     let webCacheOperation = self.webCacheOperation
                     guard let task = webCacheOperation.task(forKey: taskKey),

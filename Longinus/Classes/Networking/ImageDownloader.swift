@@ -122,7 +122,7 @@ public class ImageDownloader {
     private lazy var session: URLSession = {
         let queue = OperationQueue()
         queue.qualityOfService = .background
-        queue.maxConcurrentOperationCount = 1
+        queue.maxConcurrentOperationCount = min(16, max(1, ProcessInfo.processInfo.activeProcessorCount))
         queue.name = "\(LonginusPrefixID).download"
         return URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: queue)
     }()
