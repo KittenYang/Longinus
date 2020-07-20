@@ -40,13 +40,18 @@ private class ImageDownloadLinkedMapNode {
 }
 
 private class ImageDownloadLinkedMap {
+    private var lock: Mutex
     fileprivate var dic: [URL : ImageDownloadLinkedMapNode]
     fileprivate var head: ImageDownloadLinkedMapNode?
     fileprivate var tail: ImageDownloadLinkedMapNode?
     
-    init() { dic = [:] }
+    init() {
+        dic = [:]
+        lock = Mutex()
+    }
     
     fileprivate func enqueue(_ node: ImageDownloadLinkedMapNode) {
+        lock.lock()
         dic[node.key] = node
         if head == nil {
             head = node
@@ -56,6 +61,7 @@ private class ImageDownloadLinkedMap {
             node.prev = tail
             tail = node
         }
+        lock.unlock()
     }
     
     fileprivate func dequeue() -> ImageDownloadLinkedMapNode? {
@@ -67,11 +73,13 @@ private class ImageDownloadLinkedMap {
     }
     
     fileprivate func remove(_ node: ImageDownloadLinkedMapNode) {
+        lock.lock()
         dic[node.key] = nil
         node.prev?.next = node.next
         node.next?.prev = node.prev
         if head === node { head = node.next }
         if tail === node { tail = node.prev }
+        lock.unlock()
     }
 }
 
@@ -84,7 +92,7 @@ class ImageDownloadOperationQueue {
     init() {
         waitingQueue = ImageDownloadLinkedMap()
         preloadWaitingQueue = ImageDownloadLinkedMap()
-        maxRunningCount = 1
+        maxRunningCount = 6
         currentRunningCount = 0
     }
     

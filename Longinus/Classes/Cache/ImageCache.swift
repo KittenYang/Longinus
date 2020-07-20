@@ -87,6 +87,7 @@ public class ImageCacher: ImageCacheable {
         }
         if cacheType.contains(.disk),
             let currentDiskCache = diskCache {
+            // 原图保存到磁盘，修改后的图片不保存
             if let currentData = data {
                 return currentDiskCache.save(value: currentData, for: key, completion)
             }
