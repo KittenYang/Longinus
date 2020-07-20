@@ -29,7 +29,7 @@ import Foundation
 
 public class MemoryCache<Key: Hashable, Value> {
     
-    let releaseQueue = DispatchQueue.global(qos: .utility)
+    let releaseQueue = DispatchQueue.global(qos: .background)
     
     private let lock: Mutex = Mutex()
     private var lru = LinkedList<Key, Value>()

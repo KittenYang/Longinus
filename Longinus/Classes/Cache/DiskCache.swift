@@ -33,9 +33,9 @@ public class DiskCache: DiskCacheable {
     public typealias Key = String
     public typealias Value = Data
     
-    private var storage: KVStorage<Key>?//DiskStorage
+    private var storage: KVStorage<Key>?
     private let sizeThreshold: Int32
-    private let queue: DispatchQueuePool
+    private let queue = DispatchQueuePool.default
     private let ioLock: DispatchSemaphore
     
     private(set) var costLimit: Int32
@@ -80,7 +80,6 @@ public class DiskCache: DiskCacheable {
         }
         ioLock = DispatchSemaphore(value: 1)
         sizeThreshold = threshold
-        queue = DispatchQueuePool.default
         self.countLimit = Int32.max
         self.costLimit = Int32.max
         self.ageLimit = .never
@@ -116,8 +115,12 @@ extension DiskCache {
     }
     
     public func save(value: Value, for key: Key) {
+        var filename: String? = nil
+        if value.count > sizeThreshold {
+            filename = key.lg.md5
+        }
         _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
-        storage?.save(key: key, value: value, filename: (value.count > sizeThreshold) ? key.lg.md5 : nil)
+        storage?.save(key: key, value: value, filename: filename)
         ioLock.signal()
     }
     

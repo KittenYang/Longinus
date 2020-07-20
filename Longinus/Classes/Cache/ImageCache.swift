@@ -76,8 +76,11 @@ public class ImageCacher: ImageCacheable {
         }
     }
     
-    public func store(_ image: UIImage?, data: Data?, forKey key: String, cacheType: ImageCacheType, completion: @escaping ((
-        ) -> Void)) {
+    public func store(_ image: UIImage?,
+                      data: Data?,
+                      forKey key: String,
+                      cacheType: ImageCacheType,
+                      completion: @escaping (() -> Void)) {
         if cacheType.contains(.memory),
             let currentImage = image {
             memoryCache.save(value: currentImage, for: key, cost: currentImage.cacheCost)

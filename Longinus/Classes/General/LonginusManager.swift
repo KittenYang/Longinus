@@ -39,7 +39,7 @@ public class LonginusManager {
     public private(set) var imageDownloader: ImageDownloadable
     public private(set) var imageCoder: ImageCodeable
     public private(set) var preloadTasks: [String: ImageLoadTask] //Set<ImageLoadTask>
-    private let coderQueue: DispatchQueuePool
+    private let coderQueue: DispatchQueuePool = DispatchQueuePool.userInitiated
     private var tasks: Set<ImageLoadTask>
     private var taskLock: Mutex
     private var urlBlacklistLock: Mutex
@@ -74,7 +74,6 @@ public class LonginusManager {
         imageCacher = cacher
         imageDownloader = downloader
         imageCoder = coder
-        coderQueue = DispatchQueuePool.userInitiated
         tasks = Set()
         preloadTasks = [:]
         taskSentinel = 0
@@ -223,29 +222,27 @@ public class LonginusManager {
         } else {
             // Get disk data
             self.imageCacher.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
-                DispatchQueue.main.lg.safeAsync {
-                    guard let self = self, let task = task, !task.isCancelled else { return }
-                    switch result {
-                    case let .disk(data: data):
-                        self.handle(imageData: data,
-                                    options: options,
-                                    cacheType: (memoryImage != nil ? .all : .disk),
-                                    forTask: task,
-                                    resource: resource,
-                                    transformer: transformer,
-                                    completion: completion)
-                    case .none:
-                        // Download
-                        self.downloadImage(with: resource,
-                                           options: options,
-                                           task: task,
-                                           transformer: transformer,
-                                           progress: progress,
-                                           completion: completion)
-                    default:
-                        print("Error: illegal query disk data result")
-                        break
-                    }                    
+                guard let self = self, let task = task, !task.isCancelled else { return }
+                switch result {
+                case let .disk(data: data):
+                    self.handle(imageData: data,
+                                options: options,
+                                cacheType: (memoryImage != nil ? .all : .disk),
+                                forTask: task,
+                                resource: resource,
+                                transformer: transformer,
+                                completion: completion)
+                case .none:
+                    // Download
+                    self.downloadImage(with: resource,
+                                       options: options,
+                                       task: task,
+                                       transformer: transformer,
+                                       progress: progress,
+                                       completion: completion)
+                default:
+                    print("Error: illegal query disk data result")
+                    break
                 }
             }
         }
@@ -340,9 +337,7 @@ extension LonginusManager {
                      data: data,
                      cacheType: cacheType)
             if cacheType == .none {
-                self.coderQueue.async { [weak self] in
-                    self?.imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk) {
-                    }
+                imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk) {
                 }
             }
             remove(loadTask: task)
@@ -369,8 +364,7 @@ extension LonginusManager {
                                            data: data,
                                            forKey: resource.cacheKey,
                                            cacheType: storeCacheType,
-                                           completion:{
-                    })
+                                           completion:{})
                 } else if let inputImage = decodedImage {
                     if var image = currentTransformer.transform(inputImage) {
                         guard !task.isCancelled else { return }

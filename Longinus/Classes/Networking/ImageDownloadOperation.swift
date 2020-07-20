@@ -72,7 +72,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     private var options: ImageOptions
     
     private lazy var progressiveCoderQueue: DispatchQueuePool = {
-        return DispatchQueuePool.userInitiated
+        return DispatchQueuePool.utility
     }()
     
     var downloadInfos: [ImageDownloadInfo] {
