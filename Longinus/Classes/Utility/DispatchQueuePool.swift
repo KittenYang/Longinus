@@ -46,8 +46,10 @@ public class DispatchQueuePool {
         return queues[Int(currentIndex) % queues.count]
     }
     
+    public static let fitableMaxQueueCount: Int = min(16, max(1, ProcessInfo.processInfo.activeProcessorCount * 2))
+    
     public init(label: String, qos: DispatchQoS, queueCount: Int = 0) {
-        let count = queueCount > 0 ? queueCount : min(16, max(1, ProcessInfo.processInfo.activeProcessorCount * 2))
+        let count = queueCount > 0 ? queueCount : DispatchQueuePool.fitableMaxQueueCount
         var pool: [DispatchQueue] = []
         for i in 0..<count {
             let queue = DispatchQueue(label: "\(label).\(i)", qos: qos, target: DispatchQueue.global(qos: qos.qosClass))

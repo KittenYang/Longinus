@@ -34,10 +34,17 @@ enum WebImageType: Int {
     }
 }
 
+enum ImageWallType {
+    case image
+    case gif
+}
+
 class ImageViewCollectionViewController: UICollectionViewController {
 
     let allWebImageType: [WebImageType] = [.longinus, .yywebimage, .sdwebimage, .kingfisher]
     var currentType: WebImageType = .longinus
+    
+    var imageWallType: ImageWallType = .image
     
     lazy var segmentControl: UISegmentedControl = {
         let control = UISegmentedControl(items: allWebImageType.compactMap{ $0.name })
@@ -57,7 +64,7 @@ class ImageViewCollectionViewController: UICollectionViewController {
         self.collectionView!.register(ImageWallCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView.contentInset.bottom += 45.0
         if #available(iOS 10.0, *) {
-            self.collectionView.prefetchDataSource = self
+//            self.collectionView.prefetchDataSource = self
         }
         
         self.view.addSubview(segmentControl)
@@ -84,7 +91,7 @@ class ImageViewCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageWallCell
-        if let url = ImageLinksPool.originLink(forIndex: indexPath.item + 1) {
+        if let url = getImageURLByIndex(indexPath: indexPath) {
             cell.currentType = currentType
             cell.updateUIWith(url)
         }
@@ -95,6 +102,17 @@ class ImageViewCollectionViewController: UICollectionViewController {
         currentType = WebImageType(rawValue: self.segmentControl.selectedSegmentIndex) ?? .longinus
         collectionView.reloadData()
     }
+    
+    private func getImageURLByIndex(indexPath: IndexPath) -> URL? {
+        var url = ImageLinksPool.originLink(forIndex: indexPath.item + 1)
+        switch imageWallType {
+        case .gif:
+            url = ImageLinksPool.thumbnailGIFLink(forIndex: indexPath.item)
+        default:
+            break
+        }
+        return url
+    }
 }
 
 // MARK: UICollectionViewDataSourcePrefetching
@@ -103,7 +121,7 @@ extension ImageViewCollectionViewController: UICollectionViewDataSourcePrefetchi
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         if currentType == .longinus {
-            let prefetechImageLinks = indexPaths.compactMap({ return ImageLinksPool.originLink(forIndex: $0.item + 1) })
+            let prefetechImageLinks = indexPaths.compactMap({ return getImageURLByIndex(indexPath: $0) })
             LonginusManager.shared.preload(prefetechImageLinks, options: .none, progress: { (successCount, finishCount, total) in
             }) { (successCount, total) in
             }
@@ -113,7 +131,7 @@ extension ImageViewCollectionViewController: UICollectionViewDataSourcePrefetchi
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         if currentType == .longinus {
             indexPaths.forEach { (indexPath) in
-                if let urlString = ImageLinksPool.originLink(forIndex: indexPath.item)?.absoluteString {
+                if let urlString = getImageURLByIndex(indexPath: indexPath)?.absoluteString {
                     LonginusManager.shared.cancelPreloading(url: urlString)
                 }
             }
@@ -133,6 +151,7 @@ class ImageWallCell: UICollectionViewCell {
     private lazy var lgImageView: Longinus.AnimatedImageView = {
         var imageView = Longinus.AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
         imageView.webImageType = .longinus
+        imageView.lg.runLoopMode = .default
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView

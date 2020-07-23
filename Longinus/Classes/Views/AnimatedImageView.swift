@@ -47,7 +47,7 @@ extension LonginusExtension where Base: AnimatedImageView {
     public var runLoopMode: RunLoop.Mode {
         get { return base.runLoopMode }
         set {
-            if runLoopMode == newValue { return }
+            if base.runLoopMode == newValue { return }
             if let oldLink = base.displayLink {
                 // If remove old run loop mode and add new run loop mode, the animation will pause a while in iOS 8.
                 // So create a new display link here.
@@ -58,7 +58,7 @@ extension LonginusExtension where Base: AnimatedImageView {
                 link.add(to: .main, forMode: newValue)
                 base.displayLink = link
             }
-            runLoopMode = newValue
+            base.runLoopMode = newValue
         }
     }
 

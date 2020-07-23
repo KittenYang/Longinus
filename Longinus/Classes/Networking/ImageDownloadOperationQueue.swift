@@ -92,7 +92,7 @@ class ImageDownloadOperationQueue {
     init() {
         waitingQueue = ImageDownloadLinkedMap()
         preloadWaitingQueue = ImageDownloadLinkedMap()
-        maxRunningCount = 6
+        maxRunningCount = DispatchQueuePool.fitableMaxQueueCount
         currentRunningCount = 0
     }
     

@@ -64,8 +64,12 @@ class ConsoleLabelViewController: UIViewController {
     }
     
     func updateConsole(newText: String) {
-        DispatchQueue.main.async {
-            self.consoleLabel.text = "\(self.consoleLabel.text ?? "")\n \(newText)\n"            
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                self.consoleLabel.text = "\(self.consoleLabel.text ?? "")\n \(newText)\n"
+            }
+        } else {
+            self.consoleLabel.text = "\(self.consoleLabel.text ?? "")\n \(newText)\n"
         }
     }
     
@@ -88,14 +92,14 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        runQueueItem()
+        runTestFromBeginning()
     }
 
     deinit {
         print("WebImageLoadingViewController deinit!")
     }
     
-    func runQueueItem() {
+    func runTestFromBeginning() {
         SDWebImageManager.shared().imageCache?.clearMemory()
         SDWebImageManager.shared().imageCache?.clearDisk(onCompletion: nil)
         self.runTest(type: .longinus)
@@ -128,7 +132,7 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
                         self.runtime -= 1
                         if self.runtime != 0 {
                             self.consoleLabel.text = "第 \(5-self.runtime + 1) 次测试...\n"
-                            self.runQueueItem()
+                            self.runTestFromBeginning()
                         } else {
                             self.loading.stopAnimating()
                             self.calculateAverageResult()

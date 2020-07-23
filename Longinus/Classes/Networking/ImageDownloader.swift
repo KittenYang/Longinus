@@ -122,7 +122,7 @@ public class ImageDownloader {
     private lazy var session: URLSession = {
         let queue = OperationQueue()
         queue.qualityOfService = .background
-        queue.maxConcurrentOperationCount = min(16, max(1, ProcessInfo.processInfo.activeProcessorCount))
+        queue.maxConcurrentOperationCount = DispatchQueuePool.fitableMaxQueueCount
         queue.name = "\(LonginusPrefixID).download"
         return URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: queue)
     }()
@@ -132,7 +132,6 @@ public class ImageDownloader {
         taskSentinel = 0
         generateDownloadOperation = { ImageDownloadOperation(request: $0, session: $1, options: $2) }
         operationQueue = ImageDownloadOperationQueue()
-        operationQueue.maxRunningCount = 6
         urlOperations = [:]
         preloadInfos = [:]
         httpHeaders = ["Accept" : "image/*;q=0.8"]

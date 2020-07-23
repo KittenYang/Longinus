@@ -275,9 +275,9 @@
 		5F94EFE0DE73F7A38C746BB74C9F5D06 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				5F59D3AF24C4974500E8964B /* ImageCache.swift */,
 				5F59D3B224C4974600E8964B /* Cacheable.swift */,
 				5F59D3B424C4974600E8964B /* DiskCache.swift */,
-				5F59D3AF24C4974500E8964B /* ImageCache.swift */,
 				5F59D3B024C4974500E8964B /* KVStorage.swift */,
 				5F59D3B324C4974600E8964B /* MemoryCache.swift */,
 			);

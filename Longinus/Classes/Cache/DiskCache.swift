@@ -140,6 +140,10 @@ extension DiskCache {
         ioLock.signal()
     }
     
+    /*
+     Empties the cache.
+     This method may blocks the calling thread until file delete finished.
+     */
     public func removeAll() {
         _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
         storage?.remove(allItems: ())
@@ -188,6 +192,13 @@ extension DiskCache {
         }
     }
     
+    /**
+    Empties the cache.
+    This method returns immediately and invoke the passed block in background queue
+    when the operation finished.
+    
+    @param result  A block which will be invoked in background queue when finished.
+    */
     public func removeAll(_ result: @escaping (() -> Void)) {
         queue.async { [weak self] in
             guard let self = self else { return }

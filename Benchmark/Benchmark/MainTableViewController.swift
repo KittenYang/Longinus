@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import Longinus
+import YYWebImage
+import SDWebImage
+import Kingfisher
 
 class MainTableViewController: UITableViewController {
 
@@ -15,7 +19,7 @@ class MainTableViewController: UITableViewController {
         case webloading
         case diskIO
         case memoryIO
-        case cpuMemoryUsage
+        case gifWall
         
         var displayTitle: String {
             switch self {
@@ -27,8 +31,8 @@ class MainTableViewController: UITableViewController {
                 return "磁盘 IO 评测"
             case .memoryIO:
                 return "内存 IO 评测"
-            case .cpuMemoryUsage:
-                return "内存/CPU占用评测"
+            case .gifWall:
+                return "GIF 性能评测"
             }
         }
         
@@ -42,17 +46,23 @@ class MainTableViewController: UITableViewController {
                 return CacheIOViewController(cacheType: .disk)
             case .memoryIO:
                 return CacheIOViewController(cacheType: .memory)
-            case .cpuMemoryUsage:
-                return WebImageLoadingViewController()
+            case .gifWall:
+                let gifVC = ImageViewCollectionViewController.loadFromNib() as! ImageViewCollectionViewController
+                gifVC.imageWallType = .gif
+                return gifVC
             }
         }
     }
 
-    private var menu: [BenchmarkType] = [.fps, .webloading, .diskIO, .memoryIO, .cpuMemoryUsage]
+    private var menu: [BenchmarkType] = [.fps, .webloading, .diskIO, .memoryIO, .gifWall]
     
     lazy var fps: FPSLabel = {
         let label = FPSLabel()
         return label
+    }()
+    
+    lazy var loading: UIActivityIndicatorView = {
+        return UIActivityIndicatorView(style: .gray)
     }()
     
     override func viewDidLoad() {
@@ -73,25 +83,49 @@ class MainTableViewController: UITableViewController {
                 fps.heightAnchor.constraint(equalToConstant: 25.0)
             ])
         }
+        
+        self.view.addSubview(loading)
+        loading.translatesAutoresizingMaskIntoConstraints = false
+        let margins = self.view.layoutMarginsGuide
+        NSLayoutConstraint.activate([
+            loading.centerYAnchor.constraint(equalTo: margins.centerYAnchor),
+            loading.centerXAnchor.constraint(equalTo: margins.centerXAnchor)
+        ])
     }
 
     /// MARK: UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menu.count
+        return menu.count + 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
-        cell.textLabel?.text = menu[indexPath.row].displayTitle
+        if indexPath.row == menu.count {
+            cell.textLabel?.text = "清除缓存"
+        } else {
+            cell.textLabel?.text = menu[indexPath.row].displayTitle
+        }
         return cell
     }
     
     /// MARK: UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let vc = menu[indexPath.row].assosiatedController
-        vc.title = menu[indexPath.row].displayTitle
-        self.navigationController?.pushViewController(vc, animated: true)
+        if indexPath.row == menu.count {
+            loading.startAnimating()
+            LonginusManager.shared.imageCacher.removeAll()
+            KingfisherManager.shared.cache.clearMemoryCache()
+            KingfisherManager.shared.cache.clearDiskCache()
+            SDWebImageManager.shared().imageCache?.clearMemory()
+            SDWebImageManager.shared().imageCache?.clearDisk(onCompletion: nil)
+            YYWebImageManager.shared().cache?.memoryCache.removeAllObjects()
+            YYWebImageManager.shared().cache?.diskCache.removeAllObjects()
+            loading.stopAnimating()
+        } else {
+            let vc = menu[indexPath.row].assosiatedController
+            vc.title = menu[indexPath.row].displayTitle
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
 }
