@@ -27,7 +27,7 @@
 
 import UIKit
 
-public class ImageCacher: ImageCacheable {
+public class ImageCacher {
 
     public let memoryCache: MemoryCache<String, UIImage>
     public let diskCache: DiskCache?
@@ -37,7 +37,10 @@ public class ImageCacher: ImageCacheable {
         memoryCache = MemoryCache()
         diskCache = DiskCache(path: path, sizeThreshold: sizeThreshold)
     }
-    
+}
+
+extension ImageCacher: ImageCacheable {
+
     public func image(forKey key: String, cacheType: ImageCacheType, completion: @escaping (ImageCacheQueryCompletionResult) -> Void) {
         var memoryImage: UIImage?
         if cacheType.contains(.memory),
@@ -69,58 +72,74 @@ public class ImageCacher: ImageCacheable {
         completion(.none)
     }
     
-    public func diskDataExists(forKey key: String, completion: @escaping (Bool) -> Void) {
-        guard let currentDiskCache = diskCache else { return completion(false) }
+    public func diskDataExists(forKey key: String, completion: ((Bool) -> Void)?) {
+        guard let currentDiskCache = diskCache else {
+            completion?(false)
+            return
+        }
         currentDiskCache.containsObject(key: key) { (_, contain) in
-            completion(contain)
+            completion?(contain)
         }
     }
     
-    public func store(_ image: UIImage?,
-                      data: Data?,
-                      forKey key: String,
-                      cacheType: ImageCacheType,
-                      completion: @escaping (() -> Void)) {
+    public func store(_ image: UIImage?, data: Data?, forKey key: String, cacheType: ImageCacheType, completion: (() -> Void)?) {
         if cacheType.contains(.memory),
             let currentImage = image {
-            memoryCache.save(value: currentImage, for: key, cost: currentImage.cacheCost)
+            memoryCache.save(value: currentImage, for: key, cost: Int(currentImage.cacheCost))
         }
         if cacheType.contains(.disk),
             let currentDiskCache = diskCache {
             // 原图保存到磁盘，修改后的图片不保存
             if let currentData = data {
-                return currentDiskCache.save(value: currentData, for: key, completion)
+                if let completion = completion {
+                    return currentDiskCache.save(value: currentData, for: key, completion)
+                } else {
+                    return currentDiskCache.save(value: currentData, for: key)
+                }
             }
-            return currentDiskCache.save({ [weak self] () -> Data? in
+            let dataWork = { [weak self] () -> (Data, Int)? in
                 guard let self = self else { return nil }
                 if let currentImage = image,
                     let coder = self.imageCoder,
                     let data = coder.encodedData(with: currentImage, format: currentImage.lg.imageFormat ?? .unknown) {
-                    return data
+                    return (data, data.count)
                 }
                 return nil
-            }, forKey: key, result: completion)
+            }
+            if let completion = completion {
+                return currentDiskCache.save(dataWork, forKey: key, result: completion)
+            } else {
+                return currentDiskCache.save(dataWork, forKey: key)
+            }
         }
-        completion()
+        completion?()
     }
     
-    public func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping  (String) -> Void) {
+    
+    public func removeImage(forKey key: String, cacheType: ImageCacheType, completion: ((String) -> Void)?) {
         if cacheType.contains(.memory) { memoryCache.remove(key: key) }
         if cacheType.contains(.disk),
             let currentDiskCache = diskCache {
-            return currentDiskCache.remove(key: key, completion)
+            if let completion = completion {
+                return currentDiskCache.remove(key: key, completion)
+            } else {
+                return currentDiskCache.remove(key: key)
+            }
         }
-        completion(key)
+        completion?(key)
     }
     
-    public func remove(_ type: ImageCacheType, completion: @escaping (() -> Void)) {
+    public func remove(_ type: ImageCacheType, completion: (() -> Void)?) {
         if type.contains(.memory) { memoryCache.removeAll() }
         if type.contains(.disk),
             let currentDiskCache = diskCache {
-            return currentDiskCache.removeAll(completion)
+            if let completion = completion {
+                return currentDiskCache.removeAll(completion)
+            } else {
+                return currentDiskCache.removeAll()
+            }
         }
-        completion()
+        completion?()
     }
-
+    
 }
-

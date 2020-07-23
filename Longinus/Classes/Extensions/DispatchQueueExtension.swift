@@ -28,7 +28,7 @@
 import Foundation
 
 extension DispatchQueue: LonginusCompatible {}
-extension LonginusExtension where Base: DispatchQueue {
+public extension LonginusExtension where Base: DispatchQueue {
     func safeAsync(_ work: @escaping () -> Void) {
         if base.label == String(cString: __dispatch_queue_get_label(nil), encoding: .utf8) {
             work()

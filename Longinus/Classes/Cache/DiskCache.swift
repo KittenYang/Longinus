@@ -29,7 +29,7 @@ import Foundation
 
 
 public class DiskCache: DiskCacheable {
-
+    
     public typealias Key = String
     public typealias Value = Data
     
@@ -114,7 +114,11 @@ extension DiskCache {
         return value
     }
     
-    public func save(value: Value, for key: Key) {
+    public func save(value: Value?, for key: Key) {
+        guard let value = value else {
+            remove(key: key)
+            return
+        }
         var filename: String? = nil
         if value.count > sizeThreshold {
             filename = key.lg.md5
@@ -122,6 +126,12 @@ extension DiskCache {
         _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
         storage?.save(key: key, value: value, filename: filename)
         ioLock.signal()
+    }
+    
+    public func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key) {
+        if let data = dataWork() {
+            self.save(value: data.0, for: key)
+        }
     }
     
     public func remove(key: Key) {
@@ -139,6 +149,7 @@ extension DiskCache {
 
 // MARK: CacheAsyncStandard
 extension DiskCache {
+    
     public func containsObject(key: Key, _ result: @escaping ((Key, Bool) -> Void)) {
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -152,8 +163,8 @@ extension DiskCache {
             result(key, self.query(key: key))
         }
     }
-    
-    public func save(value: Value, for key: Key, _ result: @escaping (() -> Void)) {
+
+    public func save(value: Value?, for key: Key, _ result: @escaping (() -> Void)) {
         queue.async { [weak self] in
             guard let self = self else { return }
             self.save(value: value, for: key)
@@ -161,12 +172,10 @@ extension DiskCache {
         }
     }
     
-    public func save(_ dataWork: @escaping () -> Data?, forKey key: String, result: @escaping (() -> Void)) {
+    public func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key, result: @escaping (() -> Void)) {
         queue.async { [weak self] in
             guard let self = self else { return }
-            if let data = dataWork() {
-                self.save(value: data, for: key)
-            }
+            self.save(dataWork, forKey: key)
             result()
         }
     }

@@ -42,7 +42,7 @@ class ImageWallCollectionViewController: UICollectionViewController {
         self.collectionView!.collectionViewLayout = layout
         self.collectionView!.register(ImageWallCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         if #available(iOS 10.0, *) {
-//            self.collectionView.prefetchDataSource = self
+            self.collectionView.prefetchDataSource = self
         }
     }
 

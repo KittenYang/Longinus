@@ -126,7 +126,7 @@ extension LonginusExtension where Base: AnimatedImage {
                     if let oldImage = base.frames[index].image {
                         base.frames[index].image = nil
                         base.cachedFrameCount -= 1
-                        base.currentCacheSize -= oldImage.lg.bytes
+                        base.currentCacheSize -= oldImage.cacheCost
                         shouldBreak = (base.currentCacheSize <= base.maxCacheSize)
                     }
                     base.lock.signal()
@@ -142,18 +142,18 @@ extension LonginusExtension where Base: AnimatedImage {
                     base.lock.wait()
                     if let oldImage = base.frames[index].image {
                         if oldImage.lg.lgImageEditKey != image.lg.lgImageEditKey {
-                            if base.currentCacheSize + image.lg.bytes - oldImage.lg.bytes <= base.maxCacheSize {
+                            if base.currentCacheSize + image.cacheCost - oldImage.cacheCost <= base.maxCacheSize {
                                 base.frames[index].image = image
                                 base.cachedFrameCount += 1
-                                base.currentCacheSize += image.lg.bytes - oldImage.lg.bytes
+                                base.currentCacheSize += image.cacheCost - oldImage.cacheCost
                             } else {
                                 shouldBreak = true
                             }
                         }
-                    } else if base.currentCacheSize + image.lg.bytes <= base.maxCacheSize {
+                    } else if base.currentCacheSize + image.cacheCost <= base.maxCacheSize {
                         base.frames[index].image = image
                         base.cachedFrameCount += 1
-                        base.currentCacheSize += image.lg.bytes
+                        base.currentCacheSize += image.cacheCost
                     } else {
                         shouldBreak = true
                     }
@@ -185,7 +185,7 @@ extension LonginusExtension where Base: AnimatedImage {
                                       decodeIfNeeded: true) {
                 base.frames[i].image = image
                 base.cachedFrameCount += 1
-                base.currentCacheSize += image.lg.bytes
+                base.currentCacheSize += image.cacheCost
             }
         }
         base.lock.signal()
@@ -249,7 +249,7 @@ public class AnimatedImage: UIImage {
         fileprivate var size: CGSize?
         fileprivate var duration: TimeInterval
         
-        fileprivate var bytes: Int64? { return image?.lg.bytes }
+        fileprivate var bytes: Int64? { return image?.cacheCost }
     }
 
     fileprivate var transformer: ImageTransformer?

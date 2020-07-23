@@ -38,8 +38,9 @@ public class LonginusManager {
     public private(set) var imageCacher: ImageCacher
     public private(set) var imageDownloader: ImageDownloadable
     public private(set) var imageCoder: ImageCodeable
-    public private(set) var preloadTasks: [String: ImageLoadTask] //Set<ImageLoadTask>
+    public private(set) var preloadTasks: [String: ImageLoadTask]
     private let coderQueue: DispatchQueuePool = DispatchQueuePool.userInitiated
+    private let releaseQueue: DispatchQueuePool = DispatchQueuePool.background
     private var tasks: Set<ImageLoadTask>
     private var taskLock: Mutex
     private var urlBlacklistLock: Mutex
@@ -88,7 +89,7 @@ public class LonginusManager {
                           transformer: ImageTransformer? = nil,
                           progress: ImageDownloaderProgressBlock? = nil,
                           completion: @escaping ImageManagerCompletionBlock) -> ImageLoadTask {
-        let task = newLoadTask()
+        let task = newLoadTask(url: resource.downloadUrl)
         taskLock.lock()
         self.tasks.insert(task)
         if options.contains(.preload) { self.preloadTasks[resource.cacheKey] = task }
@@ -172,7 +173,7 @@ public class LonginusManager {
                                                       data: nil,
                                                       forKey: resource.cacheKey,
                                                       cacheType: .memory,
-                                                      completion: {})
+                                                      completion: nil)
                             } else {
                                 self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "No edited image"]))
                             }
@@ -241,7 +242,7 @@ public class LonginusManager {
                                        progress: progress,
                                        completion: completion)
                 default:
-                    print("Error: illegal query disk data result")
+                    LGPrint("Error: illegal query disk data result")
                     break
                 }
             }
@@ -278,12 +279,12 @@ public class LonginusManager {
     }
     
     func remove(loadTask: ImageLoadTask) {
-        taskLock.lock()
-        self.tasks.remove(loadTask)
-        if let urlString = loadTask.downloadInfo?.url.absoluteString {
-            self.preloadTasks.removeValue(forKey: urlString)
+        releaseQueue.async {
+            self.taskLock.lock()
+            self.tasks.remove(loadTask)
+            self.preloadTasks.removeValue(forKey: loadTask.url.absoluteString)
+            self.taskLock.unlock()
         }
-        taskLock.unlock()
     }
 
     public func cancelPreloading(url: String) {
@@ -317,8 +318,8 @@ public class LonginusManager {
 
 // MARK: Helper
 extension LonginusManager {
-    private func newLoadTask() -> ImageLoadTask {
-        let task = ImageLoadTask(sentinel: OSAtomicIncrement32(&taskSentinel))
+    private func newLoadTask(url: URL) -> ImageLoadTask {
+        let task = ImageLoadTask(sentinel: OSAtomicIncrement32(&taskSentinel), url: url)
         task.imageManager = self
         return task
     }
@@ -337,8 +338,7 @@ extension LonginusManager {
                      data: data,
                      cacheType: cacheType)
             if cacheType == .none {
-                imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk) {
-                }
+                imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk, completion: nil)
             }
             remove(loadTask: task)
             return
@@ -364,7 +364,7 @@ extension LonginusManager {
                                            data: data,
                                            forKey: resource.cacheKey,
                                            cacheType: storeCacheType,
-                                           completion:{})
+                                           completion:nil)
                 } else if let inputImage = decodedImage {
                     if var image = currentTransformer.transform(inputImage) {
                         guard !task.isCancelled else { return }
@@ -380,7 +380,7 @@ extension LonginusManager {
                                                data: data,
                                                forKey: resource.cacheKey,
                                                cacheType: storeCacheType,
-                                               completion:{})
+                                               completion:nil)
                     } else {
                         self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "No edited image"]))
                     }
@@ -412,7 +412,7 @@ extension LonginusManager {
                                        data: data,
                                        forKey: resource.cacheKey,
                                        cacheType: storeCacheType,
-                                       completion: {})
+                                       completion: nil)
             } else {
                 if cacheType == .none {
                     self.urlBlacklistLock.lock()
@@ -464,7 +464,7 @@ extension LonginusManager {
                 self.complete(with: task, completion: completion, error: currentError)
                 self.remove(loadTask: task)
             } else {
-                print("Error: illegal result of download")
+                LGPrint("Error: illegal result of download")
             }
         }
     }

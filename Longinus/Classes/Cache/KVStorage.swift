@@ -32,7 +32,7 @@ import Foundation
         import SQLiteMacOSX
     #elseif os(iOS)
         #if (arch(i386) || arch(x86_64))
-            import SQLiteiPhoneSimulator
+            import SQLite3
         #else
             import SQLite3//SQLiteiPhoneOS
         #endif
@@ -96,7 +96,7 @@ public class KVStorage<T: CustomStringConvertible & Hashable> {
         self.path = path
         self.type = type
         let dbPath = (path as NSString).appendingPathComponent(KVStorageDatabase.Config.fileName)
-        let dataPath = (path as NSString).appendingPathComponent("data")
+        let dataPath = (path as NSString).appendingPathComponent("datas")
         let trashPath = (path as NSString).appendingPathComponent("trash")
 
         db = KVStorageDatabase(path: dbPath)

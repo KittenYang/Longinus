@@ -31,7 +31,7 @@ import Foundation
     import SQLiteMacOSX
     #elseif os(iOS)
 #if (arch(i386) || arch(x86_64))
-    import SQLiteiPhoneSimulator
+    import SQLite3
     #else
     import SQLite3//SQLiteiPhoneOS
 #endif

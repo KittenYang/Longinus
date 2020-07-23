@@ -198,16 +198,16 @@ extension LonginusExtension where Base: UIImage {
                       saturation:CGFloat,
                       maskImage:UIImage?) -> UIImage? {
         if size.height < 1 || size.height < 1 {
-            print("lg_image  error: invalid size: \(size). Both dimensions must be >= 1: \(base.description) ")
+            LGPrint("lg_image  error: invalid size: \(size). Both dimensions must be >= 1: \(base.description) ")
             return nil
         }
         guard let `cgImage` = self.cgImage else {
-            print("lg_image error: inputImage must be backed by a CGImage: \(base.description)")
+            LGPrint("lg_image error: inputImage must be backed by a CGImage: \(base.description)")
             return nil
         }
         
         if let `maskImage` = maskImage , `maskImage`.cgImage == nil {
-            NSLog ("lg_image error: effectMaskImage must be backed by a CGImage:: \(maskImage.description)");
+            LGPrint ("lg_image error: effectMaskImage must be backed by a CGImage:: \(maskImage.description)");
             return nil
         }
         
@@ -238,13 +238,13 @@ extension LonginusExtension where Base: UIImage {
         
         err = vImageBuffer_InitWithCGImage(&effect, &format, nil, cgImage, vImage_Flags(kvImagePrintDiagnosticsToConsole))
         if err != kvImageNoError {
-            print("lg_image error: vImageBuffer_InitWithCGImage returned error code \(err ?? -1) for inputImage: \(base.description)")
+            LGPrint("lg_image error: vImageBuffer_InitWithCGImage returned error code \(err ?? -1) for inputImage: \(base.description)")
             
             return nil
         }
         err = vImageBuffer_Init(&scratch, effect.height, effect.width, format.bitsPerPixel, vImage_Flags(kvImageNoFlags))
         if err != kvImageNoError {
-            print("lg_image error: vImageBuffer_Init returned error code \(err ?? -1) for inputImage: \(base.description)")
+            LGPrint("lg_image error: vImageBuffer_Init returned error code \(err ?? -1) for inputImage: \(base.description)")
             return nil;
         }
         

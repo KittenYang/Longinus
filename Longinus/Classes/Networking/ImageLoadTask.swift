@@ -35,27 +35,29 @@ public class ImageLoadTask: NSObject { // If not subclass NSObject, there is mem
         lock.unlock()
         return cancel
     }
+    public let url: URL
     public let sentinel: Int32
     public var downloadInfo: ImageDownloadInfo?
     public weak var imageManager: LonginusManager?
     private var cancelled: Bool
     private var lock: Mutex
     
-    init(sentinel: Int32) {
+    init(sentinel: Int32, url: URL) {
         self.sentinel = sentinel
+        self.url = url
         cancelled = false
         lock = Mutex()
     }
     
     /// Cancels current image loading task
     public func cancel() {
-        let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
         lock.lock()
         if self.cancelled {
-            return unlock()
+            lock.unlock()
+            return
         }
         cancelled = true
-        unlock()
+        lock.unlock()
         
         if let info = downloadInfo,
             let downloader = imageManager?.imageDownloader {

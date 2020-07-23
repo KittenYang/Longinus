@@ -30,7 +30,7 @@ import UIKit
 // MARK: Cache
 
 public protocol MemoryCacheable: CacheStandard {
-    mutating func save(value: Value, for key: Key, cost: Int)
+    mutating func save(value: Value?, for key: Key, cost: Int)
 }
 
 public protocol DiskCacheable: CacheStandard, CacheAsyncStandard {
@@ -48,7 +48,8 @@ public protocol CacheStandard {
     associatedtype Key: Hashable
     func containsObject(key: Key) -> Bool
     mutating func query(key: Key) -> Value?
-    mutating func save(value: Value, for key: Key)
+    mutating func save(value: Value?, for key: Key)
+    mutating func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key)
     mutating func remove(key: Key)
     mutating func removeAll()
 }
@@ -58,8 +59,8 @@ public protocol CacheAsyncStandard {
     associatedtype Key: Hashable
     func containsObject(key: Key, _ result: @escaping ((_ key: Key, _ contain: Bool) -> Void))
     mutating func query(key: Key, _ result: @escaping ((_ key: Key, _ value: Value?) -> Void))
-    mutating func save(value: Value, for key: Key, _ result: @escaping (()->Void))
-    mutating func save(_ dataWork: @escaping () -> Data?, forKey key: String, result: @escaping (() -> Void))
+    mutating func save(value: Value?, for key: Key, _ result: @escaping (()->Void))
+    mutating func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key, result: @escaping (() -> Void))
     mutating func remove(key: Key, _ result: @escaping ((_ key: Key) -> Void))
     mutating func removeAll(_ result: @escaping (()->Void))
 }
@@ -89,7 +90,7 @@ extension AutoTrimable {
 }
 
 public protocol CacheCostCalculable {
-    var cacheCost: Int { get }
+    var cacheCost: Int64 { get }
 }
 
 public enum CacheAge {
@@ -155,16 +156,16 @@ public protocol ImageCacheable: AnyObject {
 
     func image(forKey key: String, cacheType: ImageCacheType, completion: @escaping (ImageCacheQueryCompletionResult) -> Void)
 
-    func diskDataExists(forKey key: String, completion: @escaping (Bool) -> Void)
+    func diskDataExists(forKey key: String, completion: ((Bool) -> Void)?)
 
     func store(_ image: UIImage?,
                data: Data?,
                forKey key: String,
                cacheType: ImageCacheType,
-               completion: @escaping (() -> Void))
+               completion: (() -> Void)?)
 
 
-    func removeImage(forKey key: String, cacheType: ImageCacheType, completion: @escaping ((_ key: String) -> Void))
+    func removeImage(forKey key: String, cacheType: ImageCacheType, completion: ((_ key: String) -> Void)?)
 
-    func remove(_ type: ImageCacheType, completion: @escaping (() -> Void))
+    func remove(_ type: ImageCacheType, completion: (() -> Void)?)
 }

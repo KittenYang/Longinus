@@ -29,33 +29,25 @@ import Foundation
 
 public class MemoryCache<Key: Hashable, Value> {
     
-    let releaseQueue = DispatchQueue.global(qos: .background)
+    public typealias OperationBlock = (_ cache: MemoryCache<Key,Value>) -> Void
+    typealias Node = LinkedMapNode<Key, Value>
+    typealias LRU = LinkedMap<Key, Value>
     
-    private let lock: Mutex = Mutex()
-    private var lru = LinkedList<Key, Value>()
-    private var trimDict = [Key:TrimNode]()
-    private let ioQueue = DispatchQueuePool.default
+    fileprivate let lru = LRU()
+    fileprivate let lock = Mutex()
+    fileprivate let trimQueue = DispatchQueue(label: LonginusPrefixID + ".memoryTrim", qos: .background)
+    fileprivate let releaseQueue = DispatchQueue.global(qos: .background)
     
-    private(set) var countLimit: Int32
-    private(set) var costLimit: Int32
-    private(set) var ageLimit: CacheAge
-    private(set) var autoTrimInterval: TimeInterval
-    
-    public private(set) var totalCost: Int = 0
     public var totalCount: Int {
         lock.lock()
-        let count = self.lru.count
-        lock.unlock()
-        return count
+        defer { lock.unlock() }
+        return lru.totalCount
     }
-    
-    public var shouldRemoveAllObjectsOnMemoryWarning: Bool = true
-    public var shouldRemoveAllObjectsWhenEnteringBackground: Bool = true
-    public var didReceiveMemoryWarningBlock: ((MemoryCache<Key,Value>)->Void)?
-    public var didEnterBackgroundBlock: ((MemoryCache<Key,Value>)->Void)?
-    public var releaseOnMainThread: Bool = false
-    public var releaseAsynchronously: Bool = true
-    
+    public var totalCost: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return lru.totalCost
+    }
     var shouldAutoTrim: Bool {
         didSet {
             if oldValue == shouldAutoTrim { return }
@@ -66,129 +58,155 @@ public class MemoryCache<Key: Hashable, Value> {
     }
     
     public var first: Value? {
-        return lru.first
+        return lru.head?.value
     }
     
     public var last: Value? {
-        return lru.last
+        return lru.tail?.value
     }
     
-    public init(countLimit: Int32 = Int32.max, costLimit: Int32 = Int32.max, ageLimit: CacheAge = .never, autoTrimInterval: TimeInterval = 5) {
-        self.totalCost = 0
+    public var name: String?
+    public var countLimit = Int32.max
+    public var costLimit = Int32.max
+    public var ageLimit: CacheAge = .never
+    public var autoTrimInterval = TimeInterval(5)
+    public var shouldremoveAllValuesOnMemoryWarning = true
+    public var shouldremoveAllValuesWhenEnteringBackground = true
+    
+    public var didReceiveMemoryWarningBlock: OperationBlock?
+    public var didEnterBackgroundBlock: OperationBlock?
+    
+    public var releaseOnMainThread = false
+    public var releaseAsynchronously = false
+    
+    // MARK: - application lifetime observers
+    
+    public init(countLimit: Int32 = Int32.max,
+         costLimit: Int32 = Int32.max,
+         ageLimit: CacheAge = .never,
+         autoTrimInterval: TimeInterval = 5) {
+
         self.countLimit = countLimit
         self.costLimit = costLimit
         self.ageLimit = ageLimit
         self.autoTrimInterval = autoTrimInterval
         self.shouldAutoTrim = self.autoTrimInterval > 0
         
+        #if os(iOS)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemoryCache.appDidEnterBackgroundNotification(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemoryCache.appDidReceiveMemoryWarningNotification(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        #endif
+        
         if shouldAutoTrim { autoTrim() }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidReceiveMemoryWarningNotification), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
+        lru.removeAll()
     }
-    
-    // MARK: Notification Methods
-    @objc private func appDidReceiveMemoryWarningNotification() {
-        self.didReceiveMemoryWarningBlock?(self)
-        if self.shouldRemoveAllObjectsOnMemoryWarning {
-            self.removeAll()
+        
+    subscript(_ key: Key) -> Value? {
+        get {
+            return query(key: key)
         }
     }
-
-    @objc private func appDidEnterBackgroundNotification() {
-        self.didEnterBackgroundBlock?(self)
-        if self.shouldRemoveAllObjectsWhenEnteringBackground {
-            self.removeAll()
+            
+    // MARK: - system notifications
+    @objc fileprivate func appDidReceiveMemoryWarningNotification(_ notification: Notification) {
+        didReceiveMemoryWarningBlock?(self)
+        if shouldremoveAllValuesOnMemoryWarning {
+            removeAll()
         }
     }
     
+    @objc fileprivate func appDidEnterBackgroundNotification(_ notification: Notification) {
+        didEnterBackgroundBlock?(self)
+        if shouldremoveAllValuesWhenEnteringBackground {
+            removeAll()
+        }
+    }
 }
+
+
 
 extension MemoryCache: MemoryCacheable {
     public func containsObject(key: Key) -> Bool {
-        return lru.contains(where: { $0 == key })
+        lock.lock()
+        defer { lock.unlock() }
+        return lru.contains(key)
     }
     
     public func query(key: Key) -> Value? {
         lock.lock()
-        self.trimDict[key]?.updateAge()
-        let value = self.lru.value(for: key)
-        lock.unlock()
+        defer { lock.unlock() }
+        guard let node = lru[key] else { return nil }
+        let value = node.value
+        node.lastAccessTime = Date().timeIntervalSince1970
+        lru.bringNodeToHead(node)
         return value
     }
     
     // MARK: - save
-    public func save(value: Value, for key: Key) {
+    public func save(value: Value?, for key: Key) {
         save(value: value, for: key, cost: 0)
     }
     
-    public func save(value: Value, for key: Key, cost: Int = 0) {
+    public func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key) {
+        if let data = dataWork() {
+            self.save(value: data.0, for: key, cost: data.1)
+        }
+    }
+    
+    public func save(value: Value?, for key: Key, cost: Int = 0) {
+        guard value != nil else {
+            remove(key: key)
+            return
+        }
         lock.lock()
-        self.trimDict[key] = TrimNode(cost: cost)
-        self.totalCost += cost
-        
-        self.lru.push(value, for: key)
-        
-        if self.totalCost > self.costLimit {
-            self.ioQueue.async { [weak self] in
+        if let node = lru[key] {
+            lru.totalCost += cost - node.cost
+            node.value = value
+            node.cost = cost
+            node.lastAccessTime = CACurrentMediaTime()
+            lru.bringNodeToHead(node)
+        } else {
+            let node = Node(key: key, value: value)
+            node.cost = cost
+            lru.insertNodeAtHead(node)
+            
+            if lru.totalCount > countLimit,
+                let tail = lru.tail {
+                lru.remove(tail)
+            }
+        }
+        if lru.totalCost > costLimit {
+            trimQueue.async { [weak self] in
                 guard let self = self else { return }
                 self.trimToCost(self.costLimit)
             }
         }
-        if self.totalCount > self.countLimit {
-            let trailNode = self.lru.removeTrail()
-            if self.releaseAsynchronously {
-                let queue = self.releaseOnMainThread ? DispatchQueue.main : self.releaseQueue
-                queue.async {
-                    let _ = trailNode?.key //hold and release in queue
-                }
-            } else if (self.releaseOnMainThread && pthread_main_np() == 0) {
-                DispatchQueue.main.async {
-                    let _ = trailNode?.key //hold and release in queue
-                }
-            }
-        }
         lock.unlock()
     }
+
     
     // MARK: - remove
     public func remove(key: Key) {
         lock.lock()
-        if let node = trimDict[key] {
-            self.totalCost -= node.cost
-            self.lru.remove(for: key)
-            self.trimDict.removeValue(forKey: key)
-            if self.releaseAsynchronously {
-                let queue = self.releaseOnMainThread ? DispatchQueue.main : self.releaseQueue
-                queue.async {
-                    let _ = node //hold and release in queue
-                }
-            } else if (self.releaseOnMainThread && pthread_main_np() == 0) {
-                DispatchQueue.main.async {
-                    let _ = node //hold and release in queue
-                }
-            }
-        }
-        lock.unlock()
+        defer { lock.unlock() }
+        guard let node = lru[key] else { return }
+        lru.remove(node)
     }
     
     public func removeAll() {
         lock.lock()
-        self.trimDict.removeAll()
-        self.totalCost = 0
-        self.lru.removeAll()
-        lock.unlock()
+        defer { lock.unlock() }
+        lru.removeAll()
     }
     
     public func setCostLimit(_ cost: Int32) {
         lock.lock()
         self.costLimit = cost
-        self.ioQueue.async { [weak self] in
+        self.trimQueue.async { [weak self] in
             self?.trimToCost(cost)
         }
         lock.unlock()
@@ -197,7 +215,7 @@ extension MemoryCache: MemoryCacheable {
     public func setCountLimit(_ count: Int32) {
         lock.lock()
         self.countLimit = count
-        self.ioQueue.async { [weak self] in
+        self.trimQueue.async { [weak self] in
             self?.trimToCount(count)
         }
         lock.unlock()
@@ -206,7 +224,7 @@ extension MemoryCache: MemoryCacheable {
     public func setAgeLimit(_ age: CacheAge) {
         lock.lock()
         self.ageLimit = age
-        self.ioQueue.async { [weak self] in
+        self.trimQueue.async { [weak self] in
             self?.trimToAge(age)
         }
         lock.unlock()
@@ -214,111 +232,127 @@ extension MemoryCache: MemoryCacheable {
     
     private func removeLast() {
         lock.lock()
-        if let key = self.lru.removeTrail()?.key,
-            let cost = self.trimDict.removeValue(forKey: key)?.cost {
-            self.totalCost -= cost
-        }
+        self.lru.removeTailNode()
         lock.unlock()
     }
 }
 
 extension MemoryCache: AutoTrimable {
-    public func trimToCount(_ countLimit: Int32) {
-        let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
-        lock.lock()
-        if countLimit <= 0 {
-            self.removeAll()
-            return unlock()
-        } else if self.lru.count <= countLimit {
-            return unlock()
+    
+    public func trimToCount(_ count: Int32) {
+        guard count > 0 else {
+            removeAll()
+            return
         }
-        unlock()
-        
-        while true {
-            if self.lock.trylock() == 0 {
-                if lru.count > countLimit,
-                    !lru.isEmpty {
-                    self.removeLast()
+        lock.lock()
+        guard lru.totalCount > count else {
+            lock.unlock()
+            return
+        }
+        lock.unlock()
+        var buffer = [Node]()
+        var finish = false
+        while !finish {
+            if lock.trylock() == 0 {
+                if lru.totalCount > count,
+                    let tail = lru.removeTailNode() {
+                    buffer.append(tail)
                 } else {
-                    return unlock()
+                    finish = true
                 }
-                self.lock.unlock()
+                lock.unlock()
             } else {
-                usleep(10 * 1000) // 10 ms
+                usleep(10 * 1000)
+            }
+        }
+        
+        if !buffer.isEmpty {
+            let q = releaseOnMainThread ? DispatchQueue.main : releaseQueue
+            q.async {
+                buffer.removeAll()
             }
         }
     }
     
-    public func trimToCost(_ costLimit: Int32) {
-        let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
-        lock.lock()
-        if costLimit <= 0 {
-            self.removeAll()
-            return unlock()
-        } else if self.totalCost <= costLimit {
-            return unlock()
+    public func trimToCost(_ cost: Int32) {
+        guard cost > 0 else {
+            removeAll()
+            return
         }
-        unlock()
-        
-        while true {
-            if self.lock.trylock() == 0 {
-                if totalCost > costLimit, totalCost > 0 {
-                    self.removeLast()
+        lock.lock()
+        guard lru.totalCost > cost else {
+            lock.unlock()
+            return
+        }
+        lock.unlock()
+        var buffer = [Node]()
+        var finish = false
+        while !finish {
+            if lock.trylock() == 0 {
+                if lru.totalCost >= cost,
+                    let tail = lru.removeTailNode() {
+                    buffer.append(tail)
                 } else {
-                    return unlock()
+                    finish = true
                 }
-                self.lock.unlock()
+                lock.unlock()
             } else {
-                usleep(10 * 1000) // 10 ms
+                usleep(10 * 1000)
             }
         }
+        
+        if !buffer.isEmpty {
+            let q = releaseOnMainThread ? DispatchQueue.main : releaseQueue
+            q.async {
+                buffer.removeAll()
+            }
+        }
+        
     }
     
-    public func trimToAge(_ ageLimit: CacheAge) {
-        let unlock: ()->Void = { [weak self] in self?.lock.unlock() }
-        lock.lock()
-        if ageLimit.timeInterval <= 0 {
-            self.removeAll()
-            return unlock()
+    public func trimToAge(_ age: CacheAge) {
+        if age.timeInterval == Int32.max { return }
+        guard age.timeInterval > 0 else {
+            removeAll()
+            return
         }
-        unlock()
-       
         let now = Date().timeIntervalSince1970
-        while true {
-            if self.lock.trylock() == 0 {
-                if let lastNodeKey = lru.index(before: lru.endIndex).node?.key,
-                    let lastTrimNode = trimDict[lastNodeKey],
-                    now - lastTrimNode.age > TimeInterval(ageLimit.timeInterval) {
-                    self.removeLast()
-                } else {
-                    return unlock()
+        lock.lock()
+        guard let tail = lru.tail else {
+            lock.unlock()
+            return
+        }
+        if now - tail.lastAccessTime <= TimeInterval(age.timeInterval) {
+            lock.unlock()
+            return
+        }
+        lock.unlock()
+        var buffer = [Node]()
+        var finish = false
+        while !finish {
+            if lock.trylock() == 0 {
+                guard let tail = lru.tail else {
+                    lock.unlock()
+                    return
                 }
-                self.lock.unlock()
+                if now - tail.lastAccessTime > TimeInterval(age.timeInterval),
+                    let tail = lru.removeTailNode() {
+                    buffer.append(tail)
+                } else {
+                    finish = true
+                }
+                lock.unlock()
             } else {
-                usleep(10 * 1000) // 10 ms
+                usleep(10 * 1000)
             }
         }
-    }
-}
-
-extension MemoryCache {
-    private struct TrimNode: Hashable {
-        private(set) var cost: Int
-        private(set) var age: TimeInterval = Date().timeIntervalSince1970
         
-        mutating func updateAge() {
-            self.age = Date().timeIntervalSince1970
+        if !buffer.isEmpty {
+            let q = releaseOnMainThread ? DispatchQueue.main : releaseQueue
+            q.async {
+                buffer.removeAll()
+            }
         }
-        
-        init(cost: Int) {
-            self.cost = cost
-        }
-    }
-}
-
-extension MemoryCache: CustomStringConvertible {
-    public var description: String {
-        return lru.description
     }
 }
 

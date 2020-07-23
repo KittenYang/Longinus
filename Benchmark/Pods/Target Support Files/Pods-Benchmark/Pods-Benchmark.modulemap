@@ -1,0 +1,6 @@
+framework module Pods_Benchmark {
+  umbrella header "Pods-Benchmark-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Longinus",
+  "version": "0.1.0",
+  "summary": "A short description of Longinus.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/kittenyang@icloud.com/Longinus",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "KittenYang": "kittenyang@icloud.com"
+  },
+  "source": {
+    "git": "https://github.com/KittenYang/Longinus.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "Longinus/Classes/**/*"
+}

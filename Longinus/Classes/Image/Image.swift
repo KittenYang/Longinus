@@ -29,7 +29,7 @@ import UIKit
 
 extension UIImage: CacheCostCalculable {
     /// Cost of an image
-    public var cacheCost: Int { return lg.cost }
+    public var cacheCost: Int64 { return lg.bytes }
 }
 
 private var imageFormatKey: Void?
@@ -40,15 +40,7 @@ extension LonginusExtension where Base: UIImage {
     var size: CGSize { return base.size }
     var scale: CGFloat { return base.scale }
     
-    // Bitmap memory cost with bytes.
-    var cost: Int {
-        let pixel = Int(size.width * size.height * scale * scale)
-        guard let cgImage = cgImage else {
-            return pixel * 4
-        }
-        return pixel * cgImage.bitsPerPixel / 8
-    }
-    
+    // Bitmap memory cost with bytes
     var bytes: Int64 {
         guard let cgImage = cgImage else {
             return 1
