@@ -349,7 +349,7 @@ extension LonginusManager {
             if let currentTransformer = transformer {
                 if let animatedImage = decodedImage as? AnimatedImage {
                     if options.contains(.ignoreAnimatedImage) {
-                        decodedImage = animatedImage.lg.imageFrame(at: 0, decodeIfNeeded: !options.contains(.ignoreImageDecoding))
+                        decodedImage = animatedImage.imageFrame(at: 0, decompress: !options.contains(.ignoreImageDecoding))
                     }
                 }
                 if var animatedImage = decodedImage as? AnimatedImage {
@@ -398,7 +398,7 @@ extension LonginusManager {
                     image = decompressedImage
                 }
                 if let animatedImage = image as? AnimatedImage, options.contains(.ignoreAnimatedImage) {
-                    if let firstFrame = animatedImage.lg.imageFrame(at: 0, decodeIfNeeded: !options.contains(.ignoreImageDecoding)) {
+                    if let firstFrame = animatedImage.imageFrame(at: 0, decompress: !options.contains(.ignoreImageDecoding)) {
                         image = firstFrame
                     }
                 }

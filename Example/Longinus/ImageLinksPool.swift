@@ -4290,18 +4290,18 @@ class ImageLinksPool {
     ]
 
     
-    static let imageLinks = ["https://media.tenor.com/images/962877f1845be69d8fa026fbab9916a0/tenor.gif",
-                             "https://media.tenor.com/images/365b23d03382e5e55a6e167f6a799c4d/tenor.gif",
+    static let imageLinks = ["https://wx2.sinaimg.cn/large/9ec9dea9gy1g60m8nnsycg20ab082b04.gif",
+                             "https://wx2.sinaimg.cn/large/9ec9dea9gy1g60m8n7qp1g206n06h1gk.gif",
                              "https://cdn.echoing.tech/images/83a14ccbc00e5306a8b7c34419a06d01.jpeg",
                              "https://cdn.echoing.tech/images/3ac4037477a03e7bb1fa480ac99d9b7d.jpeg",
                              "https://cdn.echoing.tech/images/6e5c449c66a167bf61949e5370d030f7.jpeg",
-                             "https://media.tenor.com/images/75f98e2557c9f5fc3b00c74fe6f8c76b/tenor.gif",
+                             "https://wx2.sinaimg.cn/large/9ec9dea9gy1g60pqlgit5g206o06owfh.gif",
                              "https://cdn.echoing.tech/images/fa1afda807f2786ab11fa46a416889fa.jpeg",
                              "https://cdn.echoing.tech/images/2029bb840882db7d85d2c8deed2b873b.jpeg",
                              "https://cdn.echoing.tech/images/11629c9002834e76da3583f731a81225.jpeg",
                              "https://cdn.echoing.tech/images/cd075e5ede96d2ef33edd69fa35710f7.jpeg",
                              "https://cdn.echoing.tech/images/01c5fc512aa04be8847942044ab93f1e.jpeg",
-                             "https://media.tenor.com/images/442e6fae848e8dd15c9dda9fa17dc350/tenor.gif",
+                             "https://wx4.sinaimg.cn/large/9ec9dea9gy1g60q86ma6ug20b406uu0x.gif",
                              "https://cdn.echoing.tech/images/b4256657d8af57002fc355ad129ff45e.jpeg",
                              "https://cdn.echoing.tech/images/98bd2a566c92bf58046f88a7d691d3ed.jpeg",
                              "https://cdn.echoing.tech/images/71bc09ac00b0c57d5b21ed404658c1c6.jpeg",

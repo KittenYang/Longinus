@@ -56,13 +56,21 @@ public protocol ImageProgressiveCodeable: ImageCodeable {
 }
 
 
-public protocol AnimatedImageCodeable: ImageCodeable {
-    var imageData: Data? { get set}
+public protocol AnimatedImageCodeable {
+    var imageData: Data? { get set }
     var frameCount: Int? { get }
     var loopCount: Int?  { get }
+    var bytesPerFrame: Int64? { get }
     func imageFrame(at index: Int, decompress: Bool) -> UIImage?
     func imageFrameSize(at index: Int) -> CGSize?
     func duration(at index: Int) -> TimeInterval?
+    func contentsRect(at index: Int) -> CGRect?
+}
+
+extension AnimatedImageCodeable {
+    public func contentsRect(at index: Int) -> CGRect? {
+        return CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    }
 }
 
 public enum ImageFormat {

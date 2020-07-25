@@ -104,10 +104,9 @@ class ImageWallCell: UICollectionViewCell {
     }
     
     func updateUIWith(_ url: URL) {
-        let transformer = LonginusExtension<ImageTransformer>
-            .imageTransformerCommon(with: imageView.frame.size,
-                               borderWidth: 2.0,
-                               borderColor: .white)
+        let transformer = ImageTransformer.imageTransformerCommon(with: imageView.frame.size,
+                                                                  borderWidth: 2.0,
+                                                                  borderColor: .white)
         imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
     }
 }

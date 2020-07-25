@@ -1,8 +1,8 @@
 //
-//  LonginusWeakProxy.swift
+//  DispatchSemaphore.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/14.
+//  Created by Qitao Yang on 2020/7/25.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -27,21 +27,14 @@
 
 import Foundation
 
-public class LonginusWeakProxy: NSObject {
-    
-    private weak var target: NSObjectProtocol?
-    
-    public init(target: NSObjectProtocol) {
-        super.init()
-        self.target = target
+extension DispatchSemaphore {
+    @inline(__always)
+    func lock() {
+        _ = self.wait(wallTimeout: DispatchWallTime.distantFuture)
     }
-    
-    public override func responds(to aSelector: Selector!) -> Bool {
-        return (target?.responds(to: aSelector) ?? false) || super.responds(to: aSelector)
+
+    @inline(__always)
+    func unlock() {
+        _ = self.signal()
     }
-    
-    public override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        return target
-    }
-    
 }

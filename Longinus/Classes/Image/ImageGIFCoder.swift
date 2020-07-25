@@ -32,9 +32,12 @@ public class ImageGIFCoder {
     
     private var imageSource: CGImageSource?
     private var imageOrientation: UIImage.Orientation = .up
+    private let lock: Mutex = Mutex()
     
     public var imageData: Data? {
         didSet {
+            lock.lock()
+            defer { lock.unlock() }
             if let data = imageData {
                 imageSource = CGImageSourceCreateWithData(data as CFData, nil)
                 if let source = imageSource,
@@ -50,6 +53,8 @@ public class ImageGIFCoder {
     }
     
     public var frameCount: Int? {
+        lock.lock()
+        defer { lock.unlock() }
         if let source = imageSource {
             let count = CGImageSourceGetCount(source)
             if count > 0 {
@@ -60,6 +65,8 @@ public class ImageGIFCoder {
     }
     
     public var loopCount: Int? {
+        lock.lock()
+        defer { lock.unlock() }
         if let source = imageSource,
             let properties = CGImageSourceCopyProperties(source, nil) as? [CFString : Any],
             let gifInfo = properties[kCGImagePropertyGIFDictionary] as? [CFString : Any],
@@ -78,7 +85,7 @@ extension ImageGIFCoder: ImageCodeable {
     }
     
     public func decodedImage(with data: Data) -> UIImage? {
-        var image = AnimatedImage(lg_data: data, decoder: copy() as? AnimatedImageCodeable)
+        var image = AnimatedImage(lg_data: data, decoder: copy() as? AnimatedImageCodeable & ImageCodeable)
         image?.lg.imageFormat = data.lg.imageFormat
         return image
     }
@@ -133,7 +140,13 @@ extension ImageGIFCoder: ImageCodeable {
 
 extension ImageGIFCoder: AnimatedImageCodeable {
     
+    public var bytesPerFrame: Int64? {
+        return imageFrame(at: 0, decompress: true)?.cacheCost
+    }
+    
     public func imageFrame(at index: Int, decompress: Bool) -> UIImage? {
+        lock.lock()
+        defer { lock.unlock() }
         if let source = imageSource,
             let sourceImage = CGImageSourceCreateImageAtIndex(source, index, [kCGImageSourceShouldCache : true] as CFDictionary) {
             if decompress {

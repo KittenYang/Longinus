@@ -151,7 +151,7 @@ class ImageWallCell: UICollectionViewCell {
     private lazy var lgImageView: Longinus.AnimatedImageView = {
         var imageView = Longinus.AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
         imageView.webImageType = .longinus
-        imageView.lg.runLoopMode = .default
+        imageView.runLoopMode = .common
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -210,7 +210,15 @@ class ImageWallCell: UICollectionViewCell {
         let placeholder = UIImage(named: "placeholder")
         switch currentType {
         case .longinus:
-            lgImageView.lg.setImage(with: url, placeholder: placeholder, options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: nil, progress: nil, completion: nil)
+            let radius: CGFloat = min(lgImageView.frame.width, lgImageView.frame.height)
+            let transformer = ImageTransformer.imageTransformerCommon(with: CGSize(width: radius, height: radius),
+                                                                      fillContentMode: .center,
+                                                                      corner: [.allCorners],
+                                                                      cornerRadius: radius/2,
+                                                                      borderWidth: 2.0,
+                                                                      borderColor: UIColor.white,
+                                                                      backgroundColor: UIColor.gray)
+            lgImageView.lg.setImage(with: url, placeholder: placeholder, options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
         case .kingfisher:
             kfImageView.kf.setImage(with: url, placeholder: placeholder)
         case .sdwebimage:

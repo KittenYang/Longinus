@@ -92,9 +92,9 @@ public class DiskCache: DiskCacheable {
     }
     
     @objc private func appWillBeTerminated() {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage = nil
-        ioLock.signal()
+        ioLock.unlock()
     }
     
 }

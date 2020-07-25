@@ -64,8 +64,10 @@ public struct ImageTransformer {
 }
 
 // MARK: ImageTransformer Extension Methods
-extension ImageTransformer: LonginusCompatible {}
-extension LonginusExtension where Base == ImageTransformer {
+extension ImageTransformer {
+    /*
+     Crop
+     */
     static func imageTransformerCrop(with rect: CGRect)  -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.croppedImage(with: rect) { return currentImage }
@@ -74,6 +76,9 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).crop.rect=\(rect)", transform: transform)
     }
     
+    /*
+     Resize
+     */
     static public func imageTransformerResize(with size: CGSize) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: size) { return currentImage }
@@ -89,7 +94,7 @@ extension LonginusExtension where Base == ImageTransformer {
         }
         return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),contentMode=\(contentMode.rawValue)", transform: transform)
     }
-    
+
     static public func imageTransformerResize(with displaySize: CGSize, fillContentMode: LonginusExtension<UIView>.FillContentMode) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: displaySize, fillContentMode: fillContentMode) { return currentImage }
@@ -98,6 +103,9 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),fillContentMode=\(fillContentMode)", transform: transform)
     }
     
+    /*
+     Rotate
+     */
     static public func imageTransformerRotate(withAngle angle: CGFloat, fitSize: Bool) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.rotatedImage(withAngle: angle, fitSize: fitSize) { return currentImage }
@@ -106,6 +114,9 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).rotate.angle=\(angle),fitSize=\(fitSize)", transform: transform)
     }
     
+    /*
+     Flip
+     */
     static public func imageTransformerFlip(withHorizontal horizontal: Bool, vertical: Bool) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.flippedImage(withHorizontal: horizontal, vertical: vertical) { return currentImage }
@@ -113,7 +124,10 @@ extension LonginusExtension where Base == ImageTransformer {
         }
         return ImageTransformer(key: "\(LonginusPrefixID).flip.horizontal=\(horizontal),vertical=\(vertical)", transform: transform)
     }
-
+    
+    /*
+     Tint
+     */
     static public func imageTransformerTint(with color: UIColor, blendMode: CGBlendMode = .normal) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.tintedImage(with: color, blendMode: blendMode) { return currentImage }
@@ -122,11 +136,14 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).tint.color=\(color),blendMode=\(blendMode.rawValue)", transform: transform)
     }
     
+    /*
+     GradientlyTint
+     */
     static public func imageTransformerGradientlyTint(with colors: [UIColor],
-                                             locations: [CGFloat],
-                                             start: CGPoint = CGPoint(x: 0.5, y: 0),
-                                             end: CGPoint = CGPoint(x: 0.5, y: 1),
-                                             blendMode: CGBlendMode = .normal) -> ImageTransformer {
+                                                      locations: [CGFloat],
+                                                      start: CGPoint = CGPoint(x: 0.5, y: 0),
+                                                      end: CGPoint = CGPoint(x: 0.5, y: 1),
+                                                      blendMode: CGBlendMode = .normal) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.gradientlyTintedImage(with: colors,
                                                                  locations: locations,
@@ -140,6 +157,9 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).gradientlyTint.colors=\(colors),locations=\(locations),start=\(start),end=\(end),blendMode=\(blendMode.rawValue)", transform: transform)
     }
     
+    /*
+     Overlay
+     */
     static public func imageTransformerOverlay(with overlayImage: UIImage, blendMode: CGBlendMode = .normal, alpha: CGFloat) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.overlaidImage(with: overlayImage, blendMode: blendMode, alpha: alpha) { return currentImage }
@@ -148,14 +168,17 @@ extension LonginusExtension where Base == ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).overlay.image=\(overlayImage),blendMode=\(blendMode.rawValue),alpha=\(alpha)", transform: transform)
     }
     
+    /*
+     Common
+     */
     static public func imageTransformerCommon(with displaySize: CGSize,
-                                         fillContentMode:LonginusExtension<UIView>.FillContentMode = .center,
-                                         maxResolution: Int = 0,
-                                         corner: UIRectCorner = UIRectCorner(rawValue: 0),
-                                         cornerRadius: CGFloat = 0,
-                                         borderWidth: CGFloat = 0,
-                                         borderColor: UIColor? = nil,
-                                         backgroundColor: UIColor? = nil) -> ImageTransformer {
+                                              fillContentMode:LonginusExtension<UIView>.FillContentMode = .center,
+                                              maxResolution: Int = 0,
+                                              corner: UIRectCorner = UIRectCorner(rawValue: 0),
+                                              cornerRadius: CGFloat = 0,
+                                              borderWidth: CGFloat = 0,
+                                              borderColor: UIColor? = nil,
+                                              backgroundColor: UIColor? = nil) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.commonEditedImage(with: displaySize,
                                                              fillContentMode: fillContentMode,
@@ -172,7 +195,6 @@ extension LonginusExtension where Base == ImageTransformer {
         let key = "\(LonginusPrefixID).common.displaySize=\(displaySize),fillContentMode=\(fillContentMode),maxResolution=\(maxResolution),corner=\(corner),cornerRadius=\(cornerRadius),borderWidth=\(borderWidth),borderColor=\(borderColor?.description ?? "nil"),backgroundColor=\(backgroundColor?.description ?? "nil")"
         return ImageTransformer(key: key, transform: transform)
     }
-
 }
 
 // MARK: UIImage Extension Methods
