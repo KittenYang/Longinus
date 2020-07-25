@@ -84,30 +84,30 @@ public class ImageDownloader {
     public var generateDownloadOperation: (URLRequest, URLSession, ImageOptions) -> ImageDownloadOperateable
     
     public var currentDownloadCount: Int {
-        lock.wait()
+        lock.lock()
         let count = urlOperations.count
-        lock.signal()
+        lock.unlock()
         return count
     }
     
     public var currentPreloadTaskCount: Int {
-        lock.wait()
+        lock.lock()
         let count = preloadInfos.count
-        lock.signal()
+        lock.unlock()
         return count
     }
     
     public var maxConcurrentDownloadCount: Int {
         get {
-            lock.wait()
+            lock.lock()
             let count = operationQueue.maxRunningCount
-            lock.signal()
+            lock.unlock()
             return count
         }
         set {
-            lock.wait()
+            lock.lock()
             operationQueue.maxRunningCount = newValue
-            lock.signal()
+            lock.unlock()
         }
     }
     
@@ -140,15 +140,15 @@ public class ImageDownloader {
     }
     
     public func update(value: String?, forHTTPHeaderField field: String) {
-        lock.wait()
+        lock.lock()
         httpHeaders[field] = value
-        lock.signal()
+        lock.unlock()
     }
     
     fileprivate func operation(for url: URL) -> ImageDownloadOperateable? {
-        lock.wait()
+        lock.lock()
         let operation = urlOperations[url]
-        lock.signal()
+        lock.unlock()
         return operation
     }
     
@@ -162,7 +162,7 @@ extension ImageDownloader: ImageDownloadable {
                               progress: ImageDownloaderProgressBlock? = nil,
                               completion: @escaping ImageDownloaderCompletionBlock) -> ImageDownloadInfo {
         let info = generateDownloadInfo(url, progress, completion)
-        lock.wait()
+        lock.lock()
         if options.contains(.preload) { preloadInfos[info.sentinel] = info }
         var operation: ImageDownloadOperateable? = urlOperations[url]
         if operation != nil {
@@ -180,28 +180,28 @@ extension ImageDownloader: ImageDownloadable {
             if options.contains(.progressiveDownload) || options.contains(.progressiveBlur) { newOperation.imageCoder = imageCoder }
             newOperation.completion = { [weak self, weak newOperation] in
                 guard let self = self else { return }
-                self.lock.wait()
+                self.lock.lock()
                 self.urlOperations.removeValue(forKey: url)
                 if let infos = newOperation?.downloadInfos {
                     for info in infos { self.preloadInfos.removeValue(forKey: info.sentinel) }
                 }
                 self.operationQueue.removeOperation(forKey: url)
-                self.lock.signal()
+                self.lock.unlock()
             }
             urlOperations[url] = newOperation
             operationQueue.add(newOperation, preload: options.contains(.preload))
             operation = newOperation
         }
         operation?.add(info: info)
-        lock.signal()
+        lock.unlock()
         return info
     }
     
     public func cancel(info: ImageDownloadInfo) {
         info.cancel()
-        lock.wait()
+        lock.lock()
         let operation = urlOperations[info.url]
-        lock.signal()
+        lock.unlock()
         if let operation = operation {
             var allCancelled = true
             let infos = operation.downloadInfos
@@ -214,25 +214,25 @@ extension ImageDownloader: ImageDownloadable {
     }
     
     public func cancel(url: URL) {
-        lock.wait()
+        lock.lock()
         let operation = urlOperations[url]
-        lock.signal()
+        lock.unlock()
         operation?.cancel()
     }
     
     public func cancelPreloading() {
-        lock.wait()
+        lock.lock()
         let infos = preloadInfos
-        lock.signal()
+        lock.unlock()
         for (_, info) in infos {
             cancel(info: info)
         }
     }
     
     public func cancelAll() {
-        self.lock.wait()
+        self.lock.lock()
         let operations = urlOperations
-        self.lock.signal()
+        self.lock.unlock()
         for (_, operation) in operations {
             operation.cancel()
         }

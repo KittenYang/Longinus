@@ -29,7 +29,9 @@ import UIKit
 
 public class LonginusManager {
     
-    // sizeThreshold: 20KB
+    /*
+     Default sizeThreshold: 20KB
+     */
     public static let shared: LonginusManager = { () -> LonginusManager in
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! + "/\(LonginusPrefixID)"
         return LonginusManager(cachePath: path, sizeThreshold: 20 * 1024)

@@ -172,7 +172,7 @@ extension ImageTransformer {
      Common
      */
     static public func imageTransformerCommon(with displaySize: CGSize,
-                                              fillContentMode:LonginusExtension<UIView>.FillContentMode = .center,
+                                              fillContentMode: LonginusExtension<UIView>.FillContentMode = .center,
                                               maxResolution: Int = 0,
                                               corner: UIRectCorner = UIRectCorner(rawValue: 0),
                                               cornerRadius: CGFloat = 0,

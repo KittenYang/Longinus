@@ -46,9 +46,9 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     var url: URL { return request.url! }
     
     var dataTaskId: Int {
-        stateLock.wait()
+        stateLock.lock()
         let tid = dataTask?.taskIdentifier ?? 0
-        stateLock.signal()
+        stateLock.unlock()
         return tid
     }
     
@@ -76,9 +76,9 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     }()
     
     var downloadInfos: [ImageDownloadInfo] {
-        taskLock.wait()
+        taskLock.lock()
         let currentTasks = infos
-        taskLock.signal()
+        taskLock.unlock()
         return currentTasks
     }
     
@@ -96,14 +96,14 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     }
     
     func add(info: ImageDownloadInfo) {
-        taskLock.wait()
+        taskLock.lock()
         infos.append(info)
-        taskLock.signal()
+        taskLock.unlock()
     }
     
     func start() {
-        stateLock.wait()
-        defer { stateLock.signal() }
+        stateLock.lock()
+        defer { stateLock.unlock() }
         if cancelled || finished {
             if let url = request.url {
                 if !url.isFileURL && options.contains(.showNetworkActivity) {
@@ -122,8 +122,8 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     }
     
     func cancel() {
-        stateLock.wait()
-        defer { stateLock.signal() }
+        stateLock.lock()
+        defer { stateLock.unlock() }
         if finished {
             if let url = request.url {
                 if !url.isFileURL && options.contains(.showNetworkActivity) {
@@ -153,7 +153,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
 extension ImageDownloadOperation: URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        stateLock.wait()
+        stateLock.lock()
         downloadFinished = true
         if error != nil {
             complete(withData: nil, error: error)
@@ -165,16 +165,16 @@ extension ImageDownloadOperation: URLSessionTaskDelegate {
                 complete(withData: nil, error: noDataError)
             }
         }
-        stateLock.signal()
-        stateLock.wait()
+        stateLock.unlock()
+        stateLock.lock()
         done()
-        stateLock.signal()
+        stateLock.unlock()
     }
     
     private func complete(withData data: Data?, error: Error?) {
-        taskLock.wait()
+        taskLock.lock()
         let currentInfos = infos
-        taskLock.signal()
+        taskLock.unlock()
         for info in currentInfos where !info.isCancelled {
             info.completion(data, error)
         }
@@ -236,11 +236,11 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
     private func progress(with data: Data?,
                           expectedSize: Int,
                           image: UIImage?) {
-        taskLock.wait()
+        taskLock.lock()
         let currentInfos = infos
-        taskLock.signal()
-        stateLock.wait()
-        defer { stateLock.signal() }
+        taskLock.unlock()
+        stateLock.lock()
+        defer { stateLock.unlock() }
         if downloadFinished { return }
         for info in currentInfos where !info.isCancelled {
             info.progress?(data, expectedSize, image)

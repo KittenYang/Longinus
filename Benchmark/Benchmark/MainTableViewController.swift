@@ -102,8 +102,10 @@ class MainTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
         if indexPath.row == menu.count {
             cell.textLabel?.text = "清除缓存"
+            cell.textLabel?.textColor = .red
         } else {
             cell.textLabel?.text = menu[indexPath.row].displayTitle
+            cell.textLabel?.textColor = .black
         }
         return cell
     }

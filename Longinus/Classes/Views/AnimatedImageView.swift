@@ -162,7 +162,7 @@ open class AnimatedImageView: UIImageView {
         if let tempMode = aDecoder.decodeObject(forKey: "runLoopMode") as? RunLoop.Mode {
             runLoopMode = tempMode
         } else {
-            runLoopMode = RunLoop.Mode.common
+            runLoopMode = RunLoop.Mode.default
         }
         // decode bool 默认值为false，所以需要判断处理
         if aDecoder.containsValue(forKey: "isAutoPlayAnimatedImage") {

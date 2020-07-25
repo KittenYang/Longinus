@@ -53,16 +53,16 @@ public class DiskCache: DiskCacheable {
     }
     
     public var totalCount: Int32 {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         let count = storage?.totalItemCount ?? 0
-        defer { ioLock.signal() }
+        defer { ioLock.unlock() }
         return count
     }
     
     public var totalCost: Int32 {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         let count = storage?.totalItemSize ?? 0
-        defer { ioLock.signal() }
+        defer { ioLock.unlock() }
         return count
     }
 
@@ -102,15 +102,15 @@ public class DiskCache: DiskCacheable {
 // MARK: CacheStandard
 extension DiskCache {
     public func containsObject(key: Key) -> Bool {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
-        defer { ioLock.signal() }
+        _ = ioLock.lock()
+        defer { ioLock.unlock() }
         return storage?.containItemforKey(key: key) ?? false
     }
     
     public func query(key: Key) -> Value? {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         let value = storage?.itemValueForKey(key: key)
-        ioLock.signal()
+        ioLock.unlock()
         return value
     }
     
@@ -123,9 +123,9 @@ extension DiskCache {
         if value.count > sizeThreshold {
             filename = key.lg.md5
         }
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.save(key: key, value: value, filename: filename)
-        ioLock.signal()
+        ioLock.unlock()
     }
     
     public func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key) {
@@ -135,9 +135,9 @@ extension DiskCache {
     }
     
     public func remove(key: Key) {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.remove(forKey: key)
-        ioLock.signal()
+        ioLock.unlock()
     }
     
     /*
@@ -145,9 +145,9 @@ extension DiskCache {
      This method may blocks the calling thread until file delete finished.
      */
     public func removeAll() {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.remove(allItems: ())
-        ioLock.signal()
+        ioLock.unlock()
     }
 }
 
@@ -211,21 +211,21 @@ extension DiskCache {
 extension DiskCache: AutoTrimable {
     
     func trimToAge(_ age: CacheAge) {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.remove(earlierThan: age.timeInterval)
-        ioLock.signal()
+        ioLock.unlock()
     }
     
     func trimToCost(_ cost: Int32) {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.remove(toFitSize: cost)
-        ioLock.signal()
+        ioLock.unlock()
     }
     
     func trimToCount(_ count: Int32) {
-        _ = ioLock.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
+        _ = ioLock.lock()
         storage?.remove(toFitCount: count)
-        ioLock.signal()
+        ioLock.unlock()
     }
     
 }

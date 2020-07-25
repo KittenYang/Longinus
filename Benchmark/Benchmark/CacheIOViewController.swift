@@ -75,7 +75,7 @@ class CacheIOViewController: ConsoleLabelViewController {
     
     // MARK: 内存性能测试
     private func testMemoryCache() {
-        updateConsole(newText: "开始测试\n")
+        updateConsole(newText: "开始测试 300 张图，2000次存取删操作\n")
         var storeTime: Double = 0
         var getTime: Double = 0
         var removeTime: Double = 0
@@ -97,8 +97,8 @@ class CacheIOViewController: ConsoleLabelViewController {
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
-                LonginusManager.shared.imageCacher.image(forKey: item.0, cacheType: .memory) { (_) in
-                }
+                let image = LonginusManager.shared.imageCacher.memoryCache.query(key: item.0)
+                if image == nil { LGPrint("💊 Longinus 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             
@@ -126,7 +126,7 @@ class CacheIOViewController: ConsoleLabelViewController {
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 let image = YYWebImageManager.shared().cache?.getImageForKey(item.0, with: .memory)
-                assert(image != nil)
+                if image == nil { LGPrint("💊 YYWebImage 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             
@@ -151,7 +151,7 @@ class CacheIOViewController: ConsoleLabelViewController {
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 let image = SDWebImageManager.shared().imageCache?.imageFromMemoryCache(forKey: item.0)
-                assert(image != nil)
+                if image == nil { LGPrint("💊 SDWebImage 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             
@@ -179,7 +179,7 @@ class CacheIOViewController: ConsoleLabelViewController {
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 let image = KingfisherManager.shared.cache.retrieveImageInMemoryCache(forKey: item.0)
-                assert(image != nil)
+                if image == nil { LGPrint("💊 Kingfisher 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             

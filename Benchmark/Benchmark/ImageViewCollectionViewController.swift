@@ -214,8 +214,8 @@ class ImageWallCell: UICollectionViewCell {
             let transformer = ImageTransformer.imageTransformerCommon(with: CGSize(width: radius, height: radius),
                                                                       fillContentMode: .center,
                                                                       corner: [.allCorners],
-                                                                      cornerRadius: radius/2,
-                                                                      borderWidth: 2.0,
+                                                                      cornerRadius: 8.0,
+                                                                      borderWidth: 4.0,
                                                                       borderColor: UIColor.white,
                                                                       backgroundColor: UIColor.gray)
             lgImageView.lg.setImage(with: url, placeholder: placeholder, options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
