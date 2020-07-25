@@ -65,6 +65,9 @@ extension LonginusExtension where Base: AnimatedImage {
         base.updateCacheSize()
     }
     
+    /**
+    Preload specific frame image to memory.
+    */
     public func preloadImageFrame(fromIndex startIndex: Int) {
         if startIndex >= base.frameCount ?? 0 { return }
         base.lock.lock()
@@ -130,7 +133,14 @@ extension LonginusExtension where Base: AnimatedImage {
         base.lock.unlock()
     }
     
-    /// Preload all image frames synchronously
+    /**
+    Preload all frame image to memory.
+    
+    @discussion Call this methods will block the calling thread to decode
+    all animation frame image to memory.
+    If the image is shared by lots of image views (such as emoticon), preload all
+    frames will reduce the CPU cost.
+    */
     public func preloadAllImageFrames() {
         base.lock.lock()
         base.autoUpdateMaxCacheSize = false

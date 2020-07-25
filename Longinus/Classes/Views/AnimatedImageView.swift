@@ -52,8 +52,9 @@ open class AnimatedImageView: UIImageView {
      If the new value is invalid, this method has no effect.
      
      You can add an observer to this property to observe the playing status.
+     Besides,you can use `setCurrentAnimatedImageIndex:` methods to set the animation index dynamiclly
      */
-    public var currentAnimatedImageIndex: Int = 0
+    public private(set) var currentAnimatedImageIndex: Int = 0
     
     /**
      The animation timer's runloop mode, default is `NSDefaultRunLoopMode` which is not trigger animation during
@@ -95,6 +96,7 @@ open class AnimatedImageView: UIImageView {
     
     override open var image: UIImage? {
         set {
+            if super.image == newValue { return }
             setImage(image: newValue, with: .image)
         }
         get {
@@ -379,26 +381,31 @@ extension AnimatedImageView {
     
     fileprivate func setImage(image: Any?, with type: AnimatedImageViewType) {
         self.stopAnimating()
-        if timer != nil {
-            resetAnimated()
-        }
+        if timer != nil { resetAnimated() }
         currentFrame = nil
+        let animatedImage = image as? AnimatedImage
         switch type {
         case .none:
             break
         case .image:
+            let oldImage = super.image as? AnimatedImage
             super.image = image as? UIImage
+            oldImage?.lg.didRemoveFromView(self)
             break
         case .animationImages:
             super.animationImages = image as? [UIImage]
             break
         case .hilightedImage:
+            let oldImage = super.highlightedImage as? AnimatedImage
             super.highlightedImage = image as? UIImage
+            oldImage?.lg.didRemoveFromView(self)
             break
         case .hilightedAnimationImages:
             super.highlightedAnimationImages = image as? [UIImage]
             break
         }
+        animatedImage?.lg.didAddToView(self)
+        animatedImage?.lg.updateCacheSizeIfNeeded()
         imageChanged()
     }
     
@@ -434,7 +441,12 @@ extension AnimatedImageView {
         if newImageFrameCount > 1 {
             self.resetAnimated()
             currentAnimatedImage = newVisibleImage as? UIImage & AnimatedImageCodeable
-            currentFrame = newVisibleImage as? UIImage
+            if let firstFrame = currentAnimatedImage?.imageFrame(at: 0, decompress: true) {
+                currentFrame = firstFrame
+                layer.setNeedsDisplay() // force display first transformed frame if needed
+            } else {
+                currentFrame = newVisibleImage as? UIImage
+            }
             totalLoop = currentAnimatedImage?.loopCount ?? 0
             totalFrameCount = currentAnimatedImage?.frameCount ?? 1
             calcMaxBufferCount()
@@ -587,7 +599,7 @@ extension AnimatedImageView {
         var bufferIsFull = false
         
         lock.lock()
-        bufferedImage = nextIndex < buffer.count ? buffer[nextIndex] : nil
+        bufferedImage = buffer[nextIndex]
         if bufferedImage != nil {
             if incrBufferCount < totalFrameCount {
                 buffer.removeValue(forKey: nextIndex)
@@ -681,11 +693,9 @@ fileprivate class AnimatedImageFetchOperation: Operation {
         let total = view.totalFrameCount
         
         for _ in 0..<max {
-            
             if index >= total {
                 index = 0
             }
-            
             if isCancelled {
                 break
             }
