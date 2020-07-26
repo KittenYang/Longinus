@@ -36,6 +36,7 @@
 		5F59D3F824C8112600E8964B /* FPSLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPSLabel.swift; sourceTree = "<group>"; };
 		5F59D3FB24C8234500E8964B /* WebImageLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageLoadingViewController.swift; sourceTree = "<group>"; };
 		5F59D40124C89CB400E8964B /* CacheIOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheIOViewController.swift; sourceTree = "<group>"; };
+		5FADC51F24CD6C23000240DD /* Benchmark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Benchmark.entitlements; sourceTree = "<group>"; };
 		74FFA012E461AEBAD6E3EB10 /* Pods_Benchmark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Benchmark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8018CADC7F4B9678CBC40C37 /* Pods-Benchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.release.xcconfig"; path = "Target Support Files/Pods-Benchmark/Pods-Benchmark.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +74,7 @@
 		5F59D3DB24C6ED5000E8964B /* Benchmark */ = {
 			isa = PBXGroup;
 			children = (
+				5FADC51F24CD6C23000240DD /* Benchmark.entitlements */,
 				5F59D3F624C8112600E8964B /* Utilities */,
 				5F59D3F424C8110D00E8964B /* ImageLinksPool.swift */,
 				5F59D3DC24C6ED5000E8964B /* AppDelegate.swift */,
@@ -382,6 +384,7 @@
 			baseConfigurationReference = 109DA548E8F51AE7370BEC11 /* Pods-Benchmark.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Benchmark/Benchmark.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R78WMUBTG5;
 				INFOPLIST_FILE = Benchmark/Info.plist;
@@ -392,6 +395,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kittenyang.Benchmark;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -402,6 +406,7 @@
 			baseConfigurationReference = 8018CADC7F4B9678CBC40C37 /* Pods-Benchmark.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Benchmark/Benchmark.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R78WMUBTG5;
 				INFOPLIST_FILE = Benchmark/Info.plist;
@@ -412,6 +417,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kittenyang.Benchmark;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

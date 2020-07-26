@@ -50,7 +50,6 @@ class LonginusExampleCell: UITableViewCell {
                 print("\(url.absoluteString): \(progress)")
             }
         }) { (image, data, error, cacheType) in
-            
         }
     }
     
@@ -91,7 +90,22 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LonginusExampleCell.nameOfClass, for: indexPath)
+        #if targetEnvironment(macCatalyst)
+        cell.imageView?.contentMode = .scaleAspectFit
+        cell.imageView?.clipsToBounds = true
+        let radius: CGFloat = min(cell.frame.width, cell.frame.height)
+        let transformer = ImageTransformer.imageTransformerCommon(with: CGSize(width: radius, height: radius),
+                                                                  fillContentMode: .center,
+                                                                  corner: [.allCorners],
+                                                                  cornerRadius: radius/2,
+                                                                  borderWidth: 2.0,
+                                                                  borderColor: UIColor.white,
+                                                                  backgroundColor: UIColor.gray)
+        cell.imageView?.lg.setImage(with: ImageLinksPool.getImageLink(forIndex: indexPath.row % ImageLinksPool.imageLinks.count), placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation/*, .ignoreAnimatedImage*/], transformer: transformer, progress: nil, completion: nil)
+        #else
         (cell as? LonginusExampleCell)?.updateImageWithURL(url: ImageLinksPool.getImageLink(forIndex: indexPath.row % ImageLinksPool.imageLinks.count))
+        #endif
+        
         return cell
     }
     

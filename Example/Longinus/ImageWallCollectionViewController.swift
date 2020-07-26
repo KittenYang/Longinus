@@ -46,7 +46,6 @@ class ImageWallCollectionViewController: UICollectionViewController {
         }
     }
 
-
     // MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -88,12 +87,12 @@ extension ImageWallCollectionViewController: UICollectionViewDataSourcePrefetchi
 }
 
 class ImageWallCell: UICollectionViewCell {
-    private var imageView: UIImageView!
+    private var imageView: AnimatedImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        imageView = UIImageView(frame: CGRect(origin: .zero, size: frame.size))
+        imageView = AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         contentView.addSubview(imageView)
@@ -107,6 +106,7 @@ class ImageWallCell: UICollectionViewCell {
         let transformer = ImageTransformer.imageTransformerCommon(with: imageView.frame.size,
                                                                   borderWidth: 2.0,
                                                                   borderColor: .white)
+//        let flipTransformer = ImageTransformer.imageTransformerFlip(withHorizontal: true, vertical: true)
         imageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
     }
 }

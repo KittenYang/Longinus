@@ -32,17 +32,12 @@ public typealias ImageTransformMethod = (UIImage) -> UIImage?
 private var shareCIContext: CIContext?
 
 public var lg_shareCIContext: CIContext {
-    var localContext = shareCIContext
-    if localContext == nil {
-        if #available(iOS 9.0, *) {
-            localContext = CIContext(options: [CIContextOption.workingColorSpace : lg_shareColorSpace])
-        } else {
-            // CIContext.init(options:) will crash in iOS 8. So use other init
-            localContext = CIContext(eaglContext: EAGLContext(api: .openGLES2)!, options: [CIContextOption.workingColorSpace : lg_shareColorSpace])
-        }
-        shareCIContext = localContext
+    var context = shareCIContext
+    if context == nil {
+        context = CIContext(options: [CIContextOption.workingColorSpace : lg_shareColorSpace])
+        shareCIContext = context
     }
-    return localContext!
+    return context!
 }
 
 public func lg_clearCIContext() { shareCIContext = nil }
