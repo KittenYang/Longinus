@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     }
     
     @objc func reload() {
-        LonginusManager.shared.imageCacher.remove([.memory,.disk], completion: {})
+        LonginusManager.shared.imageCacher?.remove([.memory,.disk], completion: nil)
         self.tableView.perform(#selector(UITableView.reloadData), with: nil, afterDelay: 0.1)
     }
 

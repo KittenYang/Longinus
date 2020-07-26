@@ -27,15 +27,44 @@
 
 import UIKit
 
+/**
+ImageCacher is a cache that stores UIImage and image data based on memory cache and disk cache.
+
+@discussion The disk cache will try to protect the original image data:
+
+* If the original image is still image, it will be saved as png/jpeg file based on alpha information.
+* If the original image is animated gif, it will be saved as original format.
+
+Although UIImage can be serialized with NSCoding protocol, but it's not a good idea:
+Apple actually use UIImagePNGRepresentation() to encode all kind of image, it may
+lose the original multi-frame data. The result is packed to plist file and cannot
+view with photo viewer directly. If the image has no alpha channel, using JPEG
+instead of PNG can save more disk size and encoding/decoding time.
+*/
 public class ImageCacher {
 
+    /** The underlying memory cache. see `MemoryCache` for more information.*/
     public let memoryCache: MemoryCache<String, UIImage>
+    
+    /** The underlying disk cache. see `DiskCache` for more information.*/
     public let diskCache: DiskCache?
+    
+    /** The weak refrense to imageCoder to encode image if `Data` is not provided in `store(image: ,data:)` method.*/
     public weak var imageCoder: ImageCodeable?
     
-    init(path: String, sizeThreshold: Int32) {
+    /**
+     The designated initializer. Multiple instances with the same path will make the
+     cache unstable.
+     
+     - Parameters:
+        - path: Full path of a directory in which the cache will write data.
+        Once initialized you should not read and write to this directory.
+        - sizeThreshold: Determine the object should store to sqlite or file system.
+    */
+    init?(path: String, sizeThreshold: Int32) {
         memoryCache = MemoryCache()
         diskCache = DiskCache(path: path, sizeThreshold: sizeThreshold)
+        if diskCache == nil { return nil }
     }
     
     /*
@@ -47,12 +76,13 @@ public class ImageCacher {
         diskCache?.removeAll()
     }
     
-    /*
+    /**
      Empties the cache.
      This method returns immediately and invoke the passed block in background queue
      when the operation finished.
      
-     @param completion  A block which will be invoked in background queue when finished.
+     - Parameters:
+        - completion: A block which will be invoked in background queue when finished.
      */
     public func removeAll(_ completion: @escaping ()->Void) {
         memoryCache.removeAll()
@@ -60,6 +90,7 @@ public class ImageCacher {
             completion()
         })
     }
+    
 }
 
 extension ImageCacher: ImageCacheable {
@@ -105,6 +136,14 @@ extension ImageCacher: ImageCacheable {
         }
     }
     
+    /*
+     Store image or data to the memory cache or disk cache
+     If need to store to memory, it will save the UIImage objects to the LRU linkedMap.
+     If need to store to disk, it will save the data to the disk. If input data is nil, it will use a `dataWork` operation to encoded image to Data according to the image type.
+     Note: It will only save the save the ORIGINAL image data to the disk.
+     Note: If memory cache stored successfully, the completion handler will called in current thread synchronous.
+     Note: If disk cache stored successfully, the completion handler will called in background thread a synchronous.
+     */
     public func store(_ image: UIImage?, data: Data?, forKey key: String, cacheType: ImageCacheType, completion: (() -> Void)?) {
         if cacheType.contains(.memory),
             let currentImage = image {
@@ -112,7 +151,7 @@ extension ImageCacher: ImageCacheable {
         }
         if cacheType.contains(.disk),
             let currentDiskCache = diskCache {
-            // 原图保存到磁盘，修改后的图片不保存
+            // Save the original image data to disk
             if let currentData = data {
                 if let completion = completion {
                     return currentDiskCache.save(value: currentData, for: key, completion)
@@ -138,7 +177,11 @@ extension ImageCacher: ImageCacheable {
         completion?()
     }
     
-    
+    /*
+     Remove image from the memory cache or remove data from the disk cache by the specific key.
+     Note: If memory cache removed successfully, the completion handler will called in current thread synchronous.
+     Note: If disk cache removed successfully, the completion handler will called in background thread a synchronous.
+     */
     public func removeImage(forKey key: String, cacheType: ImageCacheType, completion: ((String) -> Void)?) {
         if cacheType.contains(.memory) { memoryCache.remove(key: key) }
         if cacheType.contains(.disk),
@@ -152,6 +195,11 @@ extension ImageCacher: ImageCacheable {
         completion?(key)
     }
     
+    /*
+     Remove all images or datas to the memory cache or disk cache.
+     Note: If memory cache removed successfully, the completion handler will called in current thread synchronous.
+     Note: If disk cache removed successfully, the completion handler will called in background thread a synchronous.
+     */
     public func remove(_ type: ImageCacheType, completion: (() -> Void)?) {
         if type.contains(.memory) { memoryCache.removeAll() }
         if type.contains(.disk),

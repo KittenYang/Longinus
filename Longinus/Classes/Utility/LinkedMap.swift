@@ -27,7 +27,7 @@
 
 import Foundation
 
-public class LinkedMapNode<Key: Hashable, Value> {
+class LinkedMapNode<Key: Hashable, Value> {
     // Weak var will slow down speed. So use strong var. Set all notes prev/next to nil when removing all nodes
     public var prev: LinkedMapNode?
     public var next: LinkedMapNode?
@@ -45,7 +45,7 @@ public class LinkedMapNode<Key: Hashable, Value> {
     }
 }
 
-public class LinkedMap<Key: Hashable, Value> {
+class LinkedMap<Key: Hashable, Value> {
     public typealias Node = LinkedMapNode<Key, Value>
     
     public var head: Node?

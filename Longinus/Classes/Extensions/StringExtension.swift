@@ -30,12 +30,12 @@ import CommonCrypto
 
 extension LonginusExtension where Base == String {
     var utf8: UnsafePointer<Int8>? { return (base as NSString).utf8String }
-    var md5: String {
+    var sha256: String {
         guard let data = base.data(using: .utf8) else { return base }
-        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        var hash = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
         _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
-            return CC_MD5(bytes.baseAddress, CC_LONG(data.count), &digest)
+            return CC_SHA256(bytes.baseAddress, CC_LONG(data.count), &hash)
         }
-        return digest.map { String(format: "%02x", $0) }.joined()
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }

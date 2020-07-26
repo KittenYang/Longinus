@@ -48,12 +48,12 @@ import Foundation
 
 typealias KVStorageItemSample = (key: String, fileName: String?, size: Int32)
 
-public enum KVStorageValueType {
+enum KVStorageValueType {
     case blob(data: Data)
     case text(string: String)
 }
 
-public struct KVStorageItem : Equatable {
+struct KVStorageItem : Equatable {
     var key: String
     var value: Data?
     var filename: String?
@@ -63,7 +63,7 @@ public struct KVStorageItem : Equatable {
     var accessTime = 0
 }
 
-public func ==(lhs: KVStorageItem, rhs: KVStorageItem) -> Bool {
+func ==(lhs: KVStorageItem, rhs: KVStorageItem) -> Bool {
     return lhs.key == rhs.key && (lhs.value == rhs.value || lhs.filename == rhs.filename)
 }
 
@@ -71,8 +71,17 @@ public enum KVStorageType {
     case file, sqlite, automatic
 }
 
+/**
+ KVStorage is a key-value storage based on sqlite and file system.
+Typically, you should not use this class directly.
 
-public class KVStorage<T: CustomStringConvertible & Hashable> {
+ - Warining:
+ The instance of this class is *NOT* thread safe, you need to make sure
+ that there's only one thread to access the instance at the same time. If you really
+ need to process large amounts of data in multi-thread, you should split the data
+ to multiple KVStorage instance (sharding).
+*/
+class KVStorage<T: CustomStringConvertible & Hashable> {
     
     public let path: String
     public let type: KVStorageType
@@ -92,6 +101,11 @@ public class KVStorage<T: CustomStringConvertible & Hashable> {
         return db.totalItemCount
     }
     
+    /**
+     The designated initializer for KVStorage is `initWithPath:type:`.
+     After initialized, a directory is created based on the `path` to hold key-value data.
+     Once initialized you should not read or write this directory without the instance.
+     */
     init?(path: String, type: KVStorageType) {
         self.path = path
         self.type = type
@@ -156,17 +170,17 @@ extension KVStorage {
 // MARK: - Operation
 extension KVStorage {
     @discardableResult
-    public func save(item: KVStorageItem) -> Bool {
+    func save(item: KVStorageItem) -> Bool {
         return save(key: item.key, value: item.value, filename: item.filename)
     }
     
     @discardableResult
-    public func save(key: String, value: Data?) -> Bool {
+    func save(key: String, value: Data?) -> Bool {
         return save(key: key, value: value, filename: nil)
     }
     
     @discardableResult
-    public func save(key: String, value: Data?, filename: String?) -> Bool {
+    func save(key: String, value: Data?, filename: String?) -> Bool {
         guard let data = value, key.count > 0 else { return false}
         if type == .file && (filename?.isEmpty ?? true) { return false }
         
@@ -188,7 +202,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(forKey key: String) -> Bool {
+    func remove(forKey key: String) -> Bool {
         guard !key.isEmpty else {
             return false
         }
@@ -204,7 +218,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(forKeys keys: [String]) -> Bool {
+    func remove(forKeys keys: [String]) -> Bool {
         guard !keys.isEmpty else {
             return false
         }
@@ -221,7 +235,7 @@ extension KVStorage {
     }
 
     @discardableResult
-    public func remove(largerThan size: Int32) -> Bool {
+    func remove(largerThan size: Int32) -> Bool {
         if size == Int32.max { return true }
 
         if size <= 0 { return remove(allItems: ()) }
@@ -246,7 +260,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(earlierThan time: Int32) -> Bool {
+    func remove(earlierThan time: Int32) -> Bool {
         if time == Int32.max { return true }
         if time < 0 { return remove(allItems: ()) }
         switch type {
@@ -270,7 +284,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(toFitSize maxSize: Int32) -> Bool {
+    func remove(toFitSize maxSize: Int32) -> Bool {
         if maxSize == Int32.max  { return true}
         if maxSize <= 0 { return remove(allItems: ())  }
         
@@ -303,7 +317,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(toFitCount maxCount: Int32) -> Bool {
+    func remove(toFitCount maxCount: Int32) -> Bool {
         if maxCount == Int32.max  { return true}
         if maxCount <= 0 { return remove(allItems: ())  }
         
@@ -335,7 +349,7 @@ extension KVStorage {
         return success
     }
     
-    public func remove(allItems progress: (_ removedCount: Int32, _ totalCount: Int32) -> Void,
+    func remove(allItems progress: (_ removedCount: Int32, _ totalCount: Int32) -> Void,
                        finish: (_ error: Bool) -> Void) {
         let total = db.totalItemCount
         if total <= 0 {
@@ -366,7 +380,7 @@ extension KVStorage {
     }
     
     
-    public func itemForKey(key: String) -> KVStorageItem? {
+    func itemForKey(key: String) -> KVStorageItem? {
         guard key.count > 0  else {
             return nil
         }
@@ -381,14 +395,14 @@ extension KVStorage {
         return item
     }
     
-    public func itemInfoForKey(key: String) -> KVStorageItem? {
+    func itemInfoForKey(key: String) -> KVStorageItem? {
         guard key.count > 0  else {
             return nil
         }
         return db.getItemWithKey(key: key, excludeInlineData: true)
     }
     
-    public func itemValueForKey(key: String) -> Data? {
+    func itemValueForKey(key: String) -> Data? {
         guard key.count > 0  else {
             return nil
         }
@@ -422,7 +436,7 @@ extension KVStorage {
         return value
     }
     
-    public func itemsForKeys(keys: [String]) -> [KVStorageItem]? {
+    func itemsForKeys(keys: [String]) -> [KVStorageItem]? {
         guard keys.count > 0  else {
             return nil
         }
@@ -448,14 +462,14 @@ extension KVStorage {
     }
     
     
-    public func itemInfosForKeys(keys: [String]) -> [KVStorageItem]? {
+    func itemInfosForKeys(keys: [String]) -> [KVStorageItem]? {
         guard keys.count > 0  else {
             return nil
         }
         return db.getItemsWithKeys(keys: keys, excludeInlineData: true)
     }
     
-    public func itemValuesForKeys(keys: [String]) -> [String: Data]? {
+    func itemValuesForKeys(keys: [String]) -> [String: Data]? {
         guard let items = itemsForKeys(keys: keys) else { return nil }
         var dict = [String: Data]()
         for i in items {
@@ -467,7 +481,7 @@ extension KVStorage {
     }
     
     
-    public func containItemforKey(key: String) -> Bool {
+    func containItemforKey(key: String) -> Bool {
         guard key.count > 0  else {
             return false
         }
@@ -475,7 +489,7 @@ extension KVStorage {
     }
     
     @discardableResult
-    public func remove(allItems: ()) -> Bool {
+    func remove(allItems: ()) -> Bool {
         guard db.close() else {
             return false
         }

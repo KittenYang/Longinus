@@ -83,10 +83,19 @@ private class ImageDownloadLinkedMap {
     }
 }
 
+/**
+ A customized Opeation Queue used linked list to handle web image download operation
+ 
+ */
 class ImageDownloadOperationQueue {
+    /**
+     The max running count of web image loading.
+     Default value is 2x current device's active processor count.
+     */
+    var maxRunningCount: Int
+    
     private let waitingQueue: ImageDownloadLinkedMap
     private let preloadWaitingQueue: ImageDownloadLinkedMap
-    var maxRunningCount: Int
     private(set) var currentRunningCount: Int
     
     init() {
@@ -96,6 +105,11 @@ class ImageDownloadOperationQueue {
         currentRunningCount = 0
     }
     
+    /**
+     If the `currentRunningCount` less than `maxRunningCount`, the adding operation will start immediately without adding to the waiting queue. When this opertation completed, it will call `removeOperation` to dequeue next head operation.
+     Otherwise, it will be added to the FIFO serial queue waiting for start.
+     The web image download operation will run in background thread.
+     */
     func add(_ operation: ImageDownloadOperateable, preload: Bool) {
         if currentRunningCount < maxRunningCount {
             currentRunningCount += 1
@@ -110,7 +124,13 @@ class ImageDownloadOperationQueue {
         }
     }
     
-    /// run next operation
+    /**
+     This methods will remove the operation node by the key if hitted.
+     Typically, it will not hit first and second if-conditions as the running opeations will not exist in waitingQueue or preloadWaitingQueue.
+     It mostly will find the next operation to start.
+     Firstly, it will find the waiting operation in waitingQueue.
+     If there is no more oprations in waitingQueue, it will find the operation in preloadWaitingQueue.
+     */
     func removeOperation(forKey key: URL) {
         if let node = waitingQueue.dic[key] {
             waitingQueue.remove(node)
@@ -132,6 +152,9 @@ class ImageDownloadOperationQueue {
         }
     }
     
+    /**
+     Take the operation in preload queue to waiting queue for higher priority.
+     */
     func upgradePreloadOperation(for key: URL) {
         if let node = preloadWaitingQueue.dic[key] {
             preloadWaitingQueue.remove(node)

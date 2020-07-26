@@ -75,6 +75,10 @@ private class ImageDefaultDownload: ImageDownloadInfo {
 
 public class ImageDownloader {
     public var donwloadTimeout: TimeInterval
+    
+    /**
+     Weak refrense to imageCoder. Set to `ImageDownloadOperateable`(e.g. ImageDownloadOperation) to progressive coding downloading image.
+     */
     public weak var imageCoder: ImageCodeable?
 
     public lazy var generateDownloadInfo: (URL, ImageDownloaderProgressBlock?, @escaping ImageDownloaderCompletionBlock) -> ImageDownloadInfo = {

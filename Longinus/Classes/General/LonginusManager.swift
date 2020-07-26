@@ -27,21 +27,54 @@
 
 import UIKit
 
+/**
+A manager to create and manage web image operation.
+*/
 public class LonginusManager {
     
-    /*
-     Default sizeThreshold: 20KB
+    /**
+     Returns global LonginusManager instance.
+     
+     The Default `sizeThreshold` value is 20KB
      */
     public static let shared: LonginusManager = { () -> LonginusManager in
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! + "/\(LonginusPrefixID)"
-        return LonginusManager(cachePath: path, sizeThreshold: 20 * 1024)
+        return LonginusManager(cachePath: path, sizeThreshold: 20 * 1_024)
     }()
     
-    public private(set) var imageCacher: ImageCacher
+    /**
+    The image cache used by image operation.
+    You can set it to nil to avoid image cache.
+    */
+    public private(set) var imageCacher: ImageCacher?
+    
+    /**
+     The object which conforms `ImageDownloadable` protocol.
+     The default object is `ImageDownloader`
+     */
     public private(set) var imageDownloader: ImageDownloadable
+    
+    /**
+     The object which conforms `ImageCodeable` protocol.
+     The default object is `ImageCoderManager`
+     */
     public private(set) var imageCoder: ImageCodeable
+    
+    /**
+     The preload tasks dictionary.
+     */
     public private(set) var preloadTasks: [String: ImageLoadTask]
+    
+    /**
+     The queue for image coding and caching.
+     This queue handled by `DispatchQueuePool`. Check this class for more details.
+     */
     private let coderQueue: DispatchQueuePool = DispatchQueuePool.userInitiated
+    
+    /**
+     The queue for releasing `ImageLoadTask`
+     This queue handled by `DispatchQueuePool`. Check this class for more details.
+     */
     private let releaseQueue: DispatchQueuePool = DispatchQueuePool.background
     private var tasks: Set<ImageLoadTask>
     private var taskLock: Mutex
@@ -67,13 +100,13 @@ public class LonginusManager {
         let cache = ImageCacher(path: cachePath, sizeThreshold: sizeThreshold)
         let downloader = ImageDownloader(sessionConfiguration: URLSessionConfiguration.default)
         let coder = ImageCoderManager()
-        cache.imageCoder = coder
+        cache?.imageCoder = coder
         downloader.imageCoder = coder
 
         self.init(cacher: cache, downloader: downloader, coder: coder)
     }
     
-    public init(cacher: ImageCacher, downloader: ImageDownloadable, coder: ImageCodeable) {
+    public init(cacher: ImageCacher?, downloader: ImageDownloadable, coder: ImageCodeable) {
         imageCacher = cacher
         imageDownloader = downloader
         imageCoder = coder
@@ -122,7 +155,7 @@ public class LonginusManager {
         
         // Get memory image
         var memoryImage: UIImage?
-        imageCacher.image(forKey: resource.cacheKey, cacheType: .memory) { (result: ImageCacheQueryCompletionResult) in
+        imageCacher?.image(forKey: resource.cacheKey, cacheType: .memory) { (result: ImageCacheQueryCompletionResult) in
             switch result {
             case let .memory(image: image):
                 memoryImage = image
@@ -171,11 +204,11 @@ public class LonginusManager {
                                               image: image,
                                               data: nil,
                                               cacheType: .memory)
-                                self.imageCacher.store(image,
-                                                      data: nil,
-                                                      forKey: resource.cacheKey,
-                                                      cacheType: .memory,
-                                                      completion: nil)
+                                self.imageCacher?.store(image,
+                                                        data: nil,
+                                                        forKey: resource.cacheKey,
+                                                        cacheType: .memory,
+                                                        completion: nil)
                             } else {
                                 self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "No edited image"]))
                             }
@@ -205,26 +238,26 @@ public class LonginusManager {
                           completion: completion)
         } else if options.contains(.preload) {
             // Check whether disk data exists
-            imageCacher.diskDataExists(forKey: resource.cacheKey) { (exists) in
+            self.imageCacher?.diskDataExists(forKey: resource.cacheKey) { [weak self] (exists) in
                 if exists {
-                    self.complete(with: task,
-                                  completion: completion,
-                                  image: nil,
-                                  data: nil,
-                                  cacheType: .disk)
-                    self.remove(loadTask: task)
+                    self?.complete(with: task,
+                                   completion: completion,
+                                   image: nil,
+                                   data: nil,
+                                   cacheType: .disk)
+                    self?.remove(loadTask: task)
                 } else {
-                    self.downloadImage(with: resource,
-                                       options: options,
-                                       task: task,
-                                       transformer: transformer,
-                                       progress: progress,
-                                       completion: completion)
+                    self?.downloadImage(with: resource,
+                                        options: options,
+                                        task: task,
+                                        transformer: transformer,
+                                        progress: progress,
+                                        completion: completion)
                 }
             }
         } else {
             // Get disk data
-            self.imageCacher.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
+            self.imageCacher?.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
                 guard let self = self, let task = task, !task.isCancelled else { return }
                 switch result {
                 case let .disk(data: data):
@@ -281,11 +314,11 @@ public class LonginusManager {
     }
     
     func remove(loadTask: ImageLoadTask) {
-        releaseQueue.async {
-            self.taskLock.lock()
-            self.tasks.remove(loadTask)
-            self.preloadTasks.removeValue(forKey: loadTask.url.absoluteString)
-            self.taskLock.unlock()
+        releaseQueue.async { [weak self] in
+            self?.taskLock.lock()
+            self?.tasks.remove(loadTask)
+            self?.preloadTasks.removeValue(forKey: loadTask.url.absoluteString)
+            self?.taskLock.unlock()
         }
     }
 
@@ -340,7 +373,7 @@ extension LonginusManager {
                      data: data,
                      cacheType: cacheType)
             if cacheType == .none {
-                imageCacher.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk, completion: nil)
+                imageCacher?.store(nil, data: data, forKey: resource.cacheKey, cacheType: .disk, completion: nil)
             }
             remove(loadTask: task)
             return
@@ -362,11 +395,11 @@ extension LonginusManager {
                                   data: data,
                                   cacheType: cacheType)
                     let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
-                    self.imageCacher.store(animatedImage,
-                                           data: data,
-                                           forKey: resource.cacheKey,
-                                           cacheType: storeCacheType,
-                                           completion:nil)
+                    self.imageCacher?.store(animatedImage,
+                                            data: data,
+                                            forKey: resource.cacheKey,
+                                            cacheType: storeCacheType,
+                                            completion:nil)
                 } else if let inputImage = decodedImage {
                     if var image = currentTransformer.transform(inputImage) {
                         guard !task.isCancelled else { return }
@@ -378,11 +411,11 @@ extension LonginusManager {
                                       data: data,
                                       cacheType: cacheType)
                         let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
-                        self.imageCacher.store(image,
-                                               data: data,
-                                               forKey: resource.cacheKey,
-                                               cacheType: storeCacheType,
-                                               completion:nil)
+                        self.imageCacher?.store(image,
+                                                data: data,
+                                                forKey: resource.cacheKey,
+                                                cacheType: storeCacheType,
+                                                completion:nil)
                     } else {
                         self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "No edited image"]))
                     }
@@ -410,11 +443,11 @@ extension LonginusManager {
                               data: data,
                               cacheType: cacheType)
                 let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
-                self.imageCacher.store(image,
-                                       data: data,
-                                       forKey: resource.cacheKey,
-                                       cacheType: storeCacheType,
-                                       completion: nil)
+                self.imageCacher?.store(image,
+                                        data: data,
+                                        forKey: resource.cacheKey,
+                                        cacheType: storeCacheType,
+                                        completion: nil)
             } else {
                 if cacheType == .none {
                     self.urlBlacklistLock.lock()

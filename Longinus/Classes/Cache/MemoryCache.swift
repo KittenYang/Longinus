@@ -27,27 +27,74 @@
 
 import Foundation
 
+/**
+MemoryCache is a fast in-memory and thread-safe cache that stores key-value pairs.
+
+* It uses LRU (least-recently-used) to remove objects.
+* It can be controlled by cost, count and age.
+* It can be configured to automatically evict objects when receive memory
+  warning or app enter background.
+
+The time of `Access Methods` in MemoryCache is typically in constant time (O(1)).
+*/
 public class MemoryCache<Key: Hashable, Value> {
     
     public typealias OperationBlock = (_ cache: MemoryCache<Key,Value>) -> Void
+    
+    /**
+     Alias a node with Key-Value
+     */
     typealias Node = LinkedMapNode<Key, Value>
+    
+    /**
+     Alias a doubly linked list whick hold the cache data as `Node`
+     */
     typealias LRU = LinkedMap<Key, Value>
     
+    /**
+     The underlying linked list whick store cache datas
+     */
     fileprivate let lru = LRU()
+    
+    /**
+     The lock to protect datas' safety
+     */
     fileprivate let lock = Mutex()
+    
+    /**
+     A serial queue to trim data every `autoTrimInterval` time.
+     */
     fileprivate let trimQueue = DispatchQueue(label: LonginusPrefixID + ".memoryTrim", qos: .background)
+    
+    /**
+     A concurrent queue to release LRU nodes if needed
+     */
     fileprivate let releaseQueue = DispatchQueue.global(qos: .background)
     
+    /**
+     The number of objects in the cache
+     */
     public var totalCount: Int {
         lock.lock()
         defer { lock.unlock() }
         return lru.totalCount
     }
+    
+    /**
+    Returns the total cost (in bytes) of objects in this cache.
+    This method may blocks the calling thread until file read finished.
+    
+    return the total objects cost in bytes.
+    */
     public var totalCost: Int {
         lock.lock()
         defer { lock.unlock() }
         return lru.totalCost
     }
+    
+    /**
+     Determine whether should auto trim datas regularly
+     */
     var shouldAutoTrim: Bool {
         didSet {
             if oldValue == shouldAutoTrim { return }
@@ -57,30 +104,92 @@ public class MemoryCache<Key: Hashable, Value> {
         }
     }
     
+    /**
+      The most recent accessed value of cache
+      */
     public var first: Value? {
         return lru.head?.value
     }
     
+    /**
+      The lastest recent accessed value of cache
+      */
     public var last: Value? {
         return lru.tail?.value
     }
     
-    public var name: String?
+    /**
+    The maximum number of objects the cache should hold.
+    
+    The default value is Int32.max, which means no limit.
+    This is not a strict limit—if the cache goes over the limit, some objects in the
+    cache could be evicted later in backgound thread.
+    */
     public var countLimit = Int32.max
+    
+    /**
+    The maximum total cost that the cache can hold before it starts evicting objects.
+    
+    The default value is Int32.max, which means no limit.
+    This is not a strict limit—if the cache goes over the limit, some objects in the
+    cache could be evicted later in backgound thread.
+    */
     public var costLimit = Int32.max
+    
+    /**
+    The age of objects in cache.
+    
+    The default value is `.never`, which means no limit.
+    This is not a strict limit—if an object goes over the limit, the object could
+    be evicted later in backgound thread.
+    */
     public var ageLimit: CacheAge = .never
+    
+    /**
+    The auto trim check time interval in seconds. Default is 5.0.
+    
+    The cache holds an internal timer to check whether the cache reaches
+    its limits, and if the limit is reached, it begins to evict objects.
+    */
     public var autoTrimInterval = TimeInterval(5)
+    
+    /**
+    If `true`, the cache will remove all objects when the app receives a memory warning.
+    The default value is `true`.
+    */
     public var shouldremoveAllValuesOnMemoryWarning = true
+    
+    /**
+    If `true`, The cache will remove all objects when the app enter background.
+    The default value is `true`.
+    */
     public var shouldremoveAllValuesWhenEnteringBackground = true
     
+    /**
+    A block to be executed when the app receives a memory warning.
+    The default value is nil.
+    */
     public var didReceiveMemoryWarningBlock: OperationBlock?
+    
+    /**
+    A block to be executed when the app enter background.
+    The default value is nil.
+    */
     public var didEnterBackgroundBlock: OperationBlock?
     
+    /**
+    If `true`, the key-value pair will be released on main thread, otherwise on
+    background thread. Default is false.
+    
+    You may set this value to `true` if the key-value object contains
+    the instance which should be released in main thread (such as UIView/CALayer).
+    */
     public var releaseOnMainThread = false
-    public var releaseAsynchronously = false
     
-    // MARK: - application lifetime observers
     
+    /**
+     The designed initialize methods.
+     */
     public init(countLimit: Int32 = Int32.max,
          costLimit: Int32 = Int32.max,
          ageLimit: CacheAge = .never,
@@ -104,14 +213,19 @@ public class MemoryCache<Key: Hashable, Value> {
         NotificationCenter.default.removeObserver(self)
         lru.removeAll()
     }
-        
+    
+    /**
+     You can use subscript syntax to access value by the specific key.
+     */
     subscript(_ key: Key) -> Value? {
         get {
             return query(key: key)
         }
     }
             
-    // MARK: - system notifications
+    /**
+     The `didReceiveMemoryWarningNotification` notification selector
+     */
     @objc fileprivate func appDidReceiveMemoryWarningNotification(_ notification: Notification) {
         didReceiveMemoryWarningBlock?(self)
         if shouldremoveAllValuesOnMemoryWarning {
@@ -119,6 +233,9 @@ public class MemoryCache<Key: Hashable, Value> {
         }
     }
     
+    /**
+     The `didEnterBackgroundNotification` notification selector
+     */
     @objc fileprivate func appDidEnterBackgroundNotification(_ notification: Notification) {
         didEnterBackgroundBlock?(self)
         if shouldremoveAllValuesWhenEnteringBackground {
@@ -128,14 +245,29 @@ public class MemoryCache<Key: Hashable, Value> {
 }
 
 
-
+/**
+ MemoryCacheable Implementation
+ */
 extension MemoryCache: MemoryCacheable {
+    
+    /**
+    Returns a Boolean value that indicates whether a given key is in cache.
+    
+     - Parameters:
+        - key: An object identifying the value.
+    */
     public func containsObject(key: Key) -> Bool {
         lock.lock()
         defer { lock.unlock() }
         return lru.contains(key)
     }
     
+    /**
+    Returns the value associated with a given key. May be nil if no value is associated with key.
+    
+     - Parameters:
+        - key: An object identifying the value.
+    */
     public func query(key: Key) -> Value? {
         lock.lock()
         defer { lock.unlock() }
@@ -146,17 +278,38 @@ extension MemoryCache: MemoryCacheable {
         return value
     }
     
-    // MARK: - save
+    /**
+    Save the value of the specified key in the cache (0 cost).
+     - Parameters:
+        - object: The object to be stored in the cache. If nil, it calls `remove(key: key)`.
+        - key: The key with which to associate the value.
+    */
     public func save(value: Value?, for key: Key) {
         save(value: value, for: key, cost: 0)
     }
     
+    /**
+    Save the value of the specified key in the cache with the dataWork handler which return the Value(e.g. Data) and Value's cost
+     - Parameters:
+        - object: The object to be stored in the cache. If nil, it calls `remove(key: key)`.
+        - key: The key with which to associate the value.
+        - dataWork: A handler which return the Value(e.g. Data) and Value's cost
+    */
     public func save(_ dataWork: @escaping () -> (Value, Int)?, forKey key: Key) {
         if let data = dataWork() {
             self.save(value: data.0, for: key, cost: data.1)
         }
     }
     
+    /**
+    Save the value of the specified key in the cache, and associates the key-value
+    pair with the specified cost.
+    
+     - Parameters:
+        - object: The object to be stored in the cache. If nil, it calls `remove(key: key)`.
+        - key: The key with which to associate the value.
+        - cost: The cost with which to associate the key-value pair.
+    */
     public func save(value: Value?, for key: Key, cost: Int = 0) {
         guard value != nil else {
             remove(key: key)
@@ -189,7 +342,12 @@ extension MemoryCache: MemoryCacheable {
     }
 
     
-    // MARK: - remove
+    /**
+    Removes the value of the specified key in the cache.
+    
+     - Parameters:
+        - key: The key identifying the value to be removed.
+    */
     public func remove(key: Key) {
         lock.lock()
         defer { lock.unlock() }
@@ -197,12 +355,18 @@ extension MemoryCache: MemoryCacheable {
         lru.remove(node)
     }
     
+    /**
+    Empties the cache immediately.
+    */
     public func removeAll() {
         lock.lock()
         defer { lock.unlock() }
         lru.removeAll()
     }
     
+    /**
+     Set the costLimit. Also will trigger `trimToCost` methods.
+     */
     public func setCostLimit(_ cost: Int32) {
         lock.lock()
         self.costLimit = cost
@@ -212,6 +376,9 @@ extension MemoryCache: MemoryCacheable {
         lock.unlock()
     }
     
+    /**
+     Set the countLimit. Also will trigger `trimToCount` methods.
+     */
     public func setCountLimit(_ count: Int32) {
         lock.lock()
         self.countLimit = count
@@ -221,6 +388,9 @@ extension MemoryCache: MemoryCacheable {
         lock.unlock()
     }
     
+    /**
+     Set the ageLimit. Also will trigger `trimToAge` methods.
+     */
     public func setAgeLimit(_ age: CacheAge) {
         lock.lock()
         self.ageLimit = age
@@ -230,6 +400,9 @@ extension MemoryCache: MemoryCacheable {
         lock.unlock()
     }
     
+    /**
+     Remove the lastest used value.
+     */
     private func removeLast() {
         lock.lock()
         self.lru.removeTailNode()
@@ -238,7 +411,14 @@ extension MemoryCache: MemoryCacheable {
 }
 
 extension MemoryCache: AutoTrimable {
-    
+
+    /**
+    Removes objects from the cache with LRU, until the `totalCount` is below or equal to
+    the specified value.
+     
+     - Parameters:
+        - count: The total count allowed to remain after the cache has been trimmed.
+    */
     public func trimToCount(_ count: Int32) {
         guard count > 0 else {
             removeAll()
@@ -273,7 +453,14 @@ extension MemoryCache: AutoTrimable {
             }
         }
     }
-    
+        
+    /**
+    Removes objects from the cache use LRU, until the `totalCost` is or equal to specified value.
+    This method may blocks the calling thread until operation finished.
+     
+    - Parameters:
+        - cost: The total cost allowed to remain after the cache has been trimmed.
+    */
     public func trimToCost(_ cost: Int32) {
         guard cost > 0 else {
             removeAll()
@@ -310,6 +497,13 @@ extension MemoryCache: AutoTrimable {
         
     }
     
+    /**
+    Removes objects from the cache use LRU, until all expiry objects removed by the specified value.
+    This method may blocks the calling thread until operation finished.
+    
+     - Parameters:
+        - age: The age of the object.
+    */
     public func trimToAge(_ age: CacheAge) {
         if age.timeInterval == Int32.max { return }
         guard age.timeInterval > 0 else {
