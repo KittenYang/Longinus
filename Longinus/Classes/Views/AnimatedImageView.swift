@@ -365,18 +365,18 @@ extension AnimatedImageView {
         
         let total = LonginusExtension<UIDevice>.totalMemory
         let free = LonginusExtension<UIDevice>.freeMemory
-        var maxCount = min(Double(total) * 0.2, Double(free) * 0.6)
-        maxCount = max(maxCount, 10 * 1_024 * 1_024) // 10MB
+        var maxByteCount = min(Double(total) * 0.2, Double(free) * 0.6)
+        maxByteCount = max(maxByteCount, 10 * 1_024 * 1_024) // 10MB
         if maxBufferSize != 0 {
-            maxCount = maxCount > Double(maxBufferSize) ? Double(maxBufferSize) : maxCount
+            maxByteCount = maxByteCount > Double(maxBufferSize) ? Double(maxBufferSize) : maxByteCount
         }
-        var tempCount = maxCount / Double(bytesCount)
-        if tempCount < 1 {
-            tempCount = 1
-        } else if tempCount > 512 {
-            tempCount = 512
+        var bufferCount = maxByteCount / Double(bytesCount)
+        if bufferCount < 1 {
+            bufferCount = 1
+        } else if bufferCount > 512 {
+            bufferCount = 512
         }
-        maxBufferCount = Int(tempCount)
+        maxBufferCount = Int(bufferCount)
     }
     
     fileprivate func setImage(image: Any?, with type: AnimatedImageViewType) {
@@ -441,15 +441,22 @@ extension AnimatedImageView {
         if newImageFrameCount > 1 {
             self.resetAnimated()
             currentAnimatedImage = newVisibleImage as? UIImage & AnimatedImageCodeable
-            if let firstFrame = currentAnimatedImage?.imageFrame(at: 0, decompress: true) {
-                currentFrame = firstFrame
-                layer.setNeedsDisplay() // force display first transformed frame if needed
-            } else {
-                currentFrame = newVisibleImage as? UIImage
-            }
+            currentFrame = newVisibleImage as? UIImage
             totalLoop = currentAnimatedImage?.loopCount ?? 0
             totalFrameCount = currentAnimatedImage?.frameCount ?? 1
             calcMaxBufferCount()
+            requestQueue.addOperation { [weak self] in
+                guard let self = self else { return }
+                if let firstFrame = self.currentAnimatedImage?.imageFrame(at: 0, decompress: true) {
+                    self.lock.lock()
+                    self.buffer[0] = firstFrame
+                    self.lock.unlock()
+                    self.currentFrame = firstFrame
+                    DispatchQueue.main.async {
+                        self.layer.setNeedsDisplay() // force display first transformed frame if needed
+                    }
+                }
+            }
         }
         
         setNeedsDisplay()
