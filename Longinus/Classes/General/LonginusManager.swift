@@ -61,7 +61,7 @@ public class LonginusManager {
     public private(set) var imageCoder: ImageCodeable
     
     /**
-     The preload tasks dictionary.
+     The dictionary holds preloading tasks.
      */
     public private(set) var preloadTasks: [String: ImageLoadTask]
     
@@ -76,12 +76,35 @@ public class LonginusManager {
      This queue handled by `DispatchQueuePool`. Check this class for more details.
      */
     private let releaseQueue: DispatchQueuePool = DispatchQueuePool.background
+
+    /**
+     The dictionary holds loading tasks.
+     */
     private var tasks: Set<ImageLoadTask>
+
+    /**
+     The lock to protect `tasks` or `preloadTasks` safety
+     */
     private var taskLock: Mutex
+    
+    /**
+     The lock to protect `urlBlacklist` safety
+     */
     private var urlBlacklistLock: Mutex
+    
+    /**
+     The global sentinel to mark every task unique
+     */
     private var taskSentinel: Int32
+    
+    /**
+     The blacklist url sets to ignore download urls
+     */
     private var urlBlacklist: Set<URL>
     
+    /**
+     Return the current tasks count
+     */
     public var currentTaskCount: Int {
         taskLock.lock()
         let count = self.tasks.count
@@ -89,6 +112,9 @@ public class LonginusManager {
         return count
     }
     
+    /**
+     Return the current preload tasks count
+     */
     public var currentPreloadTaskCount: Int {
         taskLock.lock()
         let count = self.preloadTasks.count
@@ -96,6 +122,12 @@ public class LonginusManager {
         return count
     }
     
+    /**
+     The convenience initialize method to generate a manager
+     - Parameters:
+        - cachePath: The path to save files or sqlite
+        - sizeThreshold: Determine the object should store to sqlite or file system.
+     */
     public convenience init(cachePath: String, sizeThreshold: Int32) {
         let cache = ImageCacher(path: cachePath, sizeThreshold: sizeThreshold)
         let downloader = ImageDownloader(sessionConfiguration: URLSessionConfiguration.default)
@@ -106,6 +138,14 @@ public class LonginusManager {
         self.init(cacher: cache, downloader: downloader, coder: coder)
     }
     
+    /**
+     The designed initialize method
+     
+     - Parameters:
+        - cacher: a `ImageCacher` object to handle cache operations
+        - downloader: a `ImageDownloadable` object to handle download operations. This class use `ImageDownloader`. You can customize this object which conforms `ImageDownloadable` protocal
+        - coder: a `ImageCodeable` object to handle encode/decode operations. This class use `ImageCoderManager`. You can customize this object which conforms `ImageCodeable` protocal
+     */
     public init(cacher: ImageCacher?, downloader: ImageDownloadable, coder: ImageCodeable) {
         imageCacher = cacher
         imageDownloader = downloader
@@ -118,6 +158,15 @@ public class LonginusManager {
         urlBlacklist = Set()
     }
     
+    /**
+     Creates and returns a new `ImageLoadTask`, the operation will start immediately.
+     - Parameters:
+        - resource:    The object conforms `ImageWebCacheResourceable` protocol. Typically will be a `URL`.
+        - options:     The options to control image operation.
+        - transformer: Transform block which will be invoked on background thread  (pass nil to avoid).
+        - progress:    Progress block which will be invoked on background thread (pass nil to avoid).
+        - completion:  Completion block which will be invoked on background thread  (pass nil to avoid).
+     */
     @discardableResult
     public func loadImage(with resource: ImageWebCacheResourceable,
                           options: ImageOptions = .none,
@@ -285,6 +334,21 @@ public class LonginusManager {
         return task
     }
     
+    /**
+     Creates and returns a new preload `ImageLoadTask`, the operation will start immediately.
+     This method will not decoding or decompress image or memory caching for showing. Only will download images then cache to the disk for getting later.
+     
+     Typically, you can use this method for downloading those images that will show but not show yet in advance during idle time. Or use this method in UITableView/UICollectionView `DataSourcePrefetching` methods.
+     
+     If a preload task not finished but a normal task coming, dont worry, it will automaticlly upgrade the preload task to the normal task.
+     
+     - Parameters:
+        - resource:    The object conforms `ImageWebCacheResourceable` protocol. Typically will be a `URL`.
+        - options:     The options to control image operation.
+        - transformer: Transform block which will be invoked on background thread  (pass nil to avoid).
+        - progress:    Progress block which will be invoked on background thread (pass nil to avoid).
+        - completion:  Completion block which will be invoked on background thread  (pass nil to avoid).
+     */
     @discardableResult
     public func preload(_ resources: [ImageWebCacheResourceable],
                         options: ImageOptions = .none,
@@ -313,6 +377,9 @@ public class LonginusManager {
         return tasks
     }
     
+    /**
+     Remove the image load task from normal tasks sets and preloadTasks dic
+     */
     func remove(loadTask: ImageLoadTask) {
         releaseQueue.async { [weak self] in
             self?.taskLock.lock()
@@ -322,6 +389,11 @@ public class LonginusManager {
         }
     }
 
+    /**
+     Cancel preloading task by the url
+     - Parameters:
+        - url: The url request need to cancel
+     */
     public func cancelPreloading(url: String) {
         taskLock.lock()
         let currentTask = preloadTasks[url]
@@ -329,7 +401,9 @@ public class LonginusManager {
         currentTask?.cancel()
     }
 
-    /// Cancels image preloading tasks
+    /**
+     Cancels all image preloading tasks
+     */
     public func cancelPreloading() {
         taskLock.lock()
         let currentTasks = preloadTasks
@@ -339,7 +413,9 @@ public class LonginusManager {
         }
     }
     
-    /// Cancels all image loading tasks
+    /**
+     Cancels all image tasks
+     */
     public func cancelAll() {
         taskLock.lock()
         let currentTasks = tasks
@@ -541,7 +617,9 @@ extension LonginusManager {
     }
 }
 
-// MARK: Network Indicator
+/**
+ This extension to handle Network Indicator operation
+ */
 private var networkIndicatorInfoKey: Void?
 extension LonginusManager {
 

@@ -39,6 +39,9 @@ private class ImageDownloadLinkedMapNode {
     }
 }
 
+/*
+ A FIFO linked list
+ */
 private class ImageDownloadLinkedMap {
     private var lock: Mutex
     fileprivate var dic: [URL : ImageDownloadLinkedMapNode]
