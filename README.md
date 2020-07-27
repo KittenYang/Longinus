@@ -92,6 +92,25 @@ You should open the {Project}.xcworkspace instead of the {Project}.xcodeproj aft
 
 For more information about how to use CocoaPods, I suggest this [tutorial](http://www.raywenderlich.com/64546/introduction-to-cocoapods-2).
 
+# Benchmark
+I tested some popular web image loading frameworks on iOS platform from some aspects.
+* Image loading speed. 
+* Memory&Disk read/write/delete speed.
+* Scrolling 4000 images UI fps.
+
+Here is the tested results. 
+
+*Note: The test device is iPhone 11, running on iOS 13.3*
+
+![](Assets/Image_loading_speed_benchmark.png)
+
+![](Assets/Memory_IO_benchmark.png)
+
+![](Assets/Disk_IO_benchmark.png)
+
+![](Assets/UI_fps_benchmark.png)
+
+You can git clone this repo and run the `Benchmark.xcworkspace` to test it by yourself.
 
 ## License
 
