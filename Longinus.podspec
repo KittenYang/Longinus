@@ -48,27 +48,28 @@ Pod::Spec.new do |s|
   
   s.subspec "Core" do |sp|
     sp.source_files  = ["Longinus/Classes/**/*.swift"]
+    sp.exclude_files = ["Longinus/Classes/Cache/*.swift"]
   end
   
   # ---- subspec -----
   s.subspec 'Cache' do |ss|
       ss.source_files = 'Longinus/Classes/Cache/*.swift'
   end
-  s.subspec 'Extensions' do |ss|
-      ss.source_files = 'Longinus/Classes/Extensions/*.swift'
-  end
-  s.subspec 'General' do |ss|
-       ss.source_files = 'Longinus/Classes/General/*.swift'
-  end
-  s.subspec 'Image' do |ss|
-       ss.source_files = 'Longinus/Classes/Image/*.swift'
-  end
-  s.subspec 'Networking' do |ss|
-       ss.source_files = 'Longinus/Classes/Networking/*.swift'
-  end
-  s.subspec 'Utility' do |ss|
-       ss.source_files = 'Longinus/Classes/Utility/*.swift'
-  end
+#  s.subspec 'Extensions' do |ss|
+#      ss.source_files = 'Longinus/Classes/Extensions/*.swift'
+#  end
+#  s.subspec 'General' do |ss|
+#       ss.source_files = 'Longinus/Classes/General/*.swift'
+#  end
+#  s.subspec 'Image' do |ss|
+#       ss.source_files = 'Longinus/Classes/Image/*.swift'
+#  end
+#  s.subspec 'Networking' do |ss|
+#       ss.source_files = 'Longinus/Classes/Networking/*.swift'
+#  end
+#  s.subspec 'Utility' do |ss|
+#       ss.source_files = 'Longinus/Classes/Utility/*.swift'
+#  end
 #  s.subspec 'Views' do |ss|
 #       ss.source_files = 'Longinus/Classes/Views/*.swift'
 #  end
