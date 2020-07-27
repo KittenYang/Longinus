@@ -43,8 +43,12 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
   
   s.ios.deployment_target = '9.0'
-
-  s.source_files = 'Longinus/Classes/**/*'
+  s.requires_arc = true
+  s.default_subspec = 'Core'
+  
+  s.subspec "Core" do |sp|
+    sp.source_files  = ["Longinus/Classes/**/*.swift"]
+  end
   
   # ---- subspec -----
   s.subspec 'Cache' do |ss|
@@ -65,15 +69,15 @@ Pod::Spec.new do |s|
   s.subspec 'Utility' do |ss|
        ss.source_files = 'Longinus/Classes/Utility/*.swift'
   end
-  s.subspec 'Views' do |ss|
-       ss.source_files = 'Longinus/Classes/Views/*.swift'
-  end
+#  s.subspec 'Views' do |ss|
+#       ss.source_files = 'Longinus/Classes/Views/*.swift'
+#  end
   
   # s.resource_bundles = {
   #   'Longinus' => ['Longinus/Assets/*.png']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+#  s.frameworks = 'UIKit', 'Foundation', 'CFNetwork'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
