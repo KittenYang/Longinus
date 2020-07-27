@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/kittenyang@icloud.com/Longinus">
-    <img src="https://img.shields.io/travis/kittenyang@icloud.com/Longinus.svg?style=for-the-badge" alt="CI Status" />
+    <a href="https://github.com/KittenYang/Longinus/actions?query=workflow%3Abuild"><img src="https://github.com/KittenYang/Longinus/workflows/build/badge.svg?branch=master"></a>
   </a>
   <a href="https://cocoapods.org/pods/Longinus">
     <img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/>
