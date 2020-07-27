@@ -33,6 +33,10 @@ public let lg_ScreenScale = UIScreen.main.scale
 
 public protocol LonginusCompatible { }
 
+
+/**
+ Wrapper for Longinus compatible types. This type provides an extension point for connivence methods in Longinus.
+ */
 public struct LonginusExtension<Base> {
     public let base: Base
     public init(_ base: Base) {
@@ -40,6 +44,9 @@ public struct LonginusExtension<Base> {
     }
 }
 
+/**
+ Represents an object type that is compatible with Longinus. You can use `lg` property to get a value in the namespace of Longinus.
+ */
 extension LonginusCompatible {
     public var lg: LonginusExtension<Self> {
         get { return LonginusExtension(self) }

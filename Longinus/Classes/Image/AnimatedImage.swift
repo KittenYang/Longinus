@@ -27,8 +27,13 @@
 
 import UIKit
 
+/**
+ LonginusExtension to AnimatedImage. You can access these variables or functions by `lg` property.
+ */
 extension LonginusExtension where Base: AnimatedImage {
-    /// ImageTransformer editing image frames
+    /**
+     A ImageTransformer to edit image frames
+     */
     public var transformer: ImageTransformer? {
         get {
             base.lock.lock()
@@ -46,11 +51,14 @@ extension LonginusExtension where Base: AnimatedImage {
         }
     }
     
-    
+    /**
+     The originalImageData of AnimatedImage
+     */
     public var originalImageData: Data? { return base.decoder.imageData }
     
-    
-    /// Current cache size in bytes
+    /**
+     Current cache size in bytes
+     */
     public var currentCacheSize: Int64 {
         base.lock.lock()
         let size = base.currentCacheSize!
@@ -58,6 +66,9 @@ extension LonginusExtension where Base: AnimatedImage {
         return size
     }
  
+    /**
+     Update max cache size in bytes to fit device freeMemory
+     */
     public func updateCacheSizeIfNeeded() {
         base.lock.lock()
         defer { base.lock.unlock() }
@@ -160,10 +171,16 @@ extension LonginusExtension where Base: AnimatedImage {
         base.lock.unlock()
     }
     
+    /**
+     Weak refrence view to `views` NSHashTable
+     */
     public func didAddToView(_ view: AnimatedImageView) {
         base.views.add(view)
     }
     
+    /**
+     Remove view from `views` NSHashTable. If `views` is empty, cancel the preload work and clear cached buffer
+     */
     public func didRemoveFromView(_ view: AnimatedImageView) {
         base.views.remove(view)
         if base.views.count <= 0 {
@@ -172,7 +189,9 @@ extension LonginusExtension where Base: AnimatedImage {
         }
     }
     
-    /// Cancels asynchronous preload task
+    /**
+     Cancel preload task
+     */
     public func cancelPreloadTask() {
         base.lock.lock()
         if base.preloadTask != nil {
@@ -182,9 +201,12 @@ extension LonginusExtension where Base: AnimatedImage {
         base.lock.unlock()
     }
     
-    /// Removes all image frames from cache asynchronously
-    ///
-    /// - Parameter completion: a closure called when clearing is finished
+    /**
+     Removes all image frames from cache asynchronously
+     
+     - Parameters:
+        - completion: A closure called when clearing is finished
+     */
     public func clearAsynchronously(completion: (() -> Void)?) {
         DispatchQueuePool.default.async { [weak base] in
             guard let base = base else { return }
@@ -193,7 +215,9 @@ extension LonginusExtension where Base: AnimatedImage {
         }
     }
     
-    /// Removes all image frames from cache synchronously
+    /**
+     Removes all image frames from cache synchronously
+     */
     public func clear() {
         base.lock.lock()
         for i in 0..<base.frames.count {
