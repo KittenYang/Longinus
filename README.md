@@ -102,11 +102,11 @@ Here is the tested results.
 
 *Note: The test device is iPhone 11, running on iOS 13.3*
 
-![](Assets/Image_loading_speed_benchmark.png)
+![](Assets/Image_loading_speed_benchmark.jpeg)
 
-![](Assets/Memory_IO_benchmark.png)
+![](Assets/Memory_IO_benchmark.jpeg)
 
-![](Assets/Disk_IO_benchmark.png)
+![](Assets/Disk_IO_benchmark.jpeg)
 
 
 You can git clone this repo and run the `Benchmark.xcworkspace` to test it by yourself.
