@@ -16,6 +16,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: |
-        - xcodebuild clean build -workspace Longinus.xcworkspace -scheme Longinus-Example -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+        xcodebuild clean build -workspace Longinus.xcworkspace -scheme Longinus-Example -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
       env: 
         destination: ${{ matrix.destination }}
