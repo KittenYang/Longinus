@@ -201,11 +201,12 @@ class ImageWallCell: UICollectionViewCell {
         contentView.addSubview(kfImageView)
         contentView.addSubview(yyImageView)
         contentView.addSubview(sdImageView)
+        contentView.addSubview(bbImageView)
     }
     
     private func updateCurrentBenmarkType(type: WebImageType) {
         if currentType == type { return }
-        let all = [lgImageView, kfImageView, yyImageView, sdImageView]
+        let all = [lgImageView, kfImageView, yyImageView, sdImageView, bbImageView]
         all.forEach { (imv) in
             imv.isHidden = imv.webImageType != type
             if !imv.isHidden {
