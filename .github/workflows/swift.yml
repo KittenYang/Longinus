@@ -5,11 +5,10 @@ on: [push, pull_request]
 jobs:
   build:
 
-
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 8']
+        destination: ['platform=iOS Simulator,OS=13.4,name=iPhone 8']
         swift-version: [5.0]
 
     steps:
