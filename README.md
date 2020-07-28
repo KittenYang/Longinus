@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/kittenyang@icloud.com/Longinus">
-    <img src="https://img.shields.io/travis/kittenyang@icloud.com/Longinus.svg?style=for-the-badge" alt="CI Status" />
+    <a href="https://github.com/KittenYang/Longinus/actions?query=workflow%3Abuild"><img src="https://img.shields.io/github/workflow/status/KittenYang/Longinus/build/master?style=for-the-badge"></a>
   </a>
   <a href="https://cocoapods.org/pods/Longinus">
     <img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/>
@@ -102,13 +102,12 @@ Here is the tested results.
 
 *Note: The test device is iPhone 11, running on iOS 13.3*
 
-![](Assets/Image_loading_speed_benchmark.png)
+![](Assets/Image_loading_speed_benchmark.jpeg)
 
-![](Assets/Memory_IO_benchmark.png)
+![](Assets/Memory_IO_benchmark.jpeg)
 
-![](Assets/Disk_IO_benchmark.png)
+![](Assets/Disk_IO_benchmark.jpeg)
 
-![](Assets/UI_fps_benchmark.png)
 
 You can git clone this repo and run the `Benchmark.xcworkspace` to test it by yourself.
 
