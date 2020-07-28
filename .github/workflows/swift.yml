@@ -13,7 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - run: cd Example/ 
     - name: Xcodebuild Action
       uses: sersoft-gmbh/xcodebuild-action@v1.1
       with:
