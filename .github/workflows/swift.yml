@@ -22,7 +22,7 @@ jobs:
         # The scheme to build. Required when using a workspace.
         scheme: Longinus-Example
         # The destination specifier to build.
-        destination: "${destination}"
+        destination: ${{ matrix.destination }}
         # The action to perform (e.g. build, test, ...).
         action: build
         # Whether the output of xcodebuild should be forwarded to xcpretty.
