@@ -23,6 +23,7 @@
 		5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */; };
 		5F04639924D01CE3007452D8 /* CALayer+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */; };
 		5F04639A24D01CE3007452D8 /* UIImageView+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */; };
+		5F04639C24D0297E007452D8 /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */; };
 		5F59D38724C41A3F00E8964B /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5273BF8063F5CECB2AF488B34F6154 /* Mutex.swift */; };
 		5F59D39B24C4510000E8964B /* SQLiteUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D39A24C4510000E8964B /* SQLiteUtil.swift */; };
 		5F59D3B624C4974600E8964B /* KVStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3B024C4974500E8964B /* KVStorage.swift */; };
@@ -99,6 +100,7 @@
 		5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Longinus.swift"; sourceTree = "<group>"; };
 		5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Longinus.swift"; sourceTree = "<group>"; };
 		5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Longinus.swift"; sourceTree = "<group>"; };
+		5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtension.swift; sourceTree = "<group>"; };
 		5F59D39A24C4510000E8964B /* SQLiteUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteUtil.swift; sourceTree = "<group>"; };
 		5F59D3B024C4974500E8964B /* KVStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVStorage.swift; sourceTree = "<group>"; };
 		5F59D3B224C4974600E8964B /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		1AE96DD2966AAF0C8A76A32215FAB7DB /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */,
 				5FADC53E24D01056000240DD /* DeviceExtension.swift */,
 				5FADC53C24D00FBD000240DD /* UIViewExtension.swift */,
 				5FADC53424D00DF0000240DD /* LonginusCompatible.swift */,
@@ -562,6 +565,7 @@
 				93956713A6766EFF2C02A705EFE6C9EE /* Longinus-dummy.m in Sources */,
 				5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */,
 				5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */,
+				5F04639C24D0297E007452D8 /* DispatchQueueExtension.swift in Sources */,
 				5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */,
 				5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */,
 				5FADC58424D0169B000240DD /* AnimatedImageView.swift in Sources */,
