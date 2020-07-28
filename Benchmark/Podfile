@@ -10,5 +10,6 @@ target 'Benchmark' do
   pod 'Kingfisher', '~> 5.0'
   pod 'SDWebImage/GIF'
   pod 'YYWebImage'
+  pod 'BBWebImage'
 
 end

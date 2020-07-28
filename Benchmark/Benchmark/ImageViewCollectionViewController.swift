@@ -11,6 +11,7 @@ import Longinus
 import YYWebImage
 import SDWebImage
 import Kingfisher
+import BBWebImage
 
 private let reuseIdentifier = "Cell"
 
@@ -19,6 +20,7 @@ enum WebImageType: Int {
     case yywebimage = 1
     case sdwebimage = 2
     case kingfisher = 3
+    case bbwebimage = 4
     
     var name: String {
         switch self {
@@ -30,6 +32,8 @@ enum WebImageType: Int {
             return "SDWebImage"
         case .kingfisher:
             return "Kingfisher"
+        case .bbwebimage:
+            return "BBWebImage"
         }
     }
 }
@@ -41,7 +45,7 @@ enum ImageWallType {
 
 class ImageViewCollectionViewController: UICollectionViewController {
 
-    let allWebImageType: [WebImageType] = [.longinus, .yywebimage, .sdwebimage, .kingfisher]
+    let allWebImageType: [WebImageType] = [.longinus, .yywebimage, .sdwebimage, .kingfisher, .bbwebimage]
     var currentType: WebImageType = .longinus
     
     var imageWallType: ImageWallType = .image
@@ -180,6 +184,14 @@ class ImageWallCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         return imageView
     }()
+
+    private lazy var bbImageView: BBAnimatedImageView = {
+        var imageView = BBAnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
+        imageView.webImageType = .bbwebimage
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
     
     weak var currentShowingImageView: UIImageView?
 
@@ -225,6 +237,8 @@ class ImageWallCell: UICollectionViewCell {
             sdImageView.sd_setImage(with: url, placeholderImage: placeholder, options: [], completed: nil)
         case .yywebimage:
             yyImageView.yy_setImage(with: url, placeholder: placeholder)
+        case .bbwebimage:
+            bbImageView.bb_setImage(with: url, placeholder: placeholder, options: [.progressiveDownload], editor: nil, progress: nil, completion: nil)
         }
     }
     

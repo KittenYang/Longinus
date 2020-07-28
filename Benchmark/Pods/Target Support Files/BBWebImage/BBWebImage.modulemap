@@ -1,0 +1,6 @@
+framework module BBWebImage {
+  umbrella header "BBWebImage-umbrella.h"
+
+  export *
+  module * { export * }
+}

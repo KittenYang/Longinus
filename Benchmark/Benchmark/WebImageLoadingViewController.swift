@@ -11,6 +11,7 @@ import Longinus
 import YYWebImage
 import SDWebImage
 import Kingfisher
+import BBWebImage
 
 class ConsoleLabelViewController: UIViewController {
     
@@ -78,6 +79,7 @@ class ConsoleLabelViewController: UIViewController {
         KingfisherManager.shared.downloader.cancelAll()
         SDWebImageManager.shared().cancelAll()
         YYWebImageManager.shared().queue?.cancelAllOperations()
+        BBWebImageManager.shared.cancelAll()
     }
 }
 
@@ -87,7 +89,8 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
         return [WebImageType.longinus: [TimeInterval](),
                 WebImageType.yywebimage: [TimeInterval](),
                 WebImageType.sdwebimage: [TimeInterval](),
-                WebImageType.kingfisher: [TimeInterval]()]
+                WebImageType.kingfisher: [TimeInterval](),
+                WebImageType.bbwebimage: [TimeInterval]()]
     }()
     
     override func viewDidLoad() {
@@ -193,6 +196,12 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
                     progress: { (receivedSize, expectedSize) in
                     progress(receivedSize: Int(receivedSize), Int(expectedSize))
                 }, transform: nil) { (image, url, fromType, stage, error) in
+                    done(image: image, error: error)
+                }
+            case .bbwebimage:
+                BBWebImageManager.shared.loadImage(with: url, options: [.refreshCache], editor: nil, progress: { (data, expectedSize, image) in
+                    progress(receivedSize: data?.count ?? 0, expectedSize)
+                }) { (image, data, error, cacheType) in
                     done(image: image, error: error)
                 }
             }

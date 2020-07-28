@@ -11,6 +11,7 @@ import Longinus
 import YYWebImage
 import SDWebImage
 import Kingfisher
+import BBWebImage
 
 class CacheIOViewController: ConsoleLabelViewController {
 
@@ -190,6 +191,34 @@ class CacheIOViewController: ConsoleLabelViewController {
             removeTime += CACurrentMediaTime() - startTime
         }
         updateConsole(newText: String(format: "Kingfisher 内存存取测试结果: \n存储时间 %0.4f秒\n读取时间 %0.4f秒\n移除时间 %0.4f秒\n", storeTime, getTime, removeTime))
+        
+        // BBWebImage
+        for _ in 0..<loopCount {
+            if exited { return }
+            var startTime = CACurrentMediaTime()
+            for item in allTestImages {
+                BBWebImageManager.shared.imageCache.store(item.1, data: nil, forKey: item.0, cacheType: .memory, completion: nil)
+            }
+            storeTime += CACurrentMediaTime() - startTime
+            
+            startTime = CACurrentMediaTime()
+            for item in allTestImages {
+                BBWebImageManager.shared.imageCache.image(forKey: item.0, cacheType: .memory) { (result) in
+                    switch result {
+                    case .memory(image: _): break
+                    default: assert(false)
+                    }
+                }
+            }
+            getTime += CACurrentMediaTime() - startTime
+            
+            startTime = CACurrentMediaTime()
+            for item in allTestImages {
+                BBWebImageManager.shared.imageCache.removeImage(forKey: item.0, cacheType: .memory, completion: nil)
+            }
+            removeTime += CACurrentMediaTime() - startTime
+        }
+        updateConsole(newText: String(format: "BBWebImage 内存存取测试结果: \n存储时间 %0.4f秒\n读取时间 %0.4f秒\n移除时间 %0.4f秒\n", storeTime, getTime, removeTime))
         
         DispatchQueue.main.async {
             self.loading.stopAnimating()
@@ -458,6 +487,69 @@ class CacheIOViewController: ConsoleLabelViewController {
                 testGet {
                     testRemove { [weak self] in
                         self?.updateConsole(newText: String(format: "Kingfisher 磁盘存取测试结果: \n存储时间 %0.4f秒\n读取时间 %0.4f秒\n移除时间 %0.4f秒\n", storeTime, getTime, removeTime))
+                        self?.testDiskCache(type: .bbwebimage)
+                    }
+                }
+            }
+        case .bbwebimage:
+            // BBWebImage
+            func testStore(_ completion: @escaping NoParamterBlock) {
+                print("\n\n\(type.name) 开始磁盘存储")
+                var i = allTestImages.count
+                for (index, item) in allTestImages.enumerated() {
+                    if exited { return }
+                    let startTime = CACurrentMediaTime()
+                    BBWebImageManager.shared.imageCache.store(item.1, data: nil, forKey: item.0, cacheType: .disk) {
+                        print("\(type.name) 保存第\(index)张完成")
+                        i -= 1
+                        if i == 0 {
+                            storeTime += CACurrentMediaTime() - startTime
+                            completion()
+                        }
+                    }
+                }
+            }
+            func testGet(_ completion: @escaping NoParamterBlock) {
+                print("\n\n\(type.name) 开始读取磁盘")
+                var i = allTestImages.count
+                for (index, item) in allTestImages.enumerated() {
+                    if exited { return }
+                    let startTime = CACurrentMediaTime()
+                    BBWebImageManager.shared.imageCache.image(forKey: item.0, cacheType: .disk) { (result) in
+                        print("\(type.name) 读取第\(index)张完成")
+                        switch result {
+                        case .disk(_):
+                            i -= 1
+                            if i == 0 {
+                                getTime += CACurrentMediaTime() - startTime
+                                completion()
+                            }
+                        default:
+                            break;
+                        }
+                    }
+                }
+            }
+            func testRemove(_ completion: @escaping NoParamterBlock) {
+                print("\n\n\(type.name) 开始磁盘清理")
+                var i = allTestImages.count
+                for (index,item) in allTestImages.enumerated() {
+                    if exited { return }
+                    let startTime = CACurrentMediaTime()
+                    BBWebImageManager.shared.imageCache.removeImage(forKey: item.0, cacheType: .disk) {
+                        print("\(type.name) 清理第\(index)张完成")
+                        i -= 1
+                        if i == 0 {
+                            removeTime += CACurrentMediaTime() - startTime
+                            completion()
+                        }
+                    }
+                }
+            }
+            testStore {
+                testGet {
+                    testRemove { [weak self] in
+                        self?.updateConsole(newText: String(format: "BBWebImage 磁盘存取测试结果: \n存储时间 %0.4f秒\n读取时间 %0.4f秒\n移除时间 %0.4f秒\n", storeTime, getTime, removeTime))
                         DispatchQueue.main.async {
                             self?.loading.stopAnimating()
                         }
