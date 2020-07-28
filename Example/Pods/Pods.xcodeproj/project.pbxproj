@@ -37,19 +37,6 @@
 		5FADC53524D00DF0000240DD /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53424D00DF0000240DD /* LonginusCompatible.swift */; };
 		5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53C24D00FBD000240DD /* UIViewExtension.swift */; };
 		5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53E24D01056000240DD /* DeviceExtension.swift */; };
-		5FADC55224D015D1000240DD /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54524D015D0000240DD /* DeviceExtension.swift */; };
-		5FADC55324D015D1000240DD /* SQLiteUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54624D015D0000240DD /* SQLiteUtil.swift */; };
-		5FADC55424D015D1000240DD /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54724D015D0000240DD /* Runtime.swift */; };
-		5FADC55524D015D1000240DD /* LonginusPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54824D015D0000240DD /* LonginusPrint.swift */; };
-		5FADC55624D015D1000240DD /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54924D015D0000240DD /* DispatchSemaphore.swift */; };
-		5FADC55724D015D1000240DD /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54A24D015D0000240DD /* UIViewExtension.swift */; };
-		5FADC55824D015D1000240DD /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54B24D015D0000240DD /* Box.swift */; };
-		5FADC55924D015D1000240DD /* LonginusWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54C24D015D0000240DD /* LonginusWeakProxy.swift */; };
-		5FADC55A24D015D1000240DD /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54D24D015D0000240DD /* Mutex.swift */; };
-		5FADC55B24D015D1000240DD /* LinkedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54E24D015D0000240DD /* LinkedMap.swift */; };
-		5FADC55C24D015D1000240DD /* DispatchQueuePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC54F24D015D0000240DD /* DispatchQueuePool.swift */; };
-		5FADC55D24D015D1000240DD /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC55024D015D0000240DD /* DispatchQueueExtension.swift */; };
-		5FADC55E24D015D1000240DD /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC55124D015D0000240DD /* LonginusCompatible.swift */; };
 		5FADC57F24D0169B000240DD /* ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57524D0169B000240DD /* ImageOptions.swift */; };
 		5FADC58024D0169B000240DD /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57624D0169B000240DD /* Image.swift */; };
 		5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57724D0169B000240DD /* ImageTransformer.swift */; };
@@ -125,19 +112,6 @@
 		5FADC53424D00DF0000240DD /* LonginusCompatible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
 		5FADC53C24D00FBD000240DD /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		5FADC53E24D01056000240DD /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceExtension.swift; sourceTree = "<group>"; };
-		5FADC54524D015D0000240DD /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceExtension.swift; sourceTree = "<group>"; };
-		5FADC54624D015D0000240DD /* SQLiteUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteUtil.swift; sourceTree = "<group>"; };
-		5FADC54724D015D0000240DD /* Runtime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Runtime.swift; sourceTree = "<group>"; };
-		5FADC54824D015D0000240DD /* LonginusPrint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusPrint.swift; sourceTree = "<group>"; };
-		5FADC54924D015D0000240DD /* DispatchSemaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSemaphore.swift; sourceTree = "<group>"; };
-		5FADC54A24D015D0000240DD /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		5FADC54B24D015D0000240DD /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
-		5FADC54C24D015D0000240DD /* LonginusWeakProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusWeakProxy.swift; sourceTree = "<group>"; };
-		5FADC54D24D015D0000240DD /* Mutex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mutex.swift; sourceTree = "<group>"; };
-		5FADC54E24D015D0000240DD /* LinkedMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedMap.swift; sourceTree = "<group>"; };
-		5FADC54F24D015D0000240DD /* DispatchQueuePool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueuePool.swift; sourceTree = "<group>"; };
-		5FADC55024D015D0000240DD /* DispatchQueueExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtension.swift; sourceTree = "<group>"; };
-		5FADC55124D015D0000240DD /* LonginusCompatible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
 		5FADC57524D0169B000240DD /* ImageOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptions.swift; sourceTree = "<group>"; };
 		5FADC57624D0169B000240DD /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		5FADC57724D0169B000240DD /* ImageTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTransformer.swift; sourceTree = "<group>"; };
@@ -205,7 +179,6 @@
 		1AE96DD2966AAF0C8A76A32215FAB7DB /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				5FADC54424D015D0000240DD /* Utility */,
 				5FADC53E24D01056000240DD /* DeviceExtension.swift */,
 				5FADC53C24D00FBD000240DD /* UIViewExtension.swift */,
 				5FADC53424D00DF0000240DD /* LonginusCompatible.swift */,
@@ -294,26 +267,6 @@
 			);
 			name = Cache;
 			path = Longinus/Classes/Cache;
-			sourceTree = "<group>";
-		};
-		5FADC54424D015D0000240DD /* Utility */ = {
-			isa = PBXGroup;
-			children = (
-				5FADC54524D015D0000240DD /* DeviceExtension.swift */,
-				5FADC54624D015D0000240DD /* SQLiteUtil.swift */,
-				5FADC54724D015D0000240DD /* Runtime.swift */,
-				5FADC54824D015D0000240DD /* LonginusPrint.swift */,
-				5FADC54924D015D0000240DD /* DispatchSemaphore.swift */,
-				5FADC54A24D015D0000240DD /* UIViewExtension.swift */,
-				5FADC54B24D015D0000240DD /* Box.swift */,
-				5FADC54C24D015D0000240DD /* LonginusWeakProxy.swift */,
-				5FADC54D24D015D0000240DD /* Mutex.swift */,
-				5FADC54E24D015D0000240DD /* LinkedMap.swift */,
-				5FADC54F24D015D0000240DD /* DispatchQueuePool.swift */,
-				5FADC55024D015D0000240DD /* DispatchQueueExtension.swift */,
-				5FADC55124D015D0000240DD /* LonginusCompatible.swift */,
-			);
-			name = Utility;
 			sourceTree = "<group>";
 		};
 		5FADC57424D0169B000240DD /* ImageCode */ = {
@@ -586,7 +539,6 @@
 				E8DBEB74175E89B6ECDE703BD1F48723 /* Box.swift in Sources */,
 				125FE30303724E5DFF2F379E02AA8FAE /* DispatchQueuePool.swift in Sources */,
 				5FADC58524D0169B000240DD /* ImageCoderManager.swift in Sources */,
-				5FADC55D24D015D1000240DD /* DispatchQueueExtension.swift in Sources */,
 				5FADC53524D00DF0000240DD /* LonginusCompatible.swift in Sources */,
 				5FADC53324D00B70000240DD /* StringExtension.swift in Sources */,
 				5FADC58324D0169B000240DD /* AnimatedImage.swift in Sources */,
@@ -596,17 +548,11 @@
 				5FADC58024D0169B000240DD /* Image.swift in Sources */,
 				5F59D3BA24C4974600E8964B /* DiskCache.swift in Sources */,
 				19F5AB12B6A03AB50EE298D1349B76CF /* ImageDownloadOperation.swift in Sources */,
-				5FADC55824D015D1000240DD /* Box.swift in Sources */,
 				051A2BF82490E72CDBA70A18230991E8 /* ImageDownloadOperationQueue.swift in Sources */,
-				5FADC55624D015D1000240DD /* DispatchSemaphore.swift in Sources */,
-				5FADC55724D015D1000240DD /* UIViewExtension.swift in Sources */,
-				5FADC55C24D015D1000240DD /* DispatchQueuePool.swift in Sources */,
 				5FADC58824D0169B000240DD /* ImageGIFCoder.swift in Sources */,
 				5F59D3FE24C847E400E8964B /* LonginusPrint.swift in Sources */,
 				5FADC58724D0169B000240DD /* ImageIOCoder.swift in Sources */,
 				5F04639224D01B23007452D8 /* ImageWebCacheable.swift in Sources */,
-				5FADC55B24D015D1000240DD /* LinkedMap.swift in Sources */,
-				5FADC55424D015D1000240DD /* Runtime.swift in Sources */,
 				5FADC58224D0169B000240DD /* ImageCodeable.swift in Sources */,
 				5F59D38724C41A3F00E8964B /* Mutex.swift in Sources */,
 				5F59D39B24C4510000E8964B /* SQLiteUtil.swift in Sources */,
@@ -614,21 +560,15 @@
 				B8B0641A1C4A80D474546D18964D63AA /* ImageWebCacheResourceable.swift in Sources */,
 				5F04639424D01BD8007452D8 /* NetworkIndicatorManager.swift in Sources */,
 				93956713A6766EFF2C02A705EFE6C9EE /* Longinus-dummy.m in Sources */,
-				5FADC55324D015D1000240DD /* SQLiteUtil.swift in Sources */,
-				5FADC55524D015D1000240DD /* LonginusPrint.swift in Sources */,
 				5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */,
 				5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */,
-				5FADC55224D015D1000240DD /* DeviceExtension.swift in Sources */,
-				5FADC55924D015D1000240DD /* LonginusWeakProxy.swift in Sources */,
 				5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */,
 				5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */,
 				5FADC58424D0169B000240DD /* AnimatedImageView.swift in Sources */,
 				51EC21D44B84559A181441952294F0F4 /* LonginusManager.swift in Sources */,
 				504867C41F27E7DDC6041621D8903D5B /* LonginusWeakProxy.swift in Sources */,
 				5F8528FC24C97819003B30D3 /* LinkedMap.swift in Sources */,
-				5FADC55A24D015D1000240DD /* Mutex.swift in Sources */,
 				5ECFEB622171EFC172DE5415B777E6E5 /* Runtime.swift in Sources */,
-				5FADC55E24D015D1000240DD /* LonginusCompatible.swift in Sources */,
 				5FADC57F24D0169B000240DD /* ImageOptions.swift in Sources */,
 				5F59D3B624C4974600E8964B /* KVStorage.swift in Sources */,
 				5FADC53124D00A4B000240DD /* ImageCacher.swift in Sources */,
