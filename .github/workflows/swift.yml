@@ -8,7 +8,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['platform=iOS Simulator,OS=13.6,name=iPhone 11','platform=macOS,arch=x86_64,variant=Mac Catalyst']
+        destination: ['platform=iOS Simulator,OS=13.6,name=iPhone 11']
         swift-version: [5.0]
 
     steps:
@@ -22,7 +22,7 @@ jobs:
         # The scheme to build. Required when using a workspace.
         scheme: Longinus-Example
         # The destination specifier to build.
-        destination: ${{ matrix.destination }}
+        destination: "${destination}"
         # The action to perform (e.g. build, test, ...).
         action: build
         # Whether the output of xcodebuild should be forwarded to xcpretty.
