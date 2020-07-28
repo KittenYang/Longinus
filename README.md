@@ -20,9 +20,9 @@
 
 
 # Longinus
-Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.
+Longinus is a pure-Swift high-performance asynchronous web image loading,caching,editing framework.
 
-It was learned from an Objective-C web image loading framework [YYWebImage](https://github.com/ibireme/YYWebImage) and bring lots of high performace features to the Swift.
+It was learned from an Objective-C web image loading framework [YYWebImage](https://github.com/ibireme/YYWebImage) and [BBWebImage](https://github.com/Silence-GitHub/BBWebImage), bring lots of high performace features to Swift.
 
 It may become a better choice for you to use a pure-Swift web image loading and caching framework.
 
