@@ -10,10 +10,16 @@ jobs:
   build:
 
     runs-on: macos-latest
+    strategy:
+      matrix:
+        destination: ['macOS', 'iOS Simulator,name=iPhone 8', 'tvOS Simulator,name=Apple TV']
+        swift-version: [5.0]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
     - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+      run: |
+        pod install
+        set -o pipefail && xcodebuild clean build -workspace Longinus.xcworkspace -scheme Longinus-Example -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+      env: 
+        destination: ${{ matrix.destination }}
