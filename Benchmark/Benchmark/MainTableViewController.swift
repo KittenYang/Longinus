@@ -115,7 +115,7 @@ class MainTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == menu.count {
             loading.startAnimating()
-            LonginusManager.shared.imageCacher.removeAll()
+            LonginusManager.shared.imageCacher?.removeAll()
             KingfisherManager.shared.cache.clearMemoryCache()
             KingfisherManager.shared.cache.clearDiskCache()
             SDWebImageManager.shared().imageCache?.clearMemory()

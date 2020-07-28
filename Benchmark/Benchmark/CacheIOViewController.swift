@@ -39,7 +39,7 @@ class CacheIOViewController: ConsoleLabelViewController {
         super.viewDidLoad()
         getTestImages { [weak self] in
             DispatchQueue.global().async {
-                LonginusManager.shared.imageCacher.removeAll()
+                LonginusManager.shared.imageCacher?.removeAll()
                 self?.testCache()
             }
         }
@@ -91,20 +91,20 @@ class CacheIOViewController: ConsoleLabelViewController {
             if exited { return }
             var startTime = CACurrentMediaTime()
             for item in allTestImages {
-                LonginusManager.shared.imageCacher.store(item.1, data: nil, forKey: item.0, cacheType: .memory, completion: nil)
+                LonginusManager.shared.imageCacher?.store(item.1, data: nil, forKey: item.0, cacheType: .memory, completion: nil)
             }
             storeTime += CACurrentMediaTime() - startTime
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
-                let image = LonginusManager.shared.imageCacher.memoryCache.query(key: item.0)
+                let image = LonginusManager.shared.imageCacher?.memoryCache.query(key: item.0)
                 if image == nil { LGPrint("💊 Longinus 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
-                LonginusManager.shared.imageCacher.removeImage(forKey: item.0, cacheType: .memory, completion: nil)
+                LonginusManager.shared.imageCacher?.removeImage(forKey: item.0, cacheType: .memory, completion: nil)
             }
             removeTime += CACurrentMediaTime() - startTime
         }
@@ -220,7 +220,7 @@ class CacheIOViewController: ConsoleLabelViewController {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
                     let data = item.1.jpegData(compressionQuality: 1.0)
-                    LonginusManager.shared.imageCacher.diskCache?.save(value: data, for: item.0, {
+                    LonginusManager.shared.imageCacher?.diskCache?.save(value: data, for: item.0, {
                         print("\(type.name) 保存第\(index)张完成")
                         DispatchQueue.main.async {
                             i -= 1
@@ -238,7 +238,7 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index,item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    LonginusManager.shared.imageCacher.image(forKey: item.0, cacheType: .disk) { (_) in
+                    LonginusManager.shared.imageCacher?.image(forKey: item.0, cacheType: .disk) { (_) in
                         print("\(type.name) 读取第\(index)张完成")
                         DispatchQueue.main.async {
                             i -= 1
@@ -256,7 +256,7 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index,item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    LonginusManager.shared.imageCacher.diskCache?.remove(key: item.0, { (_) in
+                    LonginusManager.shared.imageCacher?.diskCache?.remove(key: item.0, { (_) in
                         print("\(type.name) 清理第\(index)张完成")
                         DispatchQueue.main.async {
                             i -= 1
