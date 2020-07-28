@@ -1,10 +1,6 @@
 name: build
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,7 +9,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['macOS', 'iOS Simulator,name=iPhone 8']
+        destination: ['iOS Simulator,name=iPhone 8']
         swift-version: [5.0]
 
     steps:
