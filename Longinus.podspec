@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.0.4'
+  s.version          = '1.0.5'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
                        DESC
 
   s.homepage         = 'https://github.com/KittenYang/Longinus'
-  s.screenshots     = 'https://github.com/KittenYang/Longinus/raw/master/Assets/Logo.png'
+  s.screenshots      = 'https://github.com/KittenYang/Longinus/raw/master/Assets/Logo.png'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'KittenYang' => 'kittenyang@icloud.com' }
   s.source           = { :git => 'https://github.com/KittenYang/Longinus.git', :tag => s.version.to_s }
@@ -50,10 +50,11 @@ Pod::Spec.new do |s|
   # ---- subspec -----
   s.subspec 'General' do |ss|
        ss.source_files = ["Longinus/Classes/**/*.swift"]
-       ss.exclude_files = ["Longinus/Classes/Utility/*.swift"]
-       ss.exclude_files = ["Longinus/Classes/Cache/*.swift"]
-       ss.exclude_files = ["Longinus/Classes/ImageCode/*.swift"]
-       ss.exclude_files = ["Longinus/Classes/Networking/*.swift"]
+       ss.exclude_files = [
+       "Longinus/Classes/Utility/*.swift",
+       "Longinus/Classes/Cache/*.swift",
+       "Longinus/Classes/ImageCode/*.swift",
+       "Longinus/Classes/Networking/*.swift"]
        ss.dependency "Longinus/Utility"
        ss.dependency "Longinus/Cache"
        ss.dependency "Longinus/ImageCode"
