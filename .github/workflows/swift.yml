@@ -5,17 +5,26 @@ on: [push, pull_request]
 jobs:
   build:
 
-
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['iOS Simulator,name=iPhone 8']
+        destination: ['platform=iOS Simulator,OS=13.6,name=iPhone 11']
         swift-version: [5.0]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: |
-        xcodebuild clean build -workspace Longinus.xcworkspace -scheme Longinus-Example -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - name: Xcodebuild Action
+      uses: sersoft-gmbh/xcodebuild-action@v1.1
+      with:
+        # The path to the xcworkspace to build. Mutually exclusive with `project`.
+        workspace: Example/Longinus.xcworkspace
+        # The scheme to build. Required when using a workspace.
+        scheme: Longinus-Example
+        # The destination specifier to build.
+        destination: ${{ matrix.destination }}
+        # The action to perform (e.g. build, test, ...).
+        action: build
+        # Whether the output of xcodebuild should be forwarded to xcpretty.
+        use-xcpretty: true
       env: 
         destination: ${{ matrix.destination }}
