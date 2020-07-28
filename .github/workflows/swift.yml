@@ -18,7 +18,7 @@ jobs:
       uses: sersoft-gmbh/xcodebuild-action@v1.1
       with:
         # The path to the xcworkspace to build. Mutually exclusive with `project`.
-        workspace: Longinus.xcworkspace
+        workspace: Example/Longinus.xcworkspace
         # The scheme to build. Required when using a workspace.
         scheme: Longinus-Example
         # The destination specifier to build.
