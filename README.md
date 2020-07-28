@@ -31,7 +31,7 @@ Longinus's goal is to become the Highest-Performance web image loading framework
 * Preload images and cache them to disk for further showing.
 * Animated GIF support (dynamic buffer, lower memory usage).
 * Baseline/progressive/interlaced image decode support.
-* View extensions for UIImageView, UIButton, MKAnnotationView and CALayer to directly set an image from a URL.
+* View extensions for UIImageView, UIButton, MKAnnotationView(not yet) and CALayer to directly set an image from a URL.
 * Image loading category for UIImageView, UIButton and CALayer.
 * Built-in transition animation when setting images.(or you can set your custom image showing transion)
 * Image Transform after downloading supported: blur, round corner, resize, color tint, crop, rotate and more.
