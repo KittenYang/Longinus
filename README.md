@@ -108,7 +108,6 @@ Here is the tested results.
 
 ![](Assets/Disk_IO_benchmark.png)
 
-![](Assets/UI_fps_benchmark.png)
 
 You can git clone this repo and run the `Benchmark.xcworkspace` to test it by yourself.
 
