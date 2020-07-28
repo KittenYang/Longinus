@@ -26,23 +26,8 @@
     
 
 import Foundation
-
 #if !USING_BUILTIN_SQLITE
-    #if os(OSX)
-        import SQLiteMacOSX
-    #elseif os(iOS)
-        #if (arch(i386) || arch(x86_64))
-            import SQLite3
-        #else
-            import SQLite3//SQLiteiPhoneOS
-        #endif
-    #elseif os(watchOS)
-        #if (arch(i386) || arch(x86_64))
-            import SQLiteWatchSimulator
-        #else
-            import SQLiteWatchOS
-        #endif
-    #endif
+import SQLite3
 #endif
 
 
@@ -514,7 +499,7 @@ fileprivate final class KVStorageFile {
     init(dataPath: String, trashPath: String) {
         self.dataPath = dataPath
         self.trashPath = trashPath
-        trashQueue = DispatchQueue(label: LonginusPrefixID + ".disk.trash")
+        trashQueue = DispatchQueue(label: "com.kittenyang.KVStorage.disk.trash")
     }
 
     fileprivate func writeWithName(_ fileName: String, data: Data) -> Bool {

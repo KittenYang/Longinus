@@ -31,11 +31,12 @@ import Foundation
 public class DispatchQueuePool {
 
     //userInteractive > default > unspecified > userInitiated > utility > background
-    public static let userInteractive = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.userInteractive", qos: .userInteractive)
-    public static let `default` = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.default", qos: .default)
-    public static let userInitiated = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.userInitiated", qos: .userInitiated)
-    public static let utility = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.utility", qos: .utility)
-    public static let background = DispatchQueuePool(label: "\(LonginusPrefixID).QueuePool.background", qos: .background)
+    public static let DispatchPoolPrefixID = "com.kittenyang.Longinus"
+    public static let userInteractive = DispatchQueuePool(label: "\(DispatchPoolPrefixID).QueuePool.userInteractive", qos: .userInteractive)
+    public static let `default` = DispatchQueuePool(label: "\(DispatchPoolPrefixID).QueuePool.default", qos: .default)
+    public static let userInitiated = DispatchQueuePool(label: "\(DispatchPoolPrefixID).QueuePool.userInitiated", qos: .userInitiated)
+    public static let utility = DispatchQueuePool(label: "\(DispatchPoolPrefixID).QueuePool.utility", qos: .utility)
+    public static let background = DispatchQueuePool(label: "\(DispatchPoolPrefixID).QueuePool.background", qos: .background)
     
     private let queues: [DispatchQueue]//[OperationQueue]
     private var sentinel: Int32

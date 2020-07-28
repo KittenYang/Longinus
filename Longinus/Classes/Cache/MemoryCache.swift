@@ -64,7 +64,7 @@ public class MemoryCache<Key: Hashable, Value> {
     /**
      A serial queue to trim data every `autoTrimInterval` time.
      */
-    fileprivate let trimQueue = DispatchQueue(label: LonginusPrefixID + ".memoryTrim", qos: .background)
+    fileprivate let trimQueue = DispatchQueue(label: "com.kittenyang.MemoryCache.memoryTrim", qos: .background)
     
     /**
      A concurrent queue to release LRU nodes if needed

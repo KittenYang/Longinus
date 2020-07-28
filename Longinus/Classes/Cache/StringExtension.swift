@@ -1,8 +1,8 @@
 //
-//  Result.swift
+//  StringExtension.swift
 //  Longinus
 //
-//  Created by Qitao Yang on 2020/5/11.
+//  Created by Qitao Yang on 2020/7/19.
 //
 //  Copyright (c) 2020 KittenYang <kittenyang@icloud.com>
 //
@@ -26,9 +26,16 @@
     
 
 import Foundation
+import CommonCrypto
 
-extension Result where Failure: Error {
-    
-    
+extension String {
+    var utf8: UnsafePointer<Int8>? { return (self as NSString).utf8String }
+    var lg_sha256: String {
+        guard let data = data(using: .utf8) else { return self }
+        var hash = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
+        _ = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
+            return CC_SHA256(bytes.baseAddress, CC_LONG(data.count), &hash)
+        }
+        return hash.map { String(format: "%02x", $0) }.joined()
+    }
 }
-

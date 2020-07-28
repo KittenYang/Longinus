@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.0.3'
+  s.version          = '1.0.4'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
@@ -43,42 +43,45 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
   
   s.ios.deployment_target = '9.0'
+#  s.osx.deployment_target = "10.15"
   s.requires_arc = true
-  s.default_subspec = 'Core'
-  
-  s.subspec "Core" do |sp|
-    sp.source_files  = ["Longinus/Classes/**/*.swift"]
-#    sp.exclude_files = ["Longinus/Classes/Cache/*.swift"]
-  end
+  s.default_subspec = 'General'
   
   # ---- subspec -----
-#  s.subspec 'Cache' do |ss|
-#      ss.source_files = 'Longinus/Classes/Cache/*.swift'
-#  end
-#  s.subspec 'Extensions' do |ss|
-#      ss.source_files = 'Longinus/Classes/Extensions/*.swift'
-#  end
-#  s.subspec 'General' do |ss|
-#       ss.source_files = 'Longinus/Classes/General/*.swift'
-#  end
-#  s.subspec 'Image' do |ss|
-#       ss.source_files = 'Longinus/Classes/Image/*.swift'
-#  end
-#  s.subspec 'Networking' do |ss|
-#       ss.source_files = 'Longinus/Classes/Networking/*.swift'
-#  end
-#  s.subspec 'Utility' do |ss|
-#       ss.source_files = 'Longinus/Classes/Utility/*.swift'
-#  end
-#  s.subspec 'Views' do |ss|
-#       ss.source_files = 'Longinus/Classes/Views/*.swift'
-#  end
+  s.subspec 'General' do |ss|
+       ss.source_files = ["Longinus/Classes/**/*.swift"]
+       ss.exclude_files = ["Longinus/Classes/Utility/*.swift"]
+       ss.exclude_files = ["Longinus/Classes/Cache/*.swift"]
+       ss.exclude_files = ["Longinus/Classes/ImageCode/*.swift"]
+       ss.exclude_files = ["Longinus/Classes/Networking/*.swift"]
+       ss.dependency "Longinus/Utility"
+       ss.dependency "Longinus/Cache"
+       ss.dependency "Longinus/ImageCode"
+       ss.dependency "Longinus/Networking"
+  end
+  s.subspec 'Cache' do |ss|
+      ss.source_files = 'Longinus/Classes/Cache/*.swift'
+      ss.dependency "Longinus/Utility"
+  end
+  s.subspec 'ImageCode' do |ss|
+       ss.source_files = 'Longinus/Classes/ImageCode/*.swift'
+       ss.dependency "Longinus/Utility"
+  end
+  s.subspec 'Networking' do |ss|
+       ss.source_files = 'Longinus/Classes/Networking/*.swift'
+       ss.dependency "Longinus/ImageCode"
+       ss.dependency "Longinus/Cache"
+  end
+  s.subspec 'Utility' do |ss|
+       ss.source_files = 'Longinus/Classes/Utility/*.swift'
+  end
+
   
   # s.resource_bundles = {
   #   'Longinus' => ['Longinus/Assets/*.png']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-#  s.frameworks = 'UIKit', 'Foundation', 'CFNetwork'
+  s.ios.frameworks = 'UIKit', 'Foundation'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

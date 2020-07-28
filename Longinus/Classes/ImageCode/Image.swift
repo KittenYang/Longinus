@@ -27,11 +27,6 @@
 
 import UIKit
 
-extension UIImage: CacheCostCalculable {
-    /// Cost of an image
-    public var cacheCost: Int64 { return lg.bytes }
-}
-
 private var imageFormatKey: Void?
 private var imageEditKey: Void?
 
@@ -96,4 +91,19 @@ extension LonginusExtension where Base == CGImagePropertyOrientation {
         default: return .up
         }
     }
+}
+
+/*
+ Represents types which cost in memory can be calculated.
+*/
+public protocol CacheCostCalculable {
+    var cacheCost: Int64 { get }
+}
+
+/*
+ Extension UIImage a variable to get it's bytes which cost in memory can be calculated.
+*/
+extension UIImage: CacheCostCalculable {
+    /// Cost of an image
+    public var cacheCost: Int64 { return lg.bytes }
 }

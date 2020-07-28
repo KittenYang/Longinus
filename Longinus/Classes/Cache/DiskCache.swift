@@ -214,7 +214,7 @@ extension DiskCache {
         }
         var filename: String? = nil
         if value.count > sizeThreshold {
-            filename = key.lg.sha256
+            filename = key.lg_sha256
         }
         _ = ioLock.lock()
         storage?.save(key: key, value: value, filename: filename)

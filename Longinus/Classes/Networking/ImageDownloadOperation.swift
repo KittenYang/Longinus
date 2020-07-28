@@ -107,7 +107,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         if cancelled || finished {
             if let url = request.url {
                 if !url.isFileURL && options.contains(.showNetworkActivity) {
-                    LonginusManager.decrementNetworkActivityCount()
+                    NetworkIndicatorManager.decrementNetworkActivityCount()
                 }
             }
             return
@@ -116,7 +116,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         dataTask?.resume()
         if let url = request.url {
             if !url.isFileURL && options.contains(.showNetworkActivity) {
-                LonginusManager.incrementNetworkActivityCount()
+                NetworkIndicatorManager.incrementNetworkActivityCount()
             }
         }
     }
@@ -127,7 +127,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         if finished {
             if let url = request.url {
                 if !url.isFileURL && options.contains(.showNetworkActivity) {
-                    LonginusManager.decrementNetworkActivityCount()
+                    NetworkIndicatorManager.decrementNetworkActivityCount()
                 }
             }
             return
@@ -142,7 +142,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         dataTask = nil
         if let url = request.url {
             if !url.isFileURL && options.contains(.showNetworkActivity) {
-                LonginusManager.decrementNetworkActivityCount()
+                NetworkIndicatorManager.decrementNetworkActivityCount()
             }
         }
         completion?()

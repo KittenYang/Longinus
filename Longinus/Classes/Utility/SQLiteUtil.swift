@@ -27,23 +27,8 @@
 
 import Foundation
 #if !USING_BUILTIN_SQLITE
-#if os(OSX)
-    import SQLiteMacOSX
-    #elseif os(iOS)
-#if (arch(i386) || arch(x86_64))
-    import SQLite3
-    #else
-    import SQLite3//SQLiteiPhoneOS
+import SQLite3
 #endif
-    #elseif os(watchOS)
-#if (arch(i386) || arch(x86_64))
-    import SQLiteWatchSimulator
-    #else
-    import SQLiteWatchOS
-#endif
-#endif
-#endif
-
 
 
 typealias sqlitedb = OpaquePointer

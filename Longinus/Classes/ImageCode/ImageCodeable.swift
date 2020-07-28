@@ -26,6 +26,7 @@
     
 
 import Foundation
+import UIKit
 import MobileCoreServices
 
 public protocol ImageCodeable: AnyObject {

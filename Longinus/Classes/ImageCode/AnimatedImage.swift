@@ -310,20 +310,9 @@ public class AnimatedImage: UIImage, AnimatedImageCodeable {
         NotificationCenter.default.removeObserver(self)
     }
     
-    public convenience init?(lg_data data: Data, decoder aDecoder: (ImageCodeable & AnimatedImageCodeable)? = nil) {
-        var tempDecoder = aDecoder
-        if tempDecoder == nil {
-            if let manager = LonginusManager.shared.imageCoder as? ImageCoderManager {
-                for coder in manager.coders {
-                    if let animatedCoder = coder as? (ImageCodeable & AnimatedImageCodeable),
-                        animatedCoder.canDecode(data) {
-                        tempDecoder = animatedCoder.copy() as? (ImageCodeable & AnimatedImageCodeable)
-                        break
-                    }
-                }
-            }
-        }
-        guard var currentDecoder = tempDecoder, currentDecoder.canDecode(data) else { return nil }
+    public convenience init?(lg_data data: Data, decoder aDecoder: (ImageCodeable & AnimatedImageCodeable)) {
+        var currentDecoder = aDecoder
+        guard currentDecoder.canDecode(data) else { return nil }
         currentDecoder.imageData = data
         let firstFrameBytes = currentDecoder.bytesPerFrame
         guard let firstFrame = currentDecoder.imageFrame(at: 0, decompress: true),

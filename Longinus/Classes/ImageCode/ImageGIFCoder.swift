@@ -85,7 +85,7 @@ extension ImageGIFCoder: ImageCodeable {
     }
     
     public func decodedImage(with data: Data) -> UIImage? {
-        var image = AnimatedImage(lg_data: data, decoder: copy() as? AnimatedImageCodeable & ImageCodeable)
+        var image = AnimatedImage(lg_data: data, decoder: (copy() as? AnimatedImageCodeable & ImageCodeable) ?? ImageGIFCoder())
         image?.lg.imageFormat = data.lg.imageFormat
         return image
     }

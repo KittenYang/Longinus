@@ -108,13 +108,6 @@ extension AutoTrimable {
 }
 
 /*
- Represents types which cost in memory can be calculated.
-*/
-public protocol CacheCostCalculable {
-    var cacheCost: Int64 { get }
-}
-
-/*
  Represents the expiration strategy used in storage.
  
  - never: The item never expires.
