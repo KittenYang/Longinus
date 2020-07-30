@@ -37,7 +37,7 @@ public class ImageLoadTask: NSObject { // If not subclass NSObject, there is mem
     }
     public let url: URL
     public let sentinel: Int32
-    public var downloadInfo: ImageDownloadInfo?
+    public var download: ImageDefaultDownload?
     public weak var imageManager: LonginusManager?
     private var cancelled: Bool
     private var lock: Mutex
@@ -59,9 +59,9 @@ public class ImageLoadTask: NSObject { // If not subclass NSObject, there is mem
         cancelled = true
         lock.unlock()
         
-        if let info = downloadInfo,
+        if let info = download,
             let downloader = imageManager?.imageDownloader {
-            downloader.cancel(info: info)
+            downloader.cancel(download: info)
         }
         imageManager?.remove(loadTask: self)
     }

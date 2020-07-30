@@ -6,21 +6,21 @@ PODS:
   - Kingfisher (5.14.1):
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
-  - Longinus (1.0.5):
-    - Longinus/General (= 1.0.5)
-  - Longinus/Cache (1.0.5):
+  - Longinus (1.0.6):
+    - Longinus/General (= 1.0.6)
+  - Longinus/Cache (1.0.6):
     - Longinus/Utility
-  - Longinus/General (1.0.5):
+  - Longinus/General (1.0.6):
     - Longinus/Cache
     - Longinus/ImageCode
     - Longinus/Networking
     - Longinus/Utility
-  - Longinus/ImageCode (1.0.5):
+  - Longinus/ImageCode (1.0.6):
     - Longinus/Utility
-  - Longinus/Networking (1.0.5):
+  - Longinus/Networking (1.0.6):
     - Longinus/Cache
     - Longinus/ImageCode
-  - Longinus/Utility (1.0.5)
+  - Longinus/Utility (1.0.6)
   - SDWebImage/Core (4.4.8)
   - SDWebImage/GIF (4.4.8):
     - FLAnimatedImage (~> 1.0)
@@ -58,12 +58,12 @@ SPEC CHECKSUMS:
   BBWebImage: f4a776ad47490ff8b3548ece265210165dde02f0
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
-  Longinus: c4318c9585a6821843f8715f6bd9241e573f0649
+  Longinus: a178d2584e5202e7cdacc9853449349f94a9c4f0
   SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: f017cddb8ebc9d8c52d10687e36cb05dbe7ca422
+PODFILE CHECKSUM: 8b391b00249d2d086fb348241424454732a21086
 
 COCOAPODS: 1.10.0.beta.1

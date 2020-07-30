@@ -224,13 +224,15 @@ class ImageWallCell: UICollectionViewCell {
         switch currentType {
         case .longinus:
             let radius: CGFloat = min(lgImageView.frame.width, lgImageView.frame.height)
-            let transformer = ImageTransformer.imageTransformerCommon(with: CGSize(width: radius, height: radius),
-                                                                      fillContentMode: .center,
-                                                                      corner: [.allCorners],
-                                                                      cornerRadius: 8.0,
-                                                                      borderWidth: 4.0,
-                                                                      borderColor: UIColor.white,
-                                                                      backgroundColor: UIColor.gray)
+            let transformer = ImageTransformer
+                .imageTransformerCommon(
+                    with: CGSize(width: radius, height: radius),
+                    fillContentMode: .center,
+                    corner: [.allCorners],
+                    cornerRadius: 8.0,
+                    borderWidth: 4.0,
+                    borderColor: UIColor.white,
+                    backgroundColor: UIColor.gray)
             lgImageView.lg.setImage(with: url, placeholder: placeholder, options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
         case .kingfisher:
             kfImageView.kf.setImage(with: url, placeholder: placeholder)

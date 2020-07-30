@@ -542,7 +542,7 @@ extension LonginusManager {
                                transformer: ImageTransformer?,
                                progress: ImageDownloaderProgressBlock?,
                                completion: @escaping ImageManagerCompletionBlock) {
-        task.downloadInfo = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
+        task.download = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
             guard let self = self, let task = task, !task.isCancelled else { return }
             if let currentData = data {
                 if options.contains(.retryFailedUrl) {
