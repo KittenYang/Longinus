@@ -30,17 +30,19 @@ import UIKit
 public protocol ImageDownloadOperateable: AnyObject {
     var url: URL { get }
     var dataTaskId: Int { get }
-    var downloadInfos: [ImageDownloadInfo] { get }
+    var downloads: [ImageDefaultDownload] { get }
     var imageCoder: ImageCodeable? { get set }
     var completion: (() -> Void)? { get set }
     
     init(request: URLRequest, session: URLSession, options: ImageOptions)
-    func add(info: ImageDownloadInfo)
+    func add(download: ImageDefaultDownload)
     func start()
     func cancel()
 }
 
-
+/**
+ A Image Download Operation runned in URLSession
+ */
 class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     
     var url: URL { return request.url! }
@@ -52,16 +54,23 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         return tid
     }
     
+    var downloads: [ImageDefaultDownload] {
+        downloadsLock.lock()
+        let currentTasks = _downloads
+        downloadsLock.unlock()
+        return currentTasks
+    }
+    
     weak var imageCoder: ImageCodeable?
-    private var imageProgressiveCoder: ImageProgressiveCodeable?
     
     var completion: (() -> Void)?
     
+    private var imageProgressiveCoder: ImageProgressiveCodeable?
     private let request: URLRequest
     private let session: URLSession
-    private var infos: [ImageDownloadInfo]
+    private var _downloads: [ImageDefaultDownload]
     private var dataTask: URLSessionTask?
-    private let taskLock: DispatchSemaphore
+    private let downloadsLock: DispatchSemaphore
     private let stateLock: DispatchSemaphore
     private var imageData: Data?
     private var expectedSize: Int
@@ -75,19 +84,12 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         return DispatchQueuePool.utility
     }()
     
-    var downloadInfos: [ImageDownloadInfo] {
-        taskLock.lock()
-        let currentTasks = infos
-        taskLock.unlock()
-        return currentTasks
-    }
-    
     required init(request: URLRequest, session: URLSession, options: ImageOptions) {
         self.request = request
         self.session = session
         self.options = options
-        infos = []
-        taskLock = DispatchSemaphore(value: 1)
+        _downloads = []
+        downloadsLock = DispatchSemaphore(value: 1)
         stateLock = DispatchSemaphore(value: 1)
         expectedSize = 0
         cancelled = false
@@ -95,10 +97,10 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         downloadFinished = false
     }
     
-    func add(info: ImageDownloadInfo) {
-        taskLock.lock()
-        infos.append(info)
-        taskLock.unlock()
+    func add(download: ImageDefaultDownload) {
+        downloadsLock.lock()
+        _downloads.append(download)
+        downloadsLock.unlock()
     }
     
     func start() {
@@ -150,6 +152,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     }
 }
 
+// MARK: - URLSessionTaskDelegate
 extension ImageDownloadOperation: URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -165,23 +168,22 @@ extension ImageDownloadOperation: URLSessionTaskDelegate {
                 complete(withData: nil, error: noDataError)
             }
         }
-        stateLock.unlock()
-        stateLock.lock()
         done()
         stateLock.unlock()
     }
     
     private func complete(withData data: Data?, error: Error?) {
-        taskLock.lock()
-        let currentInfos = infos
-        taskLock.unlock()
-        for info in currentInfos where !info.isCancelled {
-            info.completion(data, error)
+        downloadsLock.lock()
+        let currentDownloads = _downloads
+        downloadsLock.unlock()
+        for download in currentDownloads where !download.isCancelled {
+            download.completion(data, error)
         }
     }
     
 }
 
+// MARK: - URLSessionDataDelegate
 extension ImageDownloadOperation: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession,
@@ -236,14 +238,14 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
     private func progress(with data: Data?,
                           expectedSize: Int,
                           image: UIImage?) {
-        taskLock.lock()
-        let currentInfos = infos
-        taskLock.unlock()
+        if downloadFinished { return }
+        downloadsLock.lock()
+        let currentDownloads = _downloads
+        downloadsLock.unlock()
         stateLock.lock()
         defer { stateLock.unlock() }
-        if downloadFinished { return }
-        for info in currentInfos where !info.isCancelled {
-            info.progress?(data, expectedSize, image)
+        for download in currentDownloads where !download.isCancelled {
+            download.progress?(data, expectedSize, image)
         }
     }
     

@@ -59,7 +59,7 @@ public class MemoryCache<Key: Hashable, Value> {
     /**
      The lock to protect datas' safety
      */
-    fileprivate let lock = Mutex()
+    fileprivate let lock = UnfairLock()
     
     /**
      A serial queue to trim data every `autoTrimInterval` time.
@@ -95,7 +95,7 @@ public class MemoryCache<Key: Hashable, Value> {
     /**
      Determine whether should auto trim datas regularly
      */
-    var shouldAutoTrim: Bool {
+    var shouldAutoTrim: Bool = false {
         didSet {
             if oldValue == shouldAutoTrim { return }
             if shouldAutoTrim {
@@ -125,7 +125,11 @@ public class MemoryCache<Key: Hashable, Value> {
     This is not a strict limit—if the cache goes over the limit, some objects in the
     cache could be evicted later in backgound thread.
     */
-    public var countLimit = Int32.max
+    public var countLimit = Int32.max {
+        didSet {
+            setCountLimit(countLimit)
+        }
+    }
     
     /**
     The maximum total cost that the cache can hold before it starts evicting objects.
@@ -134,7 +138,11 @@ public class MemoryCache<Key: Hashable, Value> {
     This is not a strict limit—if the cache goes over the limit, some objects in the
     cache could be evicted later in backgound thread.
     */
-    public var costLimit = Int32.max
+    public var costLimit = Int32.max {
+        didSet {
+            setCostLimit(costLimit)
+        }
+    }
     
     /**
     The age of objects in cache.
@@ -143,7 +151,11 @@ public class MemoryCache<Key: Hashable, Value> {
     This is not a strict limit—if an object goes over the limit, the object could
     be evicted later in backgound thread.
     */
-    public var ageLimit: CacheAge = .never
+    public var ageLimit: CacheAge = .never {
+        didSet {
+            setAgeLimit(ageLimit)
+        }
+    }
     
     /**
     The auto trim check time interval in seconds. Default is 5.0.
@@ -151,7 +163,11 @@ public class MemoryCache<Key: Hashable, Value> {
     The cache holds an internal timer to check whether the cache reaches
     its limits, and if the limit is reached, it begins to evict objects.
     */
-    public var autoTrimInterval = TimeInterval(5)
+    public var autoTrimInterval = TimeInterval(5) {
+        didSet {
+            self.shouldAutoTrim = self.autoTrimInterval > 0
+        }
+    }
     
     /**
     If `true`, the cache will remove all objects when the app receives a memory warning.
@@ -199,14 +215,11 @@ public class MemoryCache<Key: Hashable, Value> {
         self.costLimit = costLimit
         self.ageLimit = ageLimit
         self.autoTrimInterval = autoTrimInterval
-        self.shouldAutoTrim = self.autoTrimInterval > 0
         
         #if os(iOS)
         NotificationCenter.default.addObserver(self, selector: #selector(MemoryCache.appDidEnterBackgroundNotification(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MemoryCache.appDidReceiveMemoryWarningNotification(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         #endif
-        
-        if shouldAutoTrim { autoTrim() }
     }
     
     deinit {
@@ -365,11 +378,21 @@ extension MemoryCache: MemoryCacheable {
     }
     
     /**
+     Remove the lastest used value.
+     */
+    private func removeLast() {
+        lock.lock()
+        self.lru.removeTailNode()
+        lock.unlock()
+    }
+    
+    //MARK: Private methods
+    
+    /**
      Set the costLimit. Also will trigger `trimToCost` methods.
      */
-    public func setCostLimit(_ cost: Int32) {
+    private func setCostLimit(_ cost: Int32) {
         lock.lock()
-        self.costLimit = cost
         self.trimQueue.async { [weak self] in
             self?.trimToCost(cost)
         }
@@ -379,9 +402,8 @@ extension MemoryCache: MemoryCacheable {
     /**
      Set the countLimit. Also will trigger `trimToCount` methods.
      */
-    public func setCountLimit(_ count: Int32) {
+    private func setCountLimit(_ count: Int32) {
         lock.lock()
-        self.countLimit = count
         self.trimQueue.async { [weak self] in
             self?.trimToCount(count)
         }
@@ -391,23 +413,14 @@ extension MemoryCache: MemoryCacheable {
     /**
      Set the ageLimit. Also will trigger `trimToAge` methods.
      */
-    public func setAgeLimit(_ age: CacheAge) {
+    private func setAgeLimit(_ age: CacheAge) {
         lock.lock()
-        self.ageLimit = age
         self.trimQueue.async { [weak self] in
             self?.trimToAge(age)
         }
         lock.unlock()
     }
     
-    /**
-     Remove the lastest used value.
-     */
-    private func removeLast() {
-        lock.lock()
-        self.lru.removeTailNode()
-        lock.unlock()
-    }
 }
 
 extension MemoryCache: AutoTrimable {
@@ -433,7 +446,7 @@ extension MemoryCache: AutoTrimable {
         var buffer = [Node]()
         var finish = false
         while !finish {
-            if lock.trylock() == 0 {
+            if lock.trylock() {
                 if lru.totalCount > count,
                     let tail = lru.removeTailNode() {
                     buffer.append(tail)
@@ -442,7 +455,7 @@ extension MemoryCache: AutoTrimable {
                 }
                 lock.unlock()
             } else {
-                usleep(10 * 1000)
+                usleep(10 * 1000) //10 ms. if trylock failed, reduce `do-while` times to prevent cpu wastage
             }
         }
         
@@ -475,7 +488,7 @@ extension MemoryCache: AutoTrimable {
         var buffer = [Node]()
         var finish = false
         while !finish {
-            if lock.trylock() == 0 {
+            if lock.trylock() {
                 if lru.totalCost >= cost,
                     let tail = lru.removeTailNode() {
                     buffer.append(tail)
@@ -484,7 +497,7 @@ extension MemoryCache: AutoTrimable {
                 }
                 lock.unlock()
             } else {
-                usleep(10 * 1000)
+                usleep(10 * 1000) //10 ms. if trylock failed, reduce `do-while` times to prevent cpu wastage
             }
         }
         
@@ -524,7 +537,7 @@ extension MemoryCache: AutoTrimable {
         var buffer = [Node]()
         var finish = false
         while !finish {
-            if lock.trylock() == 0 {
+            if lock.trylock() {
                 guard let tail = lru.tail else {
                     lock.unlock()
                     return
@@ -537,7 +550,7 @@ extension MemoryCache: AutoTrimable {
                 }
                 lock.unlock()
             } else {
-                usleep(10 * 1000)
+                usleep(10 * 1000) //10 ms. If trylock failed, reduce `do-while` times to prevent cpu wastage
             }
         }
         
