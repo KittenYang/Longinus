@@ -34,7 +34,7 @@ public protocol ImageDownloadOperateable: AnyObject {
     var imageCoder: ImageCodeable? { get set }
     var completion: (() -> Void)? { get set }
     
-    init(request: URLRequest, session: URLSession, options: ImageOptions)
+    init(request: URLRequest, session: URLSession, options: LonginusImageOptions?)
     func add(download: ImageDefaultDownload)
     func start()
     func cancel()
@@ -43,31 +43,33 @@ public protocol ImageDownloadOperateable: AnyObject {
 /**
  A Image Download Operation runned in URLSession
  */
-class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
+public class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     
-    var url: URL { return request.url! }
+    public var url: URL { return request.url! }
     
-    var dataTaskId: Int {
+    public var dataTaskId: Int {
         stateLock.lock()
         let tid = dataTask?.taskIdentifier ?? 0
         stateLock.unlock()
         return tid
     }
     
-    var downloads: [ImageDefaultDownload] {
+    public var downloads: [ImageDefaultDownload] {
         downloadsLock.lock()
         let currentTasks = _downloads
         downloadsLock.unlock()
         return currentTasks
     }
+
+    public var options: LonginusImageOptions?
     
-    weak var imageCoder: ImageCodeable?
+    public weak var imageCoder: ImageCodeable?
     
-    var completion: (() -> Void)?
+    public var completion: (() -> Void)?
     
     private var imageProgressiveCoder: ImageProgressiveCodeable?
     private let request: URLRequest
-    private let session: URLSession
+    private weak var session: URLSession?
     private var _downloads: [ImageDefaultDownload]
     private var dataTask: URLSessionTask?
     private let downloadsLock: DispatchSemaphore
@@ -78,13 +80,16 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
     private var cancelled: Bool
     private var finished: Bool
     private var downloadFinished: Bool
-    private var options: ImageOptions
     
     private lazy var progressiveCoderQueue: DispatchQueuePool = {
         return DispatchQueuePool.utility
     }()
     
-    required init(request: URLRequest, session: URLSession, options: ImageOptions) {
+    private lazy var imageOptionsInfo: LonginusParsedImageOptionsInfo = {
+        return LonginusParsedImageOptionsInfo(self.options)
+    }()
+    
+    required public init(request: URLRequest, session: URLSession, options: LonginusImageOptions?) {
         self.request = request
         self.session = session
         self.options = options
@@ -97,38 +102,38 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         downloadFinished = false
     }
     
-    func add(download: ImageDefaultDownload) {
+    public func add(download: ImageDefaultDownload) {
         downloadsLock.lock()
         _downloads.append(download)
         downloadsLock.unlock()
     }
     
-    func start() {
+    public func start() {
         stateLock.lock()
         defer { stateLock.unlock() }
         if cancelled || finished {
             if let url = request.url {
-                if !url.isFileURL && options.contains(.showNetworkActivity) {
+                if !url.isFileURL && imageOptionsInfo.showNetworkActivity {
                     NetworkIndicatorManager.decrementNetworkActivityCount()
                 }
             }
             return
         } // Completion call back will not be called when task is cancelled
-        dataTask = session.dataTask(with: request)
+        dataTask = session?.dataTask(with: request)
         dataTask?.resume()
         if let url = request.url {
-            if !url.isFileURL && options.contains(.showNetworkActivity) {
+            if !url.isFileURL && imageOptionsInfo.showNetworkActivity {
                 NetworkIndicatorManager.incrementNetworkActivityCount()
             }
         }
     }
     
-    func cancel() {
+    public func cancel() {
         stateLock.lock()
         defer { stateLock.unlock() }
         if finished {
             if let url = request.url {
-                if !url.isFileURL && options.contains(.showNetworkActivity) {
+                if !url.isFileURL && imageOptionsInfo.showNetworkActivity {
                     NetworkIndicatorManager.decrementNetworkActivityCount()
                 }
             }
@@ -143,7 +148,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
         finished = true
         dataTask = nil
         if let url = request.url {
-            if !url.isFileURL && options.contains(.showNetworkActivity) {
+            if !url.isFileURL && imageOptionsInfo.showNetworkActivity {
                 NetworkIndicatorManager.decrementNetworkActivityCount()
             }
         }
@@ -155,7 +160,7 @@ class ImageDownloadOperation: NSObject, ImageDownloadOperateable {
 // MARK: - URLSessionTaskDelegate
 extension ImageDownloadOperation: URLSessionTaskDelegate {
     
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         stateLock.lock()
         downloadFinished = true
         if error != nil {
@@ -186,7 +191,7 @@ extension ImageDownloadOperation: URLSessionTaskDelegate {
 // MARK: - URLSessionDataDelegate
 extension ImageDownloadOperation: URLSessionDataDelegate {
     
-    func urlSession(_ session: URLSession,
+    public func urlSession(_ session: URLSession,
                     dataTask: URLSessionDataTask,
                     didReceive response: URLResponse,
                     completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
@@ -200,7 +205,7 @@ extension ImageDownloadOperation: URLSessionDataDelegate {
         }
     }
     
-    func urlSession(_ session: URLSession,
+    public func urlSession(_ session: URLSession,
                     dataTask: URLSessionDataTask,
                     didReceive data: Data) {
         if imageData == nil { imageData = Data(capacity: expectedSize) }
