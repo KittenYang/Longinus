@@ -66,6 +66,35 @@ public class LonginusManager {
     public private(set) var preloadTasks: [String: ImageLoadTask]
     
     /**
+     Default options used by the manager. This option will be used in
+     LonginusManager related methods, as well as all view extension methods.
+     You can also passing other options for each image task by sending an `options` parameter
+     to Longinus's APIs. The per image options will overwrite the default ones,
+     if the option exists in both.
+     */
+    public var defaultOptions = LonginusImageOptions.empty
+    
+    /**
+     Return the current tasks count
+     */
+    public var currentTaskCount: Int {
+        taskLock.lock()
+        let count = self.tasks.count
+        taskLock.unlock()
+        return count
+    }
+    
+    /**
+     Return the current preload tasks count
+     */
+    public var currentPreloadTaskCount: Int {
+        taskLock.lock()
+        let count = self.preloadTasks.count
+        taskLock.unlock()
+        return count
+    }
+    
+    /**
      The queue for image coding and caching.
      This queue handled by `DispatchQueuePool`. Check this class for more details.
      */
@@ -102,25 +131,6 @@ public class LonginusManager {
      */
     private var urlBlacklist: Set<URL>
     
-    /**
-     Return the current tasks count
-     */
-    public var currentTaskCount: Int {
-        taskLock.lock()
-        let count = self.tasks.count
-        taskLock.unlock()
-        return count
-    }
-    
-    /**
-     Return the current preload tasks count
-     */
-    public var currentPreloadTaskCount: Int {
-        taskLock.lock()
-        let count = self.preloadTasks.count
-        taskLock.unlock()
-        return count
-    }
     
     /**
      The convenience initialize method to generate a manager
@@ -169,17 +179,19 @@ public class LonginusManager {
      */
     @discardableResult
     public func loadImage(with resource: ImageWebCacheResourceable,
-                          options: ImageOptions = .none,
+                          options: LonginusImageOptions? = nil,
                           transformer: ImageTransformer? = nil,
                           progress: ImageDownloaderProgressBlock? = nil,
                           completion: @escaping ImageManagerCompletionBlock) -> ImageLoadTask {
         let task = newLoadTask(url: resource.downloadUrl)
+        let options = defaultOptions + (options ?? .empty)
+        let optionsInfo = LonginusParsedImageOptionsInfo(options)
         taskLock.lock()
         self.tasks.insert(task)
-        if options.contains(.preload) { self.preloadTasks[resource.cacheKey] = task }
+        if optionsInfo.preload { self.preloadTasks[resource.cacheKey] = task }
         taskLock.unlock()
         
-        if !options.contains(.retryFailedUrl) {
+        if !optionsInfo.retryFailedUrl {
             var inBlacklist: Bool = false
             urlBlacklistLock.lock()
             inBlacklist = self.urlBlacklist.contains(resource.downloadUrl)
@@ -192,7 +204,7 @@ public class LonginusManager {
             }
         }
         
-        if options.contains(.refreshCache) {
+        if optionsInfo.refreshCache {
             downloadImage(with: resource,
                           options: options,
                           task: task,
@@ -214,7 +226,7 @@ public class LonginusManager {
         }
         var finished = false
         if let currentImage = memoryImage {
-            if options.contains(.preload) {
+            if optionsInfo.preload {
                 complete(with: task,
                          completion: completion,
                          image: currentImage,
@@ -222,7 +234,7 @@ public class LonginusManager {
                          cacheType: .memory)
                 remove(loadTask: task)
                 finished = true
-            } else if !options.contains(.queryDataWhenInMemory) {
+            } else if !optionsInfo.queryDataWhenInMemory {
                 if var animatedImage = currentImage as? AnimatedImage {
                     animatedImage.lg.transformer = transformer
                     complete(with: task,
@@ -278,14 +290,16 @@ public class LonginusManager {
         }
         if finished { return task }
         
-        if options.contains(.ignoreDiskCache) || resource.downloadUrl.isFileURL {
+        if optionsInfo.ignoreDiskCache || resource.downloadUrl.isFileURL {
+            var mutableOptions = options
+            mutableOptions.append(.ignoreDiskCache)
             downloadImage(with: resource,
-                          options: options.union(.ignoreDiskCache),
+                          options: mutableOptions,
                           task: task,
                           transformer: transformer,
                           progress: progress,
                           completion: completion)
-        } else if options.contains(.preload) {
+        } else if optionsInfo.preload {
             // Check whether disk data exists
             self.imageCacher?.diskDataExists(forKey: resource.cacheKey) { [weak self] (exists) in
                 if exists {
@@ -311,7 +325,7 @@ public class LonginusManager {
                 switch result {
                 case let .disk(data: data):
                     self.handle(imageData: data,
-                                options: options,
+                                optionsInfo: optionsInfo,
                                 cacheType: (memoryImage != nil ? .all : .disk),
                                 forTask: task,
                                 resource: resource,
@@ -351,7 +365,7 @@ public class LonginusManager {
      */
     @discardableResult
     public func preload(_ resources: [ImageWebCacheResourceable],
-                        options: ImageOptions = .none,
+                        options: LonginusImageOptions? = nil,
                         progress: ImagePreloadProgress? = nil,
                         completion: ImagePreloadCompletion? = nil) -> [ImageLoadTask] {
         cancelPreloading()
@@ -361,9 +375,17 @@ public class LonginusManager {
         var successCount = 0
         var tasks: [ImageLoadTask] = []
         for resource in resources {
-            var currentOptions: ImageOptions = .preload
-            if options.contains(.useURLCache) { currentOptions.insert(.useURLCache) }
-            if options.contains(.handleCookies) { currentOptions.insert(.handleCookies) }
+            let options = defaultOptions + (options ?? .empty)
+            let optionInfo = LonginusParsedImageOptionsInfo(options)
+            var currentOptions: LonginusImageOptions = [.preload]
+            if optionInfo.useURLCache { currentOptions += [.useURLCache] }
+            if optionInfo.handleCookies { currentOptions += [.handleCookies] }
+            if let httpHeadersModifier = optionInfo.httpHeadersModifier {
+                currentOptions += [.httpHeadersModifier(httpHeadersModifier)]
+            }
+            if let requestModifier = optionInfo.requestModifier {
+                currentOptions += [.requestModifier(requestModifier)]
+            }
             let task = loadImage(with: resource, options: currentOptions) { (_, _, error, _) in
                 finishCount += 1
                 if error == nil { successCount += 1 }
@@ -436,13 +458,13 @@ extension LonginusManager {
     }
     
     private func handle(imageData data: Data,
-                        options: ImageOptions,
+                        optionsInfo: LonginusParsedImageOptionsInfo,
                         cacheType: ImageCacheType,
                         forTask task: ImageLoadTask,
                         resource: ImageWebCacheResourceable,
                         transformer: ImageTransformer?,
                         completion: @escaping ImageManagerCompletionBlock) {
-        if options.contains(.preload) {
+        if optionsInfo.preload {
             complete(with: task,
                      completion: completion,
                      image: nil,
@@ -459,8 +481,8 @@ extension LonginusManager {
             var decodedImage = self.imageCoder.decodedImage(with: data)
             if let currentTransformer = transformer {
                 if let animatedImage = decodedImage as? AnimatedImage {
-                    if options.contains(.ignoreAnimatedImage) {
-                        decodedImage = animatedImage.imageFrame(at: 0, decompress: !options.contains(.ignoreImageDecoding))
+                    if optionsInfo.ignoreAnimatedImage {
+                        decodedImage = animatedImage.imageFrame(at: 0, decompress: !optionsInfo.ignoreImageDecoding)
                     }
                 }
                 if var animatedImage = decodedImage as? AnimatedImage {
@@ -470,7 +492,7 @@ extension LonginusManager {
                                   image: animatedImage,
                                   data: data,
                                   cacheType: cacheType)
-                    let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
+                    let storeCacheType: ImageCacheType = (cacheType == .disk || optionsInfo.ignoreDiskCache ? .memory : .all)
                     self.imageCacher?.store(animatedImage,
                                             data: data,
                                             forKey: resource.cacheKey,
@@ -486,7 +508,7 @@ extension LonginusManager {
                                       image: image,
                                       data: data,
                                       cacheType: cacheType)
-                        let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
+                        let storeCacheType: ImageCacheType = (cacheType == .disk || optionsInfo.ignoreDiskCache ? .memory : .all)
                         self.imageCacher?.store(image,
                                                 data: data,
                                                 forKey: resource.cacheKey,
@@ -504,12 +526,12 @@ extension LonginusManager {
                     self.complete(with: task, completion: completion, error: NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid image data"]))
                 }
             } else if var image = decodedImage {
-                if !options.contains(.ignoreImageDecoding),
+                if !optionsInfo.ignoreImageDecoding,
                     let decompressedImage = self.imageCoder.decompressedImage(with: image, data: data) {
                     image = decompressedImage
                 }
-                if let animatedImage = image as? AnimatedImage, options.contains(.ignoreAnimatedImage) {
-                    if let firstFrame = animatedImage.imageFrame(at: 0, decompress: !options.contains(.ignoreImageDecoding)) {
+                if let animatedImage = image as? AnimatedImage, optionsInfo.ignoreAnimatedImage {
+                    if let firstFrame = animatedImage.imageFrame(at: 0, decompress: !optionsInfo.ignoreImageDecoding) {
                         image = firstFrame
                     }
                 }
@@ -518,7 +540,7 @@ extension LonginusManager {
                               image: image,
                               data: data,
                               cacheType: cacheType)
-                let storeCacheType: ImageCacheType = (cacheType == .disk || options.contains(.ignoreDiskCache) ? .memory : .all)
+                let storeCacheType: ImageCacheType = (cacheType == .disk || optionsInfo.ignoreDiskCache ? .memory : .all)
                 self.imageCacher?.store(image,
                                         data: data,
                                         forKey: resource.cacheKey,
@@ -537,21 +559,22 @@ extension LonginusManager {
     }
     
     private func downloadImage(with resource: ImageWebCacheResourceable,
-                               options: ImageOptions,
+                               options: LonginusImageOptions?,
                                task: ImageLoadTask,
                                transformer: ImageTransformer?,
                                progress: ImageDownloaderProgressBlock?,
                                completion: @escaping ImageManagerCompletionBlock) {
         task.download = self.imageDownloader.downloadImage(with: resource.downloadUrl, options: options, progress: progress) { [weak self, weak task] (data: Data?, error: Error?) in
             guard let self = self, let task = task, !task.isCancelled else { return }
+            let optionsInfo = LonginusParsedImageOptionsInfo(options)
             if let currentData = data {
-                if options.contains(.retryFailedUrl) {
+                if optionsInfo.retryFailedUrl {
                     self.urlBlacklistLock.lock()
                     self.urlBlacklist.remove(resource.downloadUrl)
                     self.urlBlacklistLock.unlock()
                 }
                 self.handle(imageData: currentData,
-                            options: options,
+                            optionsInfo: optionsInfo,
                             cacheType: .none,
                             forTask: task,
                             resource: resource,

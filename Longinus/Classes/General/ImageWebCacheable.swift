@@ -36,7 +36,7 @@ public let LonginusImageFadeAnimationKey: String = "LonginusImageFadeAnimationKe
 public protocol ImageWebCacheable: AnyObject {
     func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
-                  options: ImageOptions,
+                  options: LonginusImageOptions?,
                   transformer: ImageTransformer?,
                   taskKey: String,
                   setShowTransition: @escaping LonginusSetShowTransitionBlock,
@@ -55,7 +55,7 @@ public extension ImageWebCacheable {
         
     func setImage(with resource: ImageWebCacheResourceable?,
                   placeholder: UIImage?,
-                  options: ImageOptions,
+                  options: LonginusImageOptions?,
                   transformer: ImageTransformer?,
                   taskKey: String,
                   setShowTransition:@escaping LonginusSetShowTransitionBlock,
@@ -72,14 +72,15 @@ public extension ImageWebCacheable {
             }
             return
         }
-        if !options.contains(.ignorePlaceholder) {
+        let optionInfo = LonginusParsedImageOptionsInfo(options)
+        if !optionInfo.ignorePlaceholder {
             DispatchQueue.main.lg.safeSync { [weak self] in
                 if self != nil { setImage(placeholder) }
             }
         }
         var currentProgress = progress
         var sentinel: Int32 = 0
-        if options.contains(.progressiveDownload) || options.contains(.progressiveBlur) {
+        if optionInfo.progressiveDownload || optionInfo.progressiveBlur {
             currentProgress = { [weak self] (data, expectedSize, image) in
                 guard let self = self else { return }
                 guard let partialData = data,
@@ -94,12 +95,12 @@ public extension ImageWebCacheable {
                     currentImage.lg.lgImageEditKey = currentTransformer.key
                     currentImage.lg.imageFormat = partialData.lg.imageFormat
                     displayImage = currentImage
-                } else if !options.contains(.ignoreImageDecoding),
+                } else if !optionInfo.ignoreImageDecoding,
                     let currentImage = LonginusManager.shared.imageCoder.decompressedImage(with: partialImage, data: partialData) {
                     displayImage = currentImage
                 }
                 let downloadProgress = min(1, Double(partialData.count) / Double(expectedSize))
-                if options.contains(.progressiveBlur) {
+                if optionInfo.progressiveBlur {
                     webCacheOperation.progressiveDisplayCount += 1
                     var radius: CGFloat = 32
                     if expectedSize > 0 {
@@ -136,7 +137,7 @@ public extension ImageWebCacheable {
         let task = LonginusManager.shared.loadImage(with: resource, options: options, transformer: transformer, progress: currentProgress) { [weak self] (image: UIImage?, data: Data?, error: Error?, cacheType: ImageCacheType) in
             guard let self = self else { return }
             if let currentImage = image {
-                if options.contains(.imageWithFadeAnimation), let webCacheOperationTask = self.webCacheOperation.task(forKey: taskKey), webCacheOperationTask.sentinel == sentinel {
+                if optionInfo.imageWithFadeAnimation, let webCacheOperationTask = self.webCacheOperation.task(forKey: taskKey), webCacheOperationTask.sentinel == sentinel {
                     setShowTransition(currentImage)
                 }
                 setImage(currentImage)

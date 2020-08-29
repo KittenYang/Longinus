@@ -37,7 +37,7 @@ extension LonginusExtension where Base: UIButton {
     public func setImage(with resource: ImageWebCacheResourceable?,
                          forState state: UIControl.State,
                          placeholder: UIImage? = nil,
-                         options: ImageOptions = .none,
+                         options: LonginusImageOptions? = nil,
                          transformer: ImageTransformer? = nil,
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
@@ -79,7 +79,7 @@ extension LonginusExtension where Base: UIButton {
     public func setBackgroundImage(with resource: ImageWebCacheResourceable,
                                    forState state: UIControl.State,
                                    placeholder: UIImage? = nil,
-                                   options: ImageOptions = .none,
+                                   options: LonginusImageOptions? = nil,
                                    transformer: ImageTransformer? = nil,
                                    progress: ImageDownloaderProgressBlock? = nil,
                                    completion: ImageManagerCompletionBlock? = nil) {

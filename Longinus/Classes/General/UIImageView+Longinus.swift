@@ -31,7 +31,7 @@ extension UIImageView: ImageWebCacheable {}
 extension LonginusExtension where Base: UIImageView {
     public func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
-                         options: ImageOptions = .none,
+                         options: LonginusImageOptions? = nil,
                          transformer: ImageTransformer? = nil,
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
@@ -66,7 +66,7 @@ extension LonginusExtension where Base: UIImageView {
     
     public func setHighlightedImage(with resource: ImageWebCacheResourceable,
                                     placeholder: UIImage? = nil,
-                                    options: ImageOptions = .none,
+                                    options: LonginusImageOptions? = nil,
                                     transformer: ImageTransformer? = nil,
                                     progress: ImageDownloaderProgressBlock? = nil,
                                     completion: ImageManagerCompletionBlock? = nil) {

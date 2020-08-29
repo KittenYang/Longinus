@@ -33,13 +33,17 @@
 		5F59D3FE24C847E400E8964B /* LonginusPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3FD24C847E400E8964B /* LonginusPrint.swift */; };
 		5F7B29CA24D1419F0073E0D7 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7B29C924D1419F0073E0D7 /* UnfairLock.swift */; };
 		5F8528FC24C97819003B30D3 /* LinkedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8528FB24C97819003B30D3 /* LinkedMap.swift */; };
+		5F9FDE1F24FA8D780058FD84 /* LonginusImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */; };
+		5F9FDE2124FA8DA70058FD84 /* ImageDownloadRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */; };
+		5F9FDE2324FAB7790058FD84 /* ImageDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */; };
+		5F9FDE2524FABC270058FD84 /* ImageDownloadRedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */; };
+		5F9FDE2724FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */; };
 		5FADC52F24D00896000240DD /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC52E24D00896000240DD /* DispatchSemaphore.swift */; };
 		5FADC53124D00A4B000240DD /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53024D00A4B000240DD /* ImageCacher.swift */; };
 		5FADC53324D00B70000240DD /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53224D00B70000240DD /* StringExtension.swift */; };
 		5FADC53524D00DF0000240DD /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53424D00DF0000240DD /* LonginusCompatible.swift */; };
 		5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53C24D00FBD000240DD /* UIViewExtension.swift */; };
 		5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53E24D01056000240DD /* DeviceExtension.swift */; };
-		5FADC57F24D0169B000240DD /* ImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57524D0169B000240DD /* ImageOptions.swift */; };
 		5FADC58024D0169B000240DD /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57624D0169B000240DD /* Image.swift */; };
 		5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57724D0169B000240DD /* ImageTransformer.swift */; };
 		5FADC58224D0169B000240DD /* ImageCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57824D0169B000240DD /* ImageCodeable.swift */; };
@@ -110,13 +114,17 @@
 		5F59D3FD24C847E400E8964B /* LonginusPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonginusPrint.swift; sourceTree = "<group>"; };
 		5F7B29C924D1419F0073E0D7 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		5F8528FB24C97819003B30D3 /* LinkedMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedMap.swift; sourceTree = "<group>"; };
+		5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusImageOptions.swift; sourceTree = "<group>"; };
+		5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadRequestModifier.swift; sourceTree = "<group>"; };
+		5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadSessionDelegate.swift; sourceTree = "<group>"; };
+		5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadRedirectHandler.swift; sourceTree = "<group>"; };
+		5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationChallengeResponsable.swift; sourceTree = "<group>"; };
 		5FADC52E24D00896000240DD /* DispatchSemaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSemaphore.swift; sourceTree = "<group>"; };
 		5FADC53024D00A4B000240DD /* ImageCacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacher.swift; sourceTree = "<group>"; };
 		5FADC53224D00B70000240DD /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		5FADC53424D00DF0000240DD /* LonginusCompatible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
 		5FADC53C24D00FBD000240DD /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		5FADC53E24D01056000240DD /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceExtension.swift; sourceTree = "<group>"; };
-		5FADC57524D0169B000240DD /* ImageOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptions.swift; sourceTree = "<group>"; };
 		5FADC57624D0169B000240DD /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		5FADC57724D0169B000240DD /* ImageTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTransformer.swift; sourceTree = "<group>"; };
 		5FADC57824D0169B000240DD /* ImageCodeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCodeable.swift; sourceTree = "<group>"; };
@@ -248,6 +256,10 @@
 				B6D44EA1DDB33D08D07E551644FDE752 /* ImageDownloadOperationQueue.swift */,
 				81BBE279FC910081C5E5B2843A63998A /* ImageWebCacheResourceable.swift */,
 				5F04639324D01BD8007452D8 /* NetworkIndicatorManager.swift */,
+				5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */,
+				5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */,
+				5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */,
+				5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */,
 			);
 			name = Networking;
 			path = Longinus/Classes/Networking;
@@ -278,7 +290,6 @@
 		5FADC57424D0169B000240DD /* ImageCode */ = {
 			isa = PBXGroup;
 			children = (
-				5FADC57524D0169B000240DD /* ImageOptions.swift */,
 				5FADC57624D0169B000240DD /* Image.swift */,
 				5FADC57724D0169B000240DD /* ImageTransformer.swift */,
 				5FADC57824D0169B000240DD /* ImageCodeable.swift */,
@@ -360,6 +371,7 @@
 		DD27FE7B82690D98B0A877FCBB58B1C9 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */,
 				5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */,
 				5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */,
 				5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */,
@@ -542,6 +554,7 @@
 			files = (
 				5F04639A24D01CE3007452D8 /* UIImageView+Longinus.swift in Sources */,
 				5F59D3B924C4974600E8964B /* MemoryCache.swift in Sources */,
+				5F9FDE2724FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift in Sources */,
 				E8DBEB74175E89B6ECDE703BD1F48723 /* Box.swift in Sources */,
 				125FE30303724E5DFF2F379E02AA8FAE /* DispatchQueuePool.swift in Sources */,
 				5FADC58524D0169B000240DD /* ImageCoderManager.swift in Sources */,
@@ -554,10 +567,12 @@
 				5FADC58024D0169B000240DD /* Image.swift in Sources */,
 				5F59D3BA24C4974600E8964B /* DiskCache.swift in Sources */,
 				19F5AB12B6A03AB50EE298D1349B76CF /* ImageDownloadOperation.swift in Sources */,
+				5F9FDE2124FA8DA70058FD84 /* ImageDownloadRequestModifier.swift in Sources */,
 				051A2BF82490E72CDBA70A18230991E8 /* ImageDownloadOperationQueue.swift in Sources */,
 				5F7B29CA24D1419F0073E0D7 /* UnfairLock.swift in Sources */,
 				5FADC58824D0169B000240DD /* ImageGIFCoder.swift in Sources */,
 				5F59D3FE24C847E400E8964B /* LonginusPrint.swift in Sources */,
+				5F9FDE2324FAB7790058FD84 /* ImageDownloadSessionDelegate.swift in Sources */,
 				5FADC58724D0169B000240DD /* ImageIOCoder.swift in Sources */,
 				5F04639224D01B23007452D8 /* ImageWebCacheable.swift in Sources */,
 				5FADC58224D0169B000240DD /* ImageCodeable.swift in Sources */,
@@ -566,6 +581,7 @@
 				5F04639924D01CE3007452D8 /* CALayer+Longinus.swift in Sources */,
 				B8B0641A1C4A80D474546D18964D63AA /* ImageWebCacheResourceable.swift in Sources */,
 				5F04639424D01BD8007452D8 /* NetworkIndicatorManager.swift in Sources */,
+				5F9FDE1F24FA8D780058FD84 /* LonginusImageOptions.swift in Sources */,
 				93956713A6766EFF2C02A705EFE6C9EE /* Longinus-dummy.m in Sources */,
 				5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */,
 				5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */,
@@ -577,9 +593,9 @@
 				504867C41F27E7DDC6041621D8903D5B /* LonginusWeakProxy.swift in Sources */,
 				5F8528FC24C97819003B30D3 /* LinkedMap.swift in Sources */,
 				5ECFEB622171EFC172DE5415B777E6E5 /* Runtime.swift in Sources */,
-				5FADC57F24D0169B000240DD /* ImageOptions.swift in Sources */,
 				5F59D3B624C4974600E8964B /* KVStorage.swift in Sources */,
 				5FADC53124D00A4B000240DD /* ImageCacher.swift in Sources */,
+				5F9FDE2524FABC270058FD84 /* ImageDownloadRedirectHandler.swift in Sources */,
 				5F04639124D01B23007452D8 /* ImageLoadTask.swift in Sources */,
 				5F59D3B824C4974600E8964B /* Cacheable.swift in Sources */,
 			);

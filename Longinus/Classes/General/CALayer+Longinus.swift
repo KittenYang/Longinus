@@ -34,7 +34,7 @@ extension LonginusExtension where Base: CALayer {
     
     public func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
-                         options: ImageOptions = .none,
+                         options: LonginusImageOptions? = nil,
                          transformer: ImageTransformer? = nil,
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {

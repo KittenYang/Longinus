@@ -48,7 +48,7 @@ public protocol ImageDownloadable: AnyObject {
         - completion: The image download completion handler
      */
     func downloadImage(with url: URL,
-                       options: ImageOptions,
+                       options: LonginusImageOptions?,
                        progress: ImageDownloaderProgressBlock?,
                        completion: @escaping ImageDownloaderCompletionBlock) -> ImageDefaultDownload
     
@@ -96,19 +96,35 @@ public class ImageDefaultDownload {
 }
 
 public class ImageDownloader {
+    
+    /// The duration before the downloading is timeout. Default is 15 seconds.
     public var donwloadTimeout: TimeInterval
+    
+    /// Whether the download requests should use pipeline or not. Default is true.
+    public var requestsUsePipelining = true
     
     /**
      Weak refrense to imageCoder. Set to `ImageDownloadOperateable`(e.g. ImageDownloadOperation) to progressive coding downloading image.
      */
     public weak var imageCoder: ImageCodeable?
 
+    /**
+     Lazy var to generate `ImageDefaultDownload`
+     */
     public lazy var generateDownload: (URL, ImageDownloaderProgressBlock?, @escaping ImageDownloaderCompletionBlock) -> ImageDefaultDownload = {
         ImageDefaultDownload(sentinel: OSAtomicIncrement32(&self.taskSentinel), url: $0, progress: $1, completion: $2)
     }
     
-    public var generateDownloadOperation: (URLRequest, URLSession, ImageOptions) -> ImageDownloadOperateable
+    /**
+     Lazy var to generate `ImageDownloadOperation`
+     */
+    public lazy var generateDownloadOperation: (URLRequest, URLSession, LonginusImageOptions?) -> ImageDownloadOperateable = {
+        ImageDownloadOperation(request: $0, session: $1, options: $2)
+    }
     
+    /**
+     Get current download count
+     */
     public var currentDownloadCount: Int {
         lock.lock()
         let count = urlOperations.count
@@ -116,6 +132,9 @@ public class ImageDownloader {
         return count
     }
     
+    /**
+     Get current preload download count
+     */
     public var currentPreloadTaskCount: Int {
         lock.lock()
         let count = preloadDownloads.count
@@ -123,6 +142,9 @@ public class ImageDownloader {
         return count
     }
     
+    /**
+     Get current max concurrent download count
+     */
     public var maxConcurrentDownloadCount: Int {
         get {
             lock.lock()
@@ -137,41 +159,61 @@ public class ImageDownloader {
         }
     }
     
+    /// Use this to set supply a configuration for the downloader. By default,
+    /// NSURLSessionConfiguration.ephemeralSessionConfiguration() will be used.
+    ///
+    /// You could change the configuration before a downloading task starts.
+    /// A configuration without persistent storage for caches is requested for downloader working correctly.
+    open var sessionConfiguration: URLSessionConfiguration {
+        didSet {
+            session.invalidateAndCancel()
+            session = URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: getSessionQueue())
+        }
+    }
+    
+    /**
+     A set of trusted hosts when receiving server trust challenges. A challenge with host name contained in this
+     set will be ignored. You can use this set to specify the self-signed site.
+     */
+    open var trustedHosts: Set<String>?
+    
+    /**
+     A responder for authentication challenge.
+     Downloader will forward the received authentication challenge for the downloading session to this responder.
+     */
+    open weak var authenticationChallengeResponder: AuthenticationChallengeResponsable?
+    
     private let operationQueue: ImageDownloadOperationQueue
     private var taskSentinel: Int32
     private var urlOperations: [URL : ImageDownloadOperateable]
     private var preloadDownloads: [Int32 : ImageDefaultDownload]
     private var httpHeaders: [String : String]
     private let lock: DispatchSemaphore
-    private let sessionConfiguration: URLSessionConfiguration
     private lazy var sessionDelegate: ImageDownloadSessionDelegate = { ImageDownloadSessionDelegate(downloader: self) }()
     private lazy var session: URLSession = {
+        return URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: getSessionQueue())
+    }()
+    private func getSessionQueue() -> OperationQueue {
         let queue = OperationQueue()
         queue.qualityOfService = .background
-        queue.maxConcurrentOperationCount = DispatchQueuePool.fitableMaxQueueCount
+        queue.maxConcurrentOperationCount = 1//DispatchQueuePool.fitableMaxQueueCount
         queue.name = "\(LonginusPrefixID).download"
-        return URLSession(configuration: sessionConfiguration, delegate: sessionDelegate, delegateQueue: queue)
-    }()
+        return queue
+    }
     
     public init(sessionConfiguration: URLSessionConfiguration) {
+        self.sessionConfiguration = sessionConfiguration
         donwloadTimeout = 15
         taskSentinel = 0
-        generateDownloadOperation = { ImageDownloadOperation(request: $0, session: $1, options: $2) }
         operationQueue = ImageDownloadOperationQueue()
         urlOperations = [:]
         preloadDownloads = [:]
-        httpHeaders = ["Accept" : "image/*;q=0.8"]
+        httpHeaders = ["Accept" : "image/*;q=0.8"] // @"image/webp,image/*;q=0.8"
         lock = DispatchSemaphore(value: 1)
-        self.sessionConfiguration = sessionConfiguration
+        authenticationChallengeResponder = self
     }
-    
-    public func update(value: String?, forHTTPHeaderField field: String) {
-        lock.lock()
-        httpHeaders[field] = value
-        lock.unlock()
-    }
-    
-    fileprivate func operation(for url: URL) -> ImageDownloadOperateable? {
+        
+    func operation(for url: URL) -> ImageDownloadOperateable? {
         lock.lock()
         let operation = urlOperations[url]
         lock.unlock()
@@ -184,26 +226,52 @@ extension ImageDownloader: ImageDownloadable {
     
     @discardableResult
     public func downloadImage(with url: URL,
-                              options: ImageOptions = .none,
+                              options: LonginusImageOptions? = nil,
                               progress: ImageDownloaderProgressBlock? = nil,
                               completion: @escaping ImageDownloaderCompletionBlock) -> ImageDefaultDownload {
         let download = generateDownload(url, progress, completion)
+        let optionsInfo = LonginusParsedImageOptionsInfo(options)
         lock.lock()
-        if options.contains(.preload) { preloadDownloads[download.sentinel] = download }
+        if optionsInfo.preload { preloadDownloads[download.sentinel] = download }
         var operation: ImageDownloadOperateable? = urlOperations[url]
         if operation != nil {
-            if !options.contains(.preload) {
+            if !optionsInfo.preload {
                 operationQueue.upgradePreloadOperation(for: url)
             }
         } else {
             let timeout = donwloadTimeout > 0 ? donwloadTimeout : 15
-            let cachePolicy: URLRequest.CachePolicy = options.contains(.useURLCache) ? .useProtocolCachePolicy : .reloadIgnoringLocalCacheData
+            let cachePolicy: URLRequest.CachePolicy = optionsInfo.useURLCache ? .useProtocolCachePolicy : .reloadIgnoringLocalCacheData
             var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeout)
-            request.httpShouldHandleCookies = options.contains(.handleCookies)
+            request.httpShouldHandleCookies = optionsInfo.handleCookies
             request.allHTTPHeaderFields = httpHeaders
-            request.httpShouldUsePipelining = true
+            request.httpShouldUsePipelining = requestsUsePipelining
+            
+            if let httpHeadersModifier = optionsInfo.httpHeadersModifier {
+                if let newHeaders = httpHeadersModifier.modified(for: request.allHTTPHeaderFields) {
+                    request.allHTTPHeaderFields = newHeaders
+                }
+            }
+            
+            if let requestModifier = optionsInfo.requestModifier {
+                // Modifies request before sending.
+                guard let r = requestModifier.modified(for: request) else {
+                    completion(nil, NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "empty request"]))
+                    lock.unlock()
+                    return download
+                }
+                request = r
+            }
+            
+            // There is a possibility that request modifier changed the url to `nil` or empty.
+            // In this case, throw an error.
+            guard let url = request.url, !url.absoluteString.isEmpty else {
+                completion(nil, NSError(domain: LonginusImageErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey : "invalid URL"]))
+                lock.unlock()
+                return download
+            }
+            
             let newOperation = generateDownloadOperation(request, session, options)
-            if options.contains(.progressiveDownload) || options.contains(.progressiveBlur) { newOperation.imageCoder = imageCoder }
+            if optionsInfo.progressiveDownload || optionsInfo.progressiveBlur { newOperation.imageCoder = imageCoder }
             newOperation.completion = { [weak self, weak newOperation] in
                 guard let self = self else { return }
                 self.lock.lock()
@@ -215,7 +283,7 @@ extension ImageDownloader: ImageDownloadable {
                 self.lock.unlock()
             }
             urlOperations[url] = newOperation
-            operationQueue.add(newOperation, preload: options.contains(.preload))
+            operationQueue.add(newOperation, preload: optionsInfo.preload)
             operation = newOperation
         }
         operation?.add(download: download)
@@ -266,45 +334,5 @@ extension ImageDownloader: ImageDownloadable {
     
 }
 
-
-private class ImageDownloadSessionDelegate: NSObject, URLSessionTaskDelegate {
-    private weak var downloader: ImageDownloader?
-    
-    init(downloader: ImageDownloader) {
-        self.downloader = downloader
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        if let url = task.originalRequest?.url,
-            let operation = downloader?.operation(for: url),
-            operation.dataTaskId == task.taskIdentifier,
-            let taskDelegate = operation as? URLSessionTaskDelegate {
-            taskDelegate.urlSession?(session, task: task, didCompleteWithError: error)
-        }
-    }
-}
-
-extension ImageDownloadSessionDelegate: URLSessionDataDelegate {
-    func urlSession(_ session: URLSession,
-                    dataTask: URLSessionDataTask,
-                    didReceive response: URLResponse,
-                    completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        if let url = dataTask.originalRequest?.url,
-            let operation = downloader?.operation(for: url),
-            operation.dataTaskId == dataTask.taskIdentifier,
-            let dataDelegate = operation as? URLSessionDataDelegate {
-            dataDelegate.urlSession?(session, dataTask: dataTask, didReceive: response, completionHandler: completionHandler)
-        } else {
-            completionHandler(.allow)
-        }
-    }
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        if let url = dataTask.originalRequest?.url,
-            let operation = downloader?.operation(for: url),
-            operation.dataTaskId == dataTask.taskIdentifier,
-            let dataDelegate = operation as? URLSessionDataDelegate {
-            dataDelegate.urlSession?(session, dataTask: dataTask, didReceive: data)
-        }
-    }
-}
+// Use the default implementation from extension of `AuthenticationChallengeResponsable`.
+extension ImageDownloader: AuthenticationChallengeResponsable {}
