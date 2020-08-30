@@ -203,6 +203,8 @@ public protocol ImageCacheable: AnyObject {
     /// If disk cache hitted, the completion handler will called asynchronous from a background queue.
     func image(forKey key: String, cacheType: ImageCacheType, completion: @escaping (ImageCacheQueryCompletionResult) -> Void)
 
+    func isCached(forKey key: String) -> (Bool, ImageCacheType)
+    
     /// Check whether disk cache exist datas by the `key`
     func diskDataExists(forKey key: String, completion: ((Bool) -> Void)?)
 

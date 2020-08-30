@@ -36,14 +36,15 @@ public protocol ImageDownloadModifier {
     /// customizing purpose, such as adding auth token to the header, do basic HTTP auth or something like url mapping.
     ///
     /// Usually, you pass an `ImageDownloadRequestModifier` as the associated value of
-    /// `KingfisherOptionsInfoItem.requestModifier` and use it as the `options` parameter in related methods.
+    /// `LonginusImageOptionItem.requestModifier` and use it as the `options` parameter in related methods.
     ///
     /// If you do nothing with the input `request` and return it as is, a downloading process will start with it.
     ///
     /// - Parameter request: The input request contains necessary information like `url`. This request is generated
     ///                      according to your resource url as a GET request.
-    /// - Returns: A modified version of request, which you wish to use for downloading an image. If `nil` returned,
-    ///            a `KingfisherError.requestError` with `.emptyRequest` as its reason will occur.
+    /// - Returns: A modified version of request, which you wish to use for downloading an image.
+    ///                     If `nil` returned, a `LonginusImageErrorDomain` error with `empty request` message as its
+    ///                     reason will occur.
     ///
     func modified(for original: T?) -> T?
 }
@@ -64,7 +65,7 @@ public struct URLRequestModifier: ImageDownloadModifier {
     ///
     /// - Parameter modify: The request modifying block runs when a request modifying task comes.
     ///                     The return `URLRequest?` value of this block will be used as the image download request.
-    ///                     If `nil` returned, a `KingfisherError.requestError` with `.emptyRequest` as its
+    ///                     If `nil` returned, a `LonginusImageErrorDomain` error with `empty request` message as its
     ///                     reason will occur.
     public init(modify: @escaping (URLRequest?) -> URLRequest?) {
         block = modify

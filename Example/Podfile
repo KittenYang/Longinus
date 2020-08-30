@@ -9,3 +9,7 @@ target 'Longinus_Example' do
     
   end
 end
+
+target 'Longinus-SwiftUI-Example' do
+  pod 'Longinus/SwiftUI', :path => '../'
+end

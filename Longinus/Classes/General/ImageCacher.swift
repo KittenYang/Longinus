@@ -126,6 +126,31 @@ extension ImageCacher: ImageCacheable {
         completion(.none)
     }
     
+    public func isCached(forKey key: String) -> (Bool, ImageCacheType) {
+        let memoryContain = memoryCache.containsObject(key: key)
+        guard let currentDiskCache = diskCache else {
+            if memoryContain {
+                return (true, .memory)
+            }
+            return (false, .none)
+        }
+        let diskContain = currentDiskCache.containsObject(key: key)
+        if diskContain {
+            if memoryContain {
+                return (true, .all)
+            } else {
+                return (true, .disk)
+            }
+        } else {
+            if memoryContain {
+                return (true, .memory)
+            } else {
+                return (false, .none)
+            }
+        }
+        
+    }
+    
     public func diskDataExists(forKey key: String, completion: ((Bool) -> Void)?) {
         guard let currentDiskCache = diskCache else {
             completion?(false)

@@ -54,27 +54,38 @@ Pod::Spec.new do |s|
        "Longinus/Classes/Utility/*.swift",
        "Longinus/Classes/Cache/*.swift",
        "Longinus/Classes/ImageCode/*.swift",
-       "Longinus/Classes/Networking/*.swift"]
+       "Longinus/Classes/Networking/*.swift",
+       "Longinus/Classes/SwiftUI/*.swift"]
        ss.dependency "Longinus/Utility"
        ss.dependency "Longinus/Cache"
        ss.dependency "Longinus/ImageCode"
        ss.dependency "Longinus/Networking"
   end
+  
   s.subspec 'Cache' do |ss|
       ss.source_files = 'Longinus/Classes/Cache/*.swift'
       ss.dependency "Longinus/Utility"
   end
+  
   s.subspec 'ImageCode' do |ss|
        ss.source_files = 'Longinus/Classes/ImageCode/*.swift'
        ss.dependency "Longinus/Utility"
   end
+  
   s.subspec 'Networking' do |ss|
        ss.source_files = 'Longinus/Classes/Networking/*.swift'
        ss.dependency "Longinus/ImageCode"
        ss.dependency "Longinus/Cache"
   end
+  
   s.subspec 'Utility' do |ss|
        ss.source_files = 'Longinus/Classes/Utility/*.swift'
+  end
+  
+  s.subspec 'SwiftUI' do |ss|
+       ss.source_files = 'Longinus/Classes/SwiftUI/*.swift'
+       ss.dependency "Longinus/General"
+       ss.ios.deployment_target = "13.0"
   end
 
   

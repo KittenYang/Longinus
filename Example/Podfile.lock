@@ -1,16 +1,33 @@
 PODS:
-  - Longinus (0.1.0)
+  - Longinus (1.0.6):
+    - Longinus/General (= 1.0.6)
+  - Longinus/Cache (1.0.6):
+    - Longinus/Utility
+  - Longinus/General (1.0.6):
+    - Longinus/Cache
+    - Longinus/ImageCode
+    - Longinus/Networking
+    - Longinus/Utility
+  - Longinus/ImageCode (1.0.6):
+    - Longinus/Utility
+  - Longinus/Networking (1.0.6):
+    - Longinus/Cache
+    - Longinus/ImageCode
+  - Longinus/SwiftUI (1.0.6):
+    - Longinus/General
+  - Longinus/Utility (1.0.6)
 
 DEPENDENCIES:
   - Longinus (from `../`)
+  - Longinus/SwiftUI (from `../`)
 
 EXTERNAL SOURCES:
   Longinus:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Longinus: cc4d69c9dc89ea51e8494944f3bd6310e8ebb15c
+  Longinus: a3850e4d03a14e928dc0e3ab091af2393a08f5dc
 
-PODFILE CHECKSUM: 783b3cc01fd5cc441107c639b43acfdc791fb89e
+PODFILE CHECKSUM: 32aaefa4fa3cd2fb5f416220e772e2da02213548
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0.beta.1

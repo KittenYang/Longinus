@@ -7,479 +7,666 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		051A2BF82490E72CDBA70A18230991E8 /* ImageDownloadOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D44EA1DDB33D08D07E551644FDE752 /* ImageDownloadOperationQueue.swift */; };
-		125FE30303724E5DFF2F379E02AA8FAE /* DispatchQueuePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B32C926F5E3BF0E1848E7EF77447348 /* DispatchQueuePool.swift */; };
-		162EF7EEAB08ECD10A0A3851742FF520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		19F5AB12B6A03AB50EE298D1349B76CF /* ImageDownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5773C8D6A8608AD2DC1CFE83D02854BF /* ImageDownloadOperation.swift */; };
-		1DCE2EDD873ED67B1EFC96952BD3EBBB /* Pods-Longinus_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 508FE13D756C19FB34DFAC73753DDDDB /* Pods-Longinus_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4233A9697FA680B5D6BF48FC2AA9DC66 /* Pods-Longinus_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6ED3DEFB7B665B4E21A5FDD95AFDBE /* Pods-Longinus_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		504867C41F27E7DDC6041621D8903D5B /* LonginusWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF5AB6B27AC5EE851802EC049830E6B /* LonginusWeakProxy.swift */; };
-		51EC21D44B84559A181441952294F0F4 /* LonginusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C215C3494A5EAFC709AE717B5E17D0 /* LonginusManager.swift */; };
-		5A3937731B856764D67F32B9F6823A17 /* Longinus-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B9801AEED615C7D70B115F5DAA58CE99 /* Longinus-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5ECFEB622171EFC172DE5415B777E6E5 /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A295A636FCCD44625A58CAE1E195DD80 /* Runtime.swift */; };
-		5F04639124D01B23007452D8 /* ImageLoadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04638F24D01B23007452D8 /* ImageLoadTask.swift */; };
-		5F04639224D01B23007452D8 /* ImageWebCacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639024D01B23007452D8 /* ImageWebCacheable.swift */; };
-		5F04639424D01BD8007452D8 /* NetworkIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639324D01BD8007452D8 /* NetworkIndicatorManager.swift */; };
-		5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */; };
-		5F04639924D01CE3007452D8 /* CALayer+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */; };
-		5F04639A24D01CE3007452D8 /* UIImageView+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */; };
-		5F04639C24D0297E007452D8 /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */; };
-		5F59D38724C41A3F00E8964B /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5273BF8063F5CECB2AF488B34F6154 /* Mutex.swift */; };
-		5F59D39B24C4510000E8964B /* SQLiteUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D39A24C4510000E8964B /* SQLiteUtil.swift */; };
-		5F59D3B624C4974600E8964B /* KVStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3B024C4974500E8964B /* KVStorage.swift */; };
-		5F59D3B824C4974600E8964B /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3B224C4974600E8964B /* Cacheable.swift */; };
-		5F59D3B924C4974600E8964B /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3B324C4974600E8964B /* MemoryCache.swift */; };
-		5F59D3BA24C4974600E8964B /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3B424C4974600E8964B /* DiskCache.swift */; };
-		5F59D3FE24C847E400E8964B /* LonginusPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3FD24C847E400E8964B /* LonginusPrint.swift */; };
-		5F7B29CA24D1419F0073E0D7 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7B29C924D1419F0073E0D7 /* UnfairLock.swift */; };
-		5F8528FC24C97819003B30D3 /* LinkedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8528FB24C97819003B30D3 /* LinkedMap.swift */; };
-		5F9FDE1F24FA8D780058FD84 /* LonginusImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */; };
-		5F9FDE2124FA8DA70058FD84 /* ImageDownloadRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */; };
-		5F9FDE2324FAB7790058FD84 /* ImageDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */; };
-		5F9FDE2524FABC270058FD84 /* ImageDownloadRedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */; };
-		5F9FDE2724FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */; };
-		5FADC52F24D00896000240DD /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC52E24D00896000240DD /* DispatchSemaphore.swift */; };
-		5FADC53124D00A4B000240DD /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53024D00A4B000240DD /* ImageCacher.swift */; };
-		5FADC53324D00B70000240DD /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53224D00B70000240DD /* StringExtension.swift */; };
-		5FADC53524D00DF0000240DD /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53424D00DF0000240DD /* LonginusCompatible.swift */; };
-		5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53C24D00FBD000240DD /* UIViewExtension.swift */; };
-		5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC53E24D01056000240DD /* DeviceExtension.swift */; };
-		5FADC58024D0169B000240DD /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57624D0169B000240DD /* Image.swift */; };
-		5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57724D0169B000240DD /* ImageTransformer.swift */; };
-		5FADC58224D0169B000240DD /* ImageCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57824D0169B000240DD /* ImageCodeable.swift */; };
-		5FADC58324D0169B000240DD /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57924D0169B000240DD /* AnimatedImage.swift */; };
-		5FADC58424D0169B000240DD /* AnimatedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57A24D0169B000240DD /* AnimatedImageView.swift */; };
-		5FADC58524D0169B000240DD /* ImageCoderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57B24D0169B000240DD /* ImageCoderManager.swift */; };
-		5FADC58624D0169B000240DD /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57C24D0169B000240DD /* DataExtension.swift */; };
-		5FADC58724D0169B000240DD /* ImageIOCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57D24D0169B000240DD /* ImageIOCoder.swift */; };
-		5FADC58824D0169B000240DD /* ImageGIFCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC57E24D0169B000240DD /* ImageGIFCoder.swift */; };
-		6F4CC85D21FDFFC1685A4C496E5692CC /* Pods-Longinus_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5068D075D186D1363A0E047F44BDCEB9 /* Pods-Longinus_Tests-dummy.m */; };
-		8B9DAB9C775C3AB88FB455F27ECB51EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		93956713A6766EFF2C02A705EFE6C9EE /* Longinus-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 714928D93B3B7A2A5FDA6607BAE1FE80 /* Longinus-dummy.m */; };
-		B8B0641A1C4A80D474546D18964D63AA /* ImageWebCacheResourceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BBE279FC910081C5E5B2843A63998A /* ImageWebCacheResourceable.swift */; };
-		DA439842D223343F6C05B746B166C4F0 /* Pods-Longinus_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3400021F588BD55F11B952AD5D089D /* Pods-Longinus_Example-dummy.m */; };
-		E5562D03011022B31B1E5173C4728145 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		E8DBEB74175E89B6ECDE703BD1F48723 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6095FD475970E449FC9BE354F2760 /* Box.swift */; };
-		EDF7B9B35046B4FED948DA505D1F200D /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B789BAFA646CED036B3792D26BEB1CD /* ImageDownloader.swift */; };
+		0048A7854DFBA1B1C4A8EAAB48F58B26 /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E309B5B74BE45325B592A48821D8448E /* AnimatedImage.swift */; };
+		031D5F1333A0343EF0AF4709A5CFCEB3 /* ImageCoderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5579E854F21B2FF9980BBDD7AB92F8 /* ImageCoderManager.swift */; };
+		044CD2AE2B0DF3918146BE4A07C9543B /* LinkedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B0938FDBBE687557789A883596436F /* LinkedMap.swift */; };
+		05A6AFC2019919E862E35A97836A71F1 /* LinkedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B0938FDBBE687557789A883596436F /* LinkedMap.swift */; };
+		06ECA554B3320B853196E59052F0C892 /* ImageWebCacheResourceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E8186A4746C85109D03FC058CD454F /* ImageWebCacheResourceable.swift */; };
+		079DECFB631D7265DAF3D38EDD045910 /* DispatchQueuePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF2FE77C882C7A5BCC0510F1213A380 /* DispatchQueuePool.swift */; };
+		08DE0948F586AFE8CAA32A9BE92FC647 /* ImageWebCacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D9C0F5D275FB733326F64D81D04D56 /* ImageWebCacheable.swift */; };
+		09C5F2E0BB65940E78C5991FCE9DF865 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9A1D7CAB95819A3F8E73716AF14DB1 /* UIViewExtension.swift */; };
+		0B49AE5BC6E725D9EF7C9F74D387ED31 /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C513657556F0BC705A0593FC61BEF6B /* Mutex.swift */; };
+		0C725E2694C6529AE3EBD2EA2A713C92 /* SQLiteUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEB4DC7223CFC4C7554BBF874061739 /* SQLiteUtil.swift */; };
+		0E01614EA83E08CAE12CC3099594DC39 /* LonginusPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CACAAA6C770FE53D4D04CF79C7F4CE9 /* LonginusPrint.swift */; };
+		0EC42414FDC31C3FA2840085544B8B3E /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9A1D7CAB95819A3F8E73716AF14DB1 /* UIViewExtension.swift */; };
+		11898957C35C5892484C270CEC1DAA41 /* ImageCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF9203BBFEB394CA9C1CA73841FBCA3 /* ImageCodeable.swift */; };
+		13D338DD6D2BA9428398DFA57B181B0A /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FC009F852BE8C3BA36B7B46F026532 /* DispatchSemaphore.swift */; };
+		172636D3E6B8891BA32DF236F72DE82B /* UIImageView+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983702DAED7BB587C6B4C8926D316250 /* UIImageView+Longinus.swift */; };
+		181798CC8568ECEE99371FA95D6D93EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */; };
+		208ACA2F7E903BBC0894D4C2E2DF0091 /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCE1A29D7B868B4A1226F9107B75F97 /* ImageCacher.swift */; };
+		22C4192218D03878EE622E0E7C9BB346 /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FB889C47EFDB05FA62298F3B28AD2F /* DispatchQueueExtension.swift */; };
+		24012541E6B2F7025891254C34429D03 /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FBEA63A538DEB3A29DC63F21D752A1 /* Runtime.swift */; };
+		27DC66C81FCAB31E8C1047D700221216 /* DispatchQueuePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF2FE77C882C7A5BCC0510F1213A380 /* DispatchQueuePool.swift */; };
+		2EF987F734F835A9665BA830185939A5 /* ImageWebCacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D9C0F5D275FB733326F64D81D04D56 /* ImageWebCacheable.swift */; };
+		31543F9F2525F947711B183891F5D407 /* LonginusImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D481A822DD77240CA58639C0D8D50FA /* LonginusImageOptions.swift */; };
+		322668438382116E8F70A8FFDFE848C1 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282216F27A3701AE4EB63946283A6948 /* Box.swift */; };
+		325563EE37C0051097382F16081420AE /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26618A9BA9AC7D43A5AC361A83B50045 /* Cacheable.swift */; };
+		380E2A0017D442AC495A9F45421E8C1B /* ImageDownloadOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC776950EA5FD94A6F4B0D476C469F5 /* ImageDownloadOperationQueue.swift */; };
+		38C98CC48D67BB8025C336B651890ABB /* AnimatedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348D384804F2DEACA4893123A5AB51A5 /* AnimatedImageView.swift */; };
+		46DB97F71260E1CE66935318227BC0D5 /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46091797F31E76B9D1434465F250DEB7 /* ImageDownloader.swift */; };
+		4AD74A317A6DEB969DB499B0A2AE015B /* ImageLoadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C98BA6521D5087502B8928BE14AF208 /* ImageLoadTask.swift */; };
+		4DD3AF9DE5CE1C22DCFEA70758D79B34 /* NetworkIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D1BF96C2BD5B3A4D2134F8132A8FF0 /* NetworkIndicatorManager.swift */; };
+		4F8CBE85AE439FB75493059122D98E4A /* Pods-Longinus_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDF219CD192941AB766C7C466C3A19D0 /* Pods-Longinus_Example-dummy.m */; };
+		51C626E79DE9C471CA92C851371A96F5 /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4524620D1DDA5223A330E9EB4EF311B9 /* DeviceExtension.swift */; };
+		5221A0213EAF188ED5EE18A989A919C2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */; };
+		5293937174F828B40D62C49126231D0C /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66647298CFE815C9066D2E1F8B240E7A /* UnfairLock.swift */; };
+		5367020846BEFFC6D8B1C339610CB3EF /* CALayer+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE58B477DD0DA15647DEA91E290E39 /* CALayer+Longinus.swift */; };
+		545C27E070650F93C95838635F06197D /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9648706B0E5B82E54A255A6871E0B699 /* DiskCache.swift */; };
+		5A48BF4C03BAB3A5D6CECFFFF93A909E /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4524620D1DDA5223A330E9EB4EF311B9 /* DeviceExtension.swift */; };
+		5B1FD914F4A5EC4E45B7BC81140F30F2 /* Longinus-3985d303-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D060EA2EF2DD5FC13BE1D25C9912F5ED /* Longinus-3985d303-dummy.m */; };
+		5D5A6D2C5F9F5981DF314BED969FDF1C /* LonginusImageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D481A822DD77240CA58639C0D8D50FA /* LonginusImageOptions.swift */; };
+		620BF5E9CD3E06C3C28DE052C04CFA34 /* Longinus-3985d303-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C7C2CF7C426C6FA4EC1F36203F8D95B /* Longinus-3985d303-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		62FE0DD303CBF4D090832D3AB9E32AF2 /* ImageDownloadRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC1ACA43CDD042459BDD1FE47F16B68 /* ImageDownloadRequestModifier.swift */; };
+		65334227D476A24EF286528C1AA58BEA /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CFB97592F3B0B7C8B2A2462EF5F67D1 /* DataExtension.swift */; };
+		6A8523A8E1FC2158EBA0B4EABBF88D65 /* SQLiteUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEB4DC7223CFC4C7554BBF874061739 /* SQLiteUtil.swift */; };
+		6CB5E84EDBEA9554F936BD5746364D06 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CFB97592F3B0B7C8B2A2462EF5F67D1 /* DataExtension.swift */; };
+		6EADEA4A0FE54B21735744FF35476A55 /* ImageCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF9203BBFEB394CA9C1CA73841FBCA3 /* ImageCodeable.swift */; };
+		6F17EE3C38FFAA72DB54F6C9DD67FD7F /* ImageGIFCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F587D6B274E3E9882C4B14F973282A8 /* ImageGIFCoder.swift */; };
+		74E96E1715FF885160FBED3968450E9F /* Pods-Longinus_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B875B11DDF9042877CA24660844F01C /* Pods-Longinus_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		774206C74A078AACCE7FC91F9C93F900 /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC40AB128186EE129F04FBA5902EDD2 /* LonginusCompatible.swift */; };
+		7AEAE8EA6F0F37C1EA4846CA9BE7CA86 /* ImageDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C682954B1C88975596ABCBEBA734B434 /* ImageDownloadSessionDelegate.swift */; };
+		7B387C2335F13511832DDB53D760996B /* UIButton+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BB3E2213422457FC211FCE6E4C7490 /* UIButton+Longinus.swift */; };
+		7FC5C9640E7672636FF8FD9FBDA7B721 /* ImageDownloadOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC776950EA5FD94A6F4B0D476C469F5 /* ImageDownloadOperationQueue.swift */; };
+		82CDD757619BD3AAB67293CCED7B271B /* AnimatedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E309B5B74BE45325B592A48821D8448E /* AnimatedImage.swift */; };
+		8783553B1882FD7824C48F97EDD41F24 /* CALayer+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE58B477DD0DA15647DEA91E290E39 /* CALayer+Longinus.swift */; };
+		878A140571C669D2B85A17E7AC0C6651 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 312B988EF117AE4DE76A268D970131FE /* UIKit.framework */; };
+		8D6F259CD1B1153B4091B5C0676D10AB /* AuthenticationChallengeResponsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5498F919B8E1B4090AE750C97A46452 /* AuthenticationChallengeResponsable.swift */; };
+		937427BD3DEF2A33A26F8D8BAD8F04BE /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FBEA63A538DEB3A29DC63F21D752A1 /* Runtime.swift */; };
+		94710DA8369796B3DDEF503F4DC4DE1E /* UIImageView+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983702DAED7BB587C6B4C8926D316250 /* UIImageView+Longinus.swift */; };
+		94814A3B80CBDFA2E176781275951DAD /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCE1A29D7B868B4A1226F9107B75F97 /* ImageCacher.swift */; };
+		97D2AA64068E03A1907382FA1AE2D2CD /* ImageWebCacheResourceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E8186A4746C85109D03FC058CD454F /* ImageWebCacheResourceable.swift */; };
+		9CD9DFD601D6E50824CF352AEA2E2C85 /* ImageDownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877EE2BF546FAC5FA9E0BFD814B8DFC /* ImageDownloadOperation.swift */; };
+		A1EDF42BA28103517A27EA9156F88BD4 /* LonginusCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC40AB128186EE129F04FBA5902EDD2 /* LonginusCompatible.swift */; };
+		A4984B69EEE2D486EABBF6C5FF59363A /* LonginusWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09ED83D6C485AC640F4F7EAFFB91A5 /* LonginusWeakProxy.swift */; };
+		A661991124C6DC7F9940E1A403EB64A7 /* ImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22C025DC33EBCAEC8A3AB9FA2C5412 /* ImageTransformer.swift */; };
+		ACDFA55782719AFEA7A897D2374E7CB2 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282216F27A3701AE4EB63946283A6948 /* Box.swift */; };
+		AF2AB1D13520C3FC8405B57817461C1C /* NetworkIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D1BF96C2BD5B3A4D2134F8132A8FF0 /* NetworkIndicatorManager.swift */; };
+		B05EBFFE01814FF0164350A40306D0DE /* Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 655AF0062D667EF9AD9E492F4F197D23 /* Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m */; };
+		B104D83571243DD74B140BF5A0BF3097 /* ImageDownloadRedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A7769DD3272F2EC0CC9A7AFAD79BF /* ImageDownloadRedirectHandler.swift */; };
+		B1A7FE04836A2E22F19F367292B7B141 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 312B988EF117AE4DE76A268D970131FE /* UIKit.framework */; };
+		B3BDECC99DFCB4C2B993DC9815332B36 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC3A347154A498229169B3CDF9993C9 /* StringExtension.swift */; };
+		B48ED1F2861C44C5854D9E69972276D4 /* ImageLoadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C98BA6521D5087502B8928BE14AF208 /* ImageLoadTask.swift */; };
+		BA720F70D384FE991BD24DB245784001 /* ImageDownloadRedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A7769DD3272F2EC0CC9A7AFAD79BF /* ImageDownloadRedirectHandler.swift */; };
+		BD61F501AEDE387EB8BBFA8CBC7A0233 /* LonginusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612593E7618CA7559617E79E637CE23 /* LonginusManager.swift */; };
+		BEA3465CCFFC77447E98022FDB7075A0 /* ImageBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DB6D53E63B758CB3B45D8F32749B4C /* ImageBinder.swift */; };
+		C15092E02248F5FF8E9761AE8DFA92CC /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26618A9BA9AC7D43A5AC361A83B50045 /* Cacheable.swift */; };
+		C156F408C5F7F36B452E89AF6B383CFD /* ImageDownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877EE2BF546FAC5FA9E0BFD814B8DFC /* ImageDownloadOperation.swift */; };
+		C18BB38420EB9C58A30269B60687053C /* LonginusPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CACAAA6C770FE53D4D04CF79C7F4CE9 /* LonginusPrint.swift */; };
+		C50E488C80605854CD1BA7DDAF511FBE /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9648706B0E5B82E54A255A6871E0B699 /* DiskCache.swift */; };
+		C65951CD78665A426CD55E678E748273 /* KVStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391F166DA973D3E26F07FC9C19AA6BD /* KVStorage.swift */; };
+		C65B04DC5337BB7A4DC8BFD6ED468750 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E513D35E195C1DF461E7CFCA4286AF0 /* Image.swift */; };
+		C93293901CDD5ED34D40A85D7AEB0E1F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */; };
+		CAFC4ECC20070878755ACE722A739EBB /* Pods-Longinus_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2391B246F345755F1CCF222E5AF2AA /* Pods-Longinus_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CEAB60E26FF4C8EDC2D9FB61E7054407 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66647298CFE815C9066D2E1F8B240E7A /* UnfairLock.swift */; };
+		CF59F6E0DB47028C8706045063B3F60C /* LGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FC340008C49015C0C36865A5688A2 /* LGImage.swift */; };
+		D05D257E61A574A4C2CD91C088C2592D /* Pods-Longinus-SwiftUI-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 06214397455952650AECEE3B77B75A70 /* Pods-Longinus-SwiftUI-Example-dummy.m */; };
+		D104795DDAD1D01243B751E7F6355C15 /* ImageDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C682954B1C88975596ABCBEBA734B434 /* ImageDownloadSessionDelegate.swift */; };
+		D267DD00467FBBF6D29CC3616A552E91 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */; };
+		D295A2D9CEC1DF689F9426F27F98474A /* ImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22C025DC33EBCAEC8A3AB9FA2C5412 /* ImageTransformer.swift */; };
+		D37AF5FCE29140EB57FD1608B6F64F23 /* ImageIOCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B3510773191A9338F18498B71B213 /* ImageIOCoder.swift */; };
+		D3FB2E6946971B2CF9C4C6CF5C206195 /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54E6071CE06D524F40A15E04D921E76 /* MemoryCache.swift */; };
+		D553EC08C2D38019EDBC59BA8418467E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */; };
+		D6F47DCDC036581EA6E5906309D85700 /* ImageCoderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5579E854F21B2FF9980BBDD7AB92F8 /* ImageCoderManager.swift */; };
+		DA58BB12228D1A4E8C48F24CDF2DD070 /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C513657556F0BC705A0593FC61BEF6B /* Mutex.swift */; };
+		DC7DF83501FA56E06FFB1DA957EC9BC2 /* Pods-Longinus_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A576F6954A0BFBFC1679B73ABCE278EF /* Pods-Longinus_Tests-dummy.m */; };
+		E32AFA769D493ACBA97B881425B1F393 /* LonginusWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09ED83D6C485AC640F4F7EAFFB91A5 /* LonginusWeakProxy.swift */; };
+		E5BD627C73354A55EF9720D62C7EA8BE /* AuthenticationChallengeResponsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5498F919B8E1B4090AE750C97A46452 /* AuthenticationChallengeResponsable.swift */; };
+		E83A2398764C0D4134B18B06D9636889 /* AnimatedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348D384804F2DEACA4893123A5AB51A5 /* AnimatedImageView.swift */; };
+		E91D0DC76E2EBC10220AA0FAE34DC74C /* ImageDownloadRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC1ACA43CDD042459BDD1FE47F16B68 /* ImageDownloadRequestModifier.swift */; };
+		E95C565B654189F47DF30287E91814AA /* LonginusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F612593E7618CA7559617E79E637CE23 /* LonginusManager.swift */; };
+		E96B12AB75C470F76FEF06663F7144F6 /* ImageIOCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1B3510773191A9338F18498B71B213 /* ImageIOCoder.swift */; };
+		EC62385C04B0FF1A22C75AF080AC2CDB /* KVStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391F166DA973D3E26F07FC9C19AA6BD /* KVStorage.swift */; };
+		ED5FE60AA2C3EB148B64343B0B7AD508 /* UIButton+Longinus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BB3E2213422457FC211FCE6E4C7490 /* UIButton+Longinus.swift */; };
+		EE61951091A73EA3D6FA427217ADB967 /* Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5407F99637465877216063415564553 /* Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EF480F64782D1B6921AFCDFB80C01803 /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54E6071CE06D524F40A15E04D921E76 /* MemoryCache.swift */; };
+		F0867BCE68190223B3BFDC3ABF3A9840 /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FC009F852BE8C3BA36B7B46F026532 /* DispatchSemaphore.swift */; };
+		F40BA3D88578A31F47F6AD1121CBDAA6 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E513D35E195C1DF461E7CFCA4286AF0 /* Image.swift */; };
+		F6B767BAAA4719F969D72A3D239B649A /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FB889C47EFDB05FA62298F3B28AD2F /* DispatchQueueExtension.swift */; };
+		F6D39F57A9CAC8BE37DB38A18737E1FB /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46091797F31E76B9D1434465F250DEB7 /* ImageDownloader.swift */; };
+		F9E703DF13414C36A5D97834E90ACCBE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC3A347154A498229169B3CDF9993C9 /* StringExtension.swift */; };
+		FBAE766F9CC906411C910BBB86A36380 /* ImageGIFCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F587D6B274E3E9882C4B14F973282A8 /* ImageGIFCoder.swift */; };
+		FD143B44D753EB46300715C1C537505D /* Pods-Longinus-SwiftUI-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D20A9BBD43CBB730FF6CF8DECD1151A /* Pods-Longinus-SwiftUI-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		806A8DE578DBB26482B4150B9724C9C5 /* PBXContainerItemProxy */ = {
+		57D5CAD6008AEFCFAD01D27719402B09 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 470D9BC3F2F4A0D92DD34F2A5F5D8771;
-			remoteInfo = Longinus;
+			remoteGlobalIDString = B9A1705AEDE4500E6B58AB554939B8E5;
+			remoteInfo = "Longinus-3985d303";
 		};
-		9BA6F03526FA1334DA71587445A4A2C4 /* PBXContainerItemProxy */ = {
+		7F74381A7E65CED3388B0B3EF5D71A5F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AB4B752A90CC52534D34286C35D72690;
 			remoteInfo = "Pods-Longinus_Example";
 		};
+		BC0D1632408440B28FE3455A5F7BF9BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DCD42843680E4F77B6A8DE17914C329;
+			remoteInfo = "Longinus.default-Cache-ImageCode-Networking-Utility";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		180379AAEE104E4B23E2D309DAED1064 /* Pods-Longinus_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Example-Info.plist"; sourceTree = "<group>"; };
-		1B789BAFA646CED036B3792D26BEB1CD /* ImageDownloader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
-		1EF5AB6B27AC5EE851802EC049830E6B /* LonginusWeakProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LonginusWeakProxy.swift; sourceTree = "<group>"; };
-		2038671C0A9E7E2C199B62EDB2A4D6EE /* Pods-Longinus_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		217E4F3E3F6B36CD602B3A7FF48F4608 /* Longinus-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Longinus-prefix.pch"; sourceTree = "<group>"; };
-		220BC7B1B5BED5092260A231997E0BD9 /* Pods-Longinus_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus_Tests.modulemap"; sourceTree = "<group>"; };
-		29C215C3494A5EAFC709AE717B5E17D0 /* LonginusManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LonginusManager.swift; sourceTree = "<group>"; };
-		2B32C926F5E3BF0E1848E7EF77447348 /* DispatchQueuePool.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DispatchQueuePool.swift; sourceTree = "<group>"; };
-		2F3400021F588BD55F11B952AD5D089D /* Pods-Longinus_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Longinus_Example-dummy.m"; sourceTree = "<group>"; };
-		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		4C6EFD67C644DC9DC13EB3968B59C9DD /* Pods-Longinus_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Longinus_Example-frameworks.sh"; sourceTree = "<group>"; };
-		4D677E4A6EAC9105B4C8A5C26875D1FB /* Pods-Longinus_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		4F955DFD3E065D1864E4AD3FA432634D /* Pods-Longinus_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		5068D075D186D1363A0E047F44BDCEB9 /* Pods-Longinus_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Longinus_Tests-dummy.m"; sourceTree = "<group>"; };
-		508FE13D756C19FB34DFAC73753DDDDB /* Pods-Longinus_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus_Tests-umbrella.h"; sourceTree = "<group>"; };
-		5207336B44E444D74567E9368EE2F549 /* Pods-Longinus_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus_Example.modulemap"; sourceTree = "<group>"; };
-		5773C8D6A8608AD2DC1CFE83D02854BF /* ImageDownloadOperation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageDownloadOperation.swift; sourceTree = "<group>"; };
-		5BD6095FD475970E449FC9BE354F2760 /* Box.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
-		5F04638F24D01B23007452D8 /* ImageLoadTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoadTask.swift; sourceTree = "<group>"; };
-		5F04639024D01B23007452D8 /* ImageWebCacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageWebCacheable.swift; sourceTree = "<group>"; };
-		5F04639324D01BD8007452D8 /* NetworkIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkIndicatorManager.swift; sourceTree = "<group>"; };
-		5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Longinus.swift"; sourceTree = "<group>"; };
-		5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Longinus.swift"; sourceTree = "<group>"; };
-		5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Longinus.swift"; sourceTree = "<group>"; };
-		5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtension.swift; sourceTree = "<group>"; };
-		5F59D39A24C4510000E8964B /* SQLiteUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteUtil.swift; sourceTree = "<group>"; };
-		5F59D3B024C4974500E8964B /* KVStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVStorage.swift; sourceTree = "<group>"; };
-		5F59D3B224C4974600E8964B /* Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
-		5F59D3B324C4974600E8964B /* MemoryCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
-		5F59D3B424C4974600E8964B /* DiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
-		5F59D3FD24C847E400E8964B /* LonginusPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonginusPrint.swift; sourceTree = "<group>"; };
-		5F7B29C924D1419F0073E0D7 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
-		5F8528FB24C97819003B30D3 /* LinkedMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedMap.swift; sourceTree = "<group>"; };
-		5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusImageOptions.swift; sourceTree = "<group>"; };
-		5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadRequestModifier.swift; sourceTree = "<group>"; };
-		5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadSessionDelegate.swift; sourceTree = "<group>"; };
-		5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadRedirectHandler.swift; sourceTree = "<group>"; };
-		5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationChallengeResponsable.swift; sourceTree = "<group>"; };
-		5FADC52E24D00896000240DD /* DispatchSemaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSemaphore.swift; sourceTree = "<group>"; };
-		5FADC53024D00A4B000240DD /* ImageCacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacher.swift; sourceTree = "<group>"; };
-		5FADC53224D00B70000240DD /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		5FADC53424D00DF0000240DD /* LonginusCompatible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonginusCompatible.swift; sourceTree = "<group>"; };
-		5FADC53C24D00FBD000240DD /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		5FADC53E24D01056000240DD /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceExtension.swift; sourceTree = "<group>"; };
-		5FADC57624D0169B000240DD /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		5FADC57724D0169B000240DD /* ImageTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTransformer.swift; sourceTree = "<group>"; };
-		5FADC57824D0169B000240DD /* ImageCodeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCodeable.swift; sourceTree = "<group>"; };
-		5FADC57924D0169B000240DD /* AnimatedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedImage.swift; sourceTree = "<group>"; };
-		5FADC57A24D0169B000240DD /* AnimatedImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedImageView.swift; sourceTree = "<group>"; };
-		5FADC57B24D0169B000240DD /* ImageCoderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCoderManager.swift; sourceTree = "<group>"; };
-		5FADC57C24D0169B000240DD /* DataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
-		5FADC57D24D0169B000240DD /* ImageIOCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageIOCoder.swift; sourceTree = "<group>"; };
-		5FADC57E24D0169B000240DD /* ImageGIFCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGIFCoder.swift; sourceTree = "<group>"; };
-		70303AFAB3C8480A677B6293E15B68AB /* Pods-Longinus_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		714928D93B3B7A2A5FDA6607BAE1FE80 /* Longinus-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Longinus-dummy.m"; sourceTree = "<group>"; };
-		7D47B43055CF362788D212A67EB8DD1E /* Pods_Longinus_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Longinus_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		81BBE279FC910081C5E5B2843A63998A /* ImageWebCacheResourceable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageWebCacheResourceable.swift; sourceTree = "<group>"; };
-		8305C3F284B180342D215116CF2A7016 /* Pods-Longinus_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		8C522FF834074F70E805542CAA72EF3C /* Pods-Longinus_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Tests-Info.plist"; sourceTree = "<group>"; };
-		97B935585233A2F3FC8BBAB8F26C987A /* Longinus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Longinus.debug.xcconfig; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A295A636FCCD44625A58CAE1E195DD80 /* Runtime.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Runtime.swift; sourceTree = "<group>"; };
-		A414B72E433A6EDE434F80FF56EA299E /* Longinus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Longinus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB5273BF8063F5CECB2AF488B34F6154 /* Mutex.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Mutex.swift; sourceTree = "<group>"; };
-		B6D44EA1DDB33D08D07E551644FDE752 /* ImageDownloadOperationQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageDownloadOperationQueue.swift; sourceTree = "<group>"; };
-		B9801AEED615C7D70B115F5DAA58CE99 /* Longinus-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Longinus-umbrella.h"; sourceTree = "<group>"; };
-		BF8E4BE03CDF2A8CB482AF289FE10707 /* Pods_Longinus_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Longinus_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C243D351FB7286049E28B90D2DA40B59 /* Longinus-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Longinus-Info.plist"; sourceTree = "<group>"; };
-		C440EC8B94C6795A01729455A65AFEB3 /* Longinus.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Longinus.modulemap; sourceTree = "<group>"; };
-		C60FFE700CAE96724AA97EDFD707F6A6 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		CACD997FE4D38EDB69B8BB1CF84B81B7 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		D25905984646587A1FA860052AF53CB7 /* Pods-Longinus_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Example.release.xcconfig"; sourceTree = "<group>"; };
-		D5504DFA76476F1B20438704FEE95DE9 /* Pods-Longinus_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		DA6ED3DEFB7B665B4E21A5FDD95AFDBE /* Pods-Longinus_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus_Example-umbrella.h"; sourceTree = "<group>"; };
-		E90B272A683A9B2CB4E7A360EAF31652 /* Longinus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Longinus.release.xcconfig; sourceTree = "<group>"; };
-		EBE304516E46499E0B5DD9B5924600E1 /* Longinus.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = Longinus.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		FABBAE65134C2427EB75C42AB23162D0 /* Pods-Longinus_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		023BB55B85AB9B7F9D63D97160336442 /* Pods-Longinus_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus_Example.modulemap"; sourceTree = "<group>"; };
+		03FB889C47EFDB05FA62298F3B28AD2F /* DispatchQueueExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DispatchQueueExtension.swift; path = Longinus/Classes/Utility/DispatchQueueExtension.swift; sourceTree = "<group>"; };
+		06214397455952650AECEE3B77B75A70 /* Pods-Longinus-SwiftUI-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Longinus-SwiftUI-Example-dummy.m"; sourceTree = "<group>"; };
+		06B0938FDBBE687557789A883596436F /* LinkedMap.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LinkedMap.swift; path = Longinus/Classes/Utility/LinkedMap.swift; sourceTree = "<group>"; };
+		08430C329609F98763407A1EC482CD19 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		0B1124EFB518C3D7D1126AA676B1D150 /* Pods-Longinus-SwiftUI-Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus-SwiftUI-Example-Info.plist"; sourceTree = "<group>"; };
+		0CACAAA6C770FE53D4D04CF79C7F4CE9 /* LonginusPrint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LonginusPrint.swift; path = Longinus/Classes/Utility/LonginusPrint.swift; sourceTree = "<group>"; };
+		0F587D6B274E3E9882C4B14F973282A8 /* ImageGIFCoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageGIFCoder.swift; path = Longinus/Classes/ImageCode/ImageGIFCoder.swift; sourceTree = "<group>"; };
+		0FC1ACA43CDD042459BDD1FE47F16B68 /* ImageDownloadRequestModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloadRequestModifier.swift; path = Longinus/Classes/Networking/ImageDownloadRequestModifier.swift; sourceTree = "<group>"; };
+		149F0D56A67F889600A07DB4B58EE79B /* Longinus.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = Longinus.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		14FC009F852BE8C3BA36B7B46F026532 /* DispatchSemaphore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DispatchSemaphore.swift; path = Longinus/Classes/Utility/DispatchSemaphore.swift; sourceTree = "<group>"; };
+		1A9A1D7CAB95819A3F8E73716AF14DB1 /* UIViewExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIViewExtension.swift; path = Longinus/Classes/Utility/UIViewExtension.swift; sourceTree = "<group>"; };
+		1CFB97592F3B0B7C8B2A2462EF5F67D1 /* DataExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataExtension.swift; path = Longinus/Classes/ImageCode/DataExtension.swift; sourceTree = "<group>"; };
+		1DF2FE77C882C7A5BCC0510F1213A380 /* DispatchQueuePool.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DispatchQueuePool.swift; path = Longinus/Classes/Utility/DispatchQueuePool.swift; sourceTree = "<group>"; };
+		1E1FAA8C6FBFDCF0FD597F7436597BA8 /* Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch"; sourceTree = "<group>"; };
+		213A749FB697BF1EDB547DE8689C3063 /* Pods_Longinus_SwiftUI_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Longinus_SwiftUI_Example.framework; path = "Pods-Longinus-SwiftUI-Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24150D234BC2219659FCDA85E27BC8D8 /* Pods-Longinus_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		26618A9BA9AC7D43A5AC361A83B50045 /* Cacheable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cacheable.swift; path = Longinus/Classes/Cache/Cacheable.swift; sourceTree = "<group>"; };
+		26990437F032F2FF56433A7B01F2F2F0 /* Pods-Longinus_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Tests-Info.plist"; sourceTree = "<group>"; };
+		282216F27A3701AE4EB63946283A6948 /* Box.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Box.swift; path = Longinus/Classes/Utility/Box.swift; sourceTree = "<group>"; };
+		29ABDDD64EB672BA448191A1B8E96DF7 /* Longinus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Longinus.framework; path = "Longinus-3985d303.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C7C2CF7C426C6FA4EC1F36203F8D95B /* Longinus-3985d303-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Longinus-3985d303-umbrella.h"; sourceTree = "<group>"; };
+		2FEB4DC7223CFC4C7554BBF874061739 /* SQLiteUtil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SQLiteUtil.swift; path = Longinus/Classes/Utility/SQLiteUtil.swift; sourceTree = "<group>"; };
+		312B988EF117AE4DE76A268D970131FE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		33EB428504FC12FEB60A2E006B33DAE5 /* Longinus-3985d303-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Longinus-3985d303-Info.plist"; sourceTree = "<group>"; };
+		348D384804F2DEACA4893123A5AB51A5 /* AnimatedImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnimatedImageView.swift; path = Longinus/Classes/ImageCode/AnimatedImageView.swift; sourceTree = "<group>"; };
+		3B049F0FF8202DBAC14971B0D2B0443E /* Pods-Longinus_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Longinus_Example-frameworks.sh"; sourceTree = "<group>"; };
+		3CDD93FCE308ACA5BB393BB6D6153A32 /* Pods-Longinus_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		3D20A9BBD43CBB730FF6CF8DECD1151A /* Pods-Longinus-SwiftUI-Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus-SwiftUI-Example-umbrella.h"; sourceTree = "<group>"; };
+		3D481A822DD77240CA58639C0D8D50FA /* LonginusImageOptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LonginusImageOptions.swift; path = Longinus/Classes/General/LonginusImageOptions.swift; sourceTree = "<group>"; };
+		3FCE1A29D7B868B4A1226F9107B75F97 /* ImageCacher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageCacher.swift; path = Longinus/Classes/General/ImageCacher.swift; sourceTree = "<group>"; };
+		40F52C5708972E5F6F9EFE8B747817E6 /* Pods-Longinus_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		4524620D1DDA5223A330E9EB4EF311B9 /* DeviceExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = Longinus/Classes/Utility/DeviceExtension.swift; sourceTree = "<group>"; };
+		46091797F31E76B9D1434465F250DEB7 /* ImageDownloader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloader.swift; path = Longinus/Classes/Networking/ImageDownloader.swift; sourceTree = "<group>"; };
+		4C2D7B6380F3B46DED340642BFF25C2D /* Longinus-3985d303-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Longinus-3985d303-prefix.pch"; sourceTree = "<group>"; };
+		4C513657556F0BC705A0593FC61BEF6B /* Mutex.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Mutex.swift; path = Longinus/Classes/Utility/Mutex.swift; sourceTree = "<group>"; };
+		4DCFC7DBD03BEBCDFB1125D0E2056F5F /* Pods-Longinus-SwiftUI-Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus-SwiftUI-Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		4E09ED83D6C485AC640F4F7EAFFB91A5 /* LonginusWeakProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LonginusWeakProxy.swift; path = Longinus/Classes/Utility/LonginusWeakProxy.swift; sourceTree = "<group>"; };
+		4E513D35E195C1DF461E7CFCA4286AF0 /* Image.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Image.swift; path = Longinus/Classes/ImageCode/Image.swift; sourceTree = "<group>"; };
+		52E8186A4746C85109D03FC058CD454F /* ImageWebCacheResourceable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageWebCacheResourceable.swift; path = Longinus/Classes/Networking/ImageWebCacheResourceable.swift; sourceTree = "<group>"; };
+		554A7769DD3272F2EC0CC9A7AFAD79BF /* ImageDownloadRedirectHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloadRedirectHandler.swift; path = Longinus/Classes/Networking/ImageDownloadRedirectHandler.swift; sourceTree = "<group>"; };
+		5682511044C1D8CE09A1432B772D7171 /* Pods-Longinus_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		57D9C0F5D275FB733326F64D81D04D56 /* ImageWebCacheable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageWebCacheable.swift; path = Longinus/Classes/General/ImageWebCacheable.swift; sourceTree = "<group>"; };
+		580E560CC4778E901505CEAED9D5891F /* Longinus.default-Cache-ImageCode-Networking-Utility.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Longinus.default-Cache-ImageCode-Networking-Utility.debug.xcconfig"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility.debug.xcconfig"; sourceTree = "<group>"; };
+		5A5FC340008C49015C0C36865A5688A2 /* LGImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LGImage.swift; path = Longinus/Classes/SwiftUI/LGImage.swift; sourceTree = "<group>"; };
+		60E678B7E1C4F6401811ACD683E6A277 /* Pods-Longinus-SwiftUI-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus-SwiftUI-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		61CD093FA9861353D9AB183AA49C9207 /* Longinus.default-Cache-ImageCode-Networking-Utility.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; name = "Longinus.default-Cache-ImageCode-Networking-Utility.modulemap"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility.modulemap"; sourceTree = "<group>"; };
+		655AF0062D667EF9AD9E492F4F197D23 /* Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m"; sourceTree = "<group>"; };
+		66647298CFE815C9066D2E1F8B240E7A /* UnfairLock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UnfairLock.swift; path = Longinus/Classes/Utility/UnfairLock.swift; sourceTree = "<group>"; };
+		6B875B11DDF9042877CA24660844F01C /* Pods-Longinus_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus_Tests-umbrella.h"; sourceTree = "<group>"; };
+		76FBEA63A538DEB3A29DC63F21D752A1 /* Runtime.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Runtime.swift; path = Longinus/Classes/Utility/Runtime.swift; sourceTree = "<group>"; };
+		7C98BA6521D5087502B8928BE14AF208 /* ImageLoadTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageLoadTask.swift; path = Longinus/Classes/General/ImageLoadTask.swift; sourceTree = "<group>"; };
+		7D47B43055CF362788D212A67EB8DD1E /* Pods_Longinus_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Longinus_Example.framework; path = "Pods-Longinus_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B6EF763FB0FC037BCCED16655CEFC0 /* Longinus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Longinus.framework; path = "Longinus.default-Cache-ImageCode-Networking-Utility.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		826761B5E8B21827571DC27EDBF31225 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		8B22C025DC33EBCAEC8A3AB9FA2C5412 /* ImageTransformer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageTransformer.swift; path = Longinus/Classes/ImageCode/ImageTransformer.swift; sourceTree = "<group>"; };
+		9648706B0E5B82E54A255A6871E0B699 /* DiskCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiskCache.swift; path = Longinus/Classes/Cache/DiskCache.swift; sourceTree = "<group>"; };
+		983702DAED7BB587C6B4C8926D316250 /* UIImageView+Longinus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImageView+Longinus.swift"; path = "Longinus/Classes/General/UIImageView+Longinus.swift"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A576F6954A0BFBFC1679B73ABCE278EF /* Pods-Longinus_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Longinus_Tests-dummy.m"; sourceTree = "<group>"; };
+		A963755CC82A68260F874E2253F73566 /* Pods-Longinus-SwiftUI-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus-SwiftUI-Example.release.xcconfig"; sourceTree = "<group>"; };
+		A9AE58B477DD0DA15647DEA91E290E39 /* CALayer+Longinus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CALayer+Longinus.swift"; path = "Longinus/Classes/General/CALayer+Longinus.swift"; sourceTree = "<group>"; };
+		ADC3A347154A498229169B3CDF9993C9 /* StringExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Longinus/Classes/Cache/StringExtension.swift; sourceTree = "<group>"; };
+		ADDF44B200F3A5D465957FF989012B26 /* Longinus-3985d303.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Longinus-3985d303.release.xcconfig"; sourceTree = "<group>"; };
+		AEDA1591BEFD0D0A856AA2DBE0FD2B18 /* Pods-Longinus_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus_Tests.modulemap"; sourceTree = "<group>"; };
+		B5498F919B8E1B4090AE750C97A46452 /* AuthenticationChallengeResponsable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthenticationChallengeResponsable.swift; path = Longinus/Classes/Networking/AuthenticationChallengeResponsable.swift; sourceTree = "<group>"; };
+		B5A35D51A77C430E8911A64662F41BD0 /* Longinus-3985d303.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Longinus-3985d303.modulemap"; sourceTree = "<group>"; };
+		B84B5B1DD3AC3510AE858AC0A7C67383 /* Pods-Longinus_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
+		B8DB6D53E63B758CB3B45D8F32749B4C /* ImageBinder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageBinder.swift; path = Longinus/Classes/SwiftUI/ImageBinder.swift; sourceTree = "<group>"; };
+		BC1B3510773191A9338F18498B71B213 /* ImageIOCoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageIOCoder.swift; path = Longinus/Classes/ImageCode/ImageIOCoder.swift; sourceTree = "<group>"; };
+		BE2F12122484B84681A8A8E383365689 /* Longinus-3985d303.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Longinus-3985d303.debug.xcconfig"; sourceTree = "<group>"; };
+		BF8E4BE03CDF2A8CB482AF289FE10707 /* Pods_Longinus_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Longinus_Tests.framework; path = "Pods-Longinus_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFF9203BBFEB394CA9C1CA73841FBCA3 /* ImageCodeable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageCodeable.swift; path = Longinus/Classes/ImageCode/ImageCodeable.swift; sourceTree = "<group>"; };
+		C2C63A3DE1C5B545A4899BE10106CA07 /* Pods-Longinus-SwiftUI-Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Longinus-SwiftUI-Example-frameworks.sh"; sourceTree = "<group>"; };
+		C5407F99637465877216063415564553 /* Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h"; sourceTree = "<group>"; };
+		C682954B1C88975596ABCBEBA734B434 /* ImageDownloadSessionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloadSessionDelegate.swift; path = Longinus/Classes/Networking/ImageDownloadSessionDelegate.swift; sourceTree = "<group>"; };
+		C877EE2BF546FAC5FA9E0BFD814B8DFC /* ImageDownloadOperation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloadOperation.swift; path = Longinus/Classes/Networking/ImageDownloadOperation.swift; sourceTree = "<group>"; };
+		CDC776950EA5FD94A6F4B0D476C469F5 /* ImageDownloadOperationQueue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloadOperationQueue.swift; path = Longinus/Classes/Networking/ImageDownloadOperationQueue.swift; sourceTree = "<group>"; };
+		CF5579E854F21B2FF9980BBDD7AB92F8 /* ImageCoderManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageCoderManager.swift; path = Longinus/Classes/ImageCode/ImageCoderManager.swift; sourceTree = "<group>"; };
+		D060EA2EF2DD5FC13BE1D25C9912F5ED /* Longinus-3985d303-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Longinus-3985d303-dummy.m"; sourceTree = "<group>"; };
+		D0BB3E2213422457FC211FCE6E4C7490 /* UIButton+Longinus.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIButton+Longinus.swift"; path = "Longinus/Classes/General/UIButton+Longinus.swift"; sourceTree = "<group>"; };
+		D391F166DA973D3E26F07FC9C19AA6BD /* KVStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KVStorage.swift; path = Longinus/Classes/Cache/KVStorage.swift; sourceTree = "<group>"; };
+		D54E6071CE06D524F40A15E04D921E76 /* MemoryCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MemoryCache.swift; path = Longinus/Classes/Cache/MemoryCache.swift; sourceTree = "<group>"; };
+		D642FAE3BCBD1ED1866DE7B3F7585FD6 /* Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist"; sourceTree = "<group>"; };
+		D7D1BF96C2BD5B3A4D2134F8132A8FF0 /* NetworkIndicatorManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkIndicatorManager.swift; path = Longinus/Classes/Networking/NetworkIndicatorManager.swift; sourceTree = "<group>"; };
+		DAB791F678056FAFD2964F8B52BC8C1F /* Longinus.default-Cache-ImageCode-Networking-Utility.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Longinus.default-Cache-ImageCode-Networking-Utility.release.xcconfig"; path = "../Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility.release.xcconfig"; sourceTree = "<group>"; };
+		DAC40AB128186EE129F04FBA5902EDD2 /* LonginusCompatible.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LonginusCompatible.swift; path = Longinus/Classes/Utility/LonginusCompatible.swift; sourceTree = "<group>"; };
+		E309B5B74BE45325B592A48821D8448E /* AnimatedImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnimatedImage.swift; path = Longinus/Classes/ImageCode/AnimatedImage.swift; sourceTree = "<group>"; };
+		E39166C735E0512B33D1B81AB34449FA /* Pods-Longinus_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Longinus_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		E786338EBE95EAED9956F2CF58139D6B /* Pods-Longinus_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		EA2391B246F345755F1CCF222E5AF2AA /* Pods-Longinus_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Longinus_Example-umbrella.h"; sourceTree = "<group>"; };
+		F228DA65FEF8CE97464BDD685774E2AA /* Pods-Longinus-SwiftUI-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus-SwiftUI-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		F612593E7618CA7559617E79E637CE23 /* LonginusManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LonginusManager.swift; path = Longinus/Classes/General/LonginusManager.swift; sourceTree = "<group>"; };
+		F67CDE71A81B9B4FEAD9A96BCB62821A /* Pods-Longinus-SwiftUI-Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Longinus-SwiftUI-Example.modulemap"; sourceTree = "<group>"; };
+		F72B2952EB9BA6213491FAD1DAF8D782 /* Pods-Longinus_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Longinus_Example.release.xcconfig"; sourceTree = "<group>"; };
+		FD5BC7430531E53F5261A106BC0B79A0 /* Pods-Longinus_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Longinus_Example-Info.plist"; sourceTree = "<group>"; };
+		FDF219CD192941AB766C7C466C3A19D0 /* Pods-Longinus_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Longinus_Example-dummy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		182D006518D607EB29B0A8FDECB8B2BE /* Frameworks */ = {
+		97FCB8153DD14C17BC12496032874BC5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B9DAB9C775C3AB88FB455F27ECB51EE /* Foundation.framework in Frameworks */,
+				D267DD00467FBBF6D29CC3616A552E91 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		32C033398987C3C6121BD8F888D26CE9 /* Frameworks */ = {
+		A871FA4F968199A1474F363FC455BD04 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5562D03011022B31B1E5173C4728145 /* Foundation.framework in Frameworks */,
+				181798CC8568ECEE99371FA95D6D93EC /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		370A5856AD9DB1B13E3C9DD20E83F9B3 /* Frameworks */ = {
+		C7104C14BF385F548677C421A8815787 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				162EF7EEAB08ECD10A0A3851742FF520 /* Foundation.framework in Frameworks */,
+				5221A0213EAF188ED5EE18A989A919C2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCBB1FB3BF9DCB07CE00A1A6BF585670 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C93293901CDD5ED34D40A85D7AEB0E1F /* Foundation.framework in Frameworks */,
+				B1A7FE04836A2E22F19F367292B7B141 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4F366188E65C4391A169F65AB4F0044 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D553EC08C2D38019EDBC59BA8418467E /* Foundation.framework in Frameworks */,
+				878A140571C669D2B85A17E7AC0C6651 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1AE96DD2966AAF0C8A76A32215FAB7DB /* Utility */ = {
+		1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5F04639B24D0297E007452D8 /* DispatchQueueExtension.swift */,
-				5FADC53E24D01056000240DD /* DeviceExtension.swift */,
-				5FADC53C24D00FBD000240DD /* UIViewExtension.swift */,
-				5FADC53424D00DF0000240DD /* LonginusCompatible.swift */,
-				5FADC52E24D00896000240DD /* DispatchSemaphore.swift */,
-				5BD6095FD475970E449FC9BE354F2760 /* Box.swift */,
-				2B32C926F5E3BF0E1848E7EF77447348 /* DispatchQueuePool.swift */,
-				1EF5AB6B27AC5EE851802EC049830E6B /* LonginusWeakProxy.swift */,
-				AB5273BF8063F5CECB2AF488B34F6154 /* Mutex.swift */,
-				A295A636FCCD44625A58CAE1E195DD80 /* Runtime.swift */,
-				5F59D39A24C4510000E8964B /* SQLiteUtil.swift */,
-				5F59D3FD24C847E400E8964B /* LonginusPrint.swift */,
-				5F8528FB24C97819003B30D3 /* LinkedMap.swift */,
-				5F7B29C924D1419F0073E0D7 /* UnfairLock.swift */,
+				E2983683FD097A93297E2F5D4E382B36 /* iOS */,
 			);
-			name = Utility;
-			path = Longinus/Classes/Utility;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E4E8F50A533D9258E9D1D34834F8262 /* Support Files */ = {
+		38592BC5A08C915C2AA8F43B21488E91 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				C440EC8B94C6795A01729455A65AFEB3 /* Longinus.modulemap */,
-				714928D93B3B7A2A5FDA6607BAE1FE80 /* Longinus-dummy.m */,
-				C243D351FB7286049E28B90D2DA40B59 /* Longinus-Info.plist */,
-				217E4F3E3F6B36CD602B3A7FF48F4608 /* Longinus-prefix.pch */,
-				B9801AEED615C7D70B115F5DAA58CE99 /* Longinus-umbrella.h */,
-				97B935585233A2F3FC8BBAB8F26C987A /* Longinus.debug.xcconfig */,
-				E90B272A683A9B2CB4E7A360EAF31652 /* Longinus.release.xcconfig */,
+				B8DB6D53E63B758CB3B45D8F32749B4C /* ImageBinder.swift */,
+				5A5FC340008C49015C0C36865A5688A2 /* LGImage.swift */,
 			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/Longinus";
+			name = SwiftUI;
 			sourceTree = "<group>";
 		};
-		41EE7D2557C037EC9C89EAA8B33D7197 /* Longinus */ = {
+		38F62AA234F0DAD714407827A171DF43 /* Longinus */ = {
 			isa = PBXGroup;
 			children = (
-				5FADC57424D0169B000240DD /* ImageCode */,
-				5F94EFE0DE73F7A38C746BB74C9F5D06 /* Cache */,
-				DD27FE7B82690D98B0A877FCBB58B1C9 /* General */,
-				51825EAD510C08844CC8764D5A01EADB /* Networking */,
-				8F4171D02DBC84E7AB947B47FBB542EE /* Pod */,
-				3E4E8F50A533D9258E9D1D34834F8262 /* Support Files */,
-				1AE96DD2966AAF0C8A76A32215FAB7DB /* Utility */,
+				A6387616CA3AF1E6C7FAB69C10E89641 /* Cache */,
+				8B34D8662C33E5D9A138767EF57FB9D8 /* General */,
+				F289BB97A60FC412942BB40B22AF6040 /* ImageCode */,
+				D0FBFA694253FEF08E7C7B9E9AD29729 /* Networking */,
+				3AE12A3DB83DC47359F1C61216609713 /* Pod */,
+				C45C55BB5C7DAD4814B9178E65CA6737 /* Support Files */,
+				38592BC5A08C915C2AA8F43B21488E91 /* SwiftUI */,
+				794BA1D032CABFCBB77CC45C68C233A0 /* Utility */,
 			);
 			name = Longinus;
 			path = ../..;
 			sourceTree = "<group>";
 		};
-		4FA0AC389DB905F06F38229AB4AD7A40 /* Development Pods */ = {
+		39AEEBD63B4032AFEF1B7F84206B1AF9 /* Pods-Longinus_Tests */ = {
 			isa = PBXGroup;
 			children = (
-				41EE7D2557C037EC9C89EAA8B33D7197 /* Longinus */,
+				AEDA1591BEFD0D0A856AA2DBE0FD2B18 /* Pods-Longinus_Tests.modulemap */,
+				E39166C735E0512B33D1B81AB34449FA /* Pods-Longinus_Tests-acknowledgements.markdown */,
+				B84B5B1DD3AC3510AE858AC0A7C67383 /* Pods-Longinus_Tests-acknowledgements.plist */,
+				A576F6954A0BFBFC1679B73ABCE278EF /* Pods-Longinus_Tests-dummy.m */,
+				26990437F032F2FF56433A7B01F2F2F0 /* Pods-Longinus_Tests-Info.plist */,
+				6B875B11DDF9042877CA24660844F01C /* Pods-Longinus_Tests-umbrella.h */,
+				3CDD93FCE308ACA5BB393BB6D6153A32 /* Pods-Longinus_Tests.debug.xcconfig */,
+				40F52C5708972E5F6F9EFE8B747817E6 /* Pods-Longinus_Tests.release.xcconfig */,
 			);
-			name = "Development Pods";
+			name = "Pods-Longinus_Tests";
+			path = "Target Support Files/Pods-Longinus_Tests";
 			sourceTree = "<group>";
 		};
-		51825EAD510C08844CC8764D5A01EADB /* Networking */ = {
+		3AE12A3DB83DC47359F1C61216609713 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				1B789BAFA646CED036B3792D26BEB1CD /* ImageDownloader.swift */,
-				5773C8D6A8608AD2DC1CFE83D02854BF /* ImageDownloadOperation.swift */,
-				B6D44EA1DDB33D08D07E551644FDE752 /* ImageDownloadOperationQueue.swift */,
-				81BBE279FC910081C5E5B2843A63998A /* ImageWebCacheResourceable.swift */,
-				5F04639324D01BD8007452D8 /* NetworkIndicatorManager.swift */,
-				5F9FDE2024FA8DA70058FD84 /* ImageDownloadRequestModifier.swift */,
-				5F9FDE2424FABC270058FD84 /* ImageDownloadRedirectHandler.swift */,
-				5F9FDE2224FAB7790058FD84 /* ImageDownloadSessionDelegate.swift */,
-				5F9FDE2624FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift */,
-			);
-			name = Networking;
-			path = Longinus/Classes/Networking;
-			sourceTree = "<group>";
-		};
-		55CBB8C020AB7176F3D3048485FA5633 /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				ABD1739AD7DEB27D028A6344908AA27F /* Pods-Longinus_Example */,
-				FEF2AAD2E5CE21C30D06401815EF3CC9 /* Pods-Longinus_Tests */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		5F94EFE0DE73F7A38C746BB74C9F5D06 /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-				5FADC53224D00B70000240DD /* StringExtension.swift */,
-				5F59D3B224C4974600E8964B /* Cacheable.swift */,
-				5F59D3B424C4974600E8964B /* DiskCache.swift */,
-				5F59D3B024C4974500E8964B /* KVStorage.swift */,
-				5F59D3B324C4974600E8964B /* MemoryCache.swift */,
-			);
-			name = Cache;
-			path = Longinus/Classes/Cache;
-			sourceTree = "<group>";
-		};
-		5FADC57424D0169B000240DD /* ImageCode */ = {
-			isa = PBXGroup;
-			children = (
-				5FADC57624D0169B000240DD /* Image.swift */,
-				5FADC57724D0169B000240DD /* ImageTransformer.swift */,
-				5FADC57824D0169B000240DD /* ImageCodeable.swift */,
-				5FADC57924D0169B000240DD /* AnimatedImage.swift */,
-				5FADC57A24D0169B000240DD /* AnimatedImageView.swift */,
-				5FADC57B24D0169B000240DD /* ImageCoderManager.swift */,
-				5FADC57C24D0169B000240DD /* DataExtension.swift */,
-				5FADC57D24D0169B000240DD /* ImageIOCoder.swift */,
-				5FADC57E24D0169B000240DD /* ImageGIFCoder.swift */,
-			);
-			name = ImageCode;
-			path = Longinus/Classes/ImageCode;
-			sourceTree = "<group>";
-		};
-		8F4171D02DBC84E7AB947B47FBB542EE /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				C60FFE700CAE96724AA97EDFD707F6A6 /* LICENSE */,
-				EBE304516E46499E0B5DD9B5924600E1 /* Longinus.podspec */,
-				CACD997FE4D38EDB69B8BB1CF84B81B7 /* README.md */,
+				826761B5E8B21827571DC27EDBF31225 /* LICENSE */,
+				149F0D56A67F889600A07DB4B58EE79B /* Longinus.podspec */,
+				08430C329609F98763407A1EC482CD19 /* README.md */,
 			);
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		9829783E3B37751A061947DFD49886E2 /* Products */ = {
+		64E6A7898EBEA37AD9F2C16FC7D6BE09 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A414B72E433A6EDE434F80FF56EA299E /* Longinus.framework */,
+				29ABDDD64EB672BA448191A1B8E96DF7 /* Longinus.framework */,
+				81B6EF763FB0FC037BCCED16655CEFC0 /* Longinus.framework */,
 				7D47B43055CF362788D212A67EB8DD1E /* Pods_Longinus_Example.framework */,
+				213A749FB697BF1EDB547DE8689C3063 /* Pods_Longinus_SwiftUI_Example.framework */,
 				BF8E4BE03CDF2A8CB482AF289FE10707 /* Pods_Longinus_Tests.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		ABD1739AD7DEB27D028A6344908AA27F /* Pods-Longinus_Example */ = {
+		7338AA7B292D20FEDFE5FBB885816529 /* Pods-Longinus-SwiftUI-Example */ = {
 			isa = PBXGroup;
 			children = (
-				5207336B44E444D74567E9368EE2F549 /* Pods-Longinus_Example.modulemap */,
-				4F955DFD3E065D1864E4AD3FA432634D /* Pods-Longinus_Example-acknowledgements.markdown */,
-				4D677E4A6EAC9105B4C8A5C26875D1FB /* Pods-Longinus_Example-acknowledgements.plist */,
-				2F3400021F588BD55F11B952AD5D089D /* Pods-Longinus_Example-dummy.m */,
-				4C6EFD67C644DC9DC13EB3968B59C9DD /* Pods-Longinus_Example-frameworks.sh */,
-				180379AAEE104E4B23E2D309DAED1064 /* Pods-Longinus_Example-Info.plist */,
-				DA6ED3DEFB7B665B4E21A5FDD95AFDBE /* Pods-Longinus_Example-umbrella.h */,
-				D5504DFA76476F1B20438704FEE95DE9 /* Pods-Longinus_Example.debug.xcconfig */,
-				D25905984646587A1FA860052AF53CB7 /* Pods-Longinus_Example.release.xcconfig */,
+				F67CDE71A81B9B4FEAD9A96BCB62821A /* Pods-Longinus-SwiftUI-Example.modulemap */,
+				60E678B7E1C4F6401811ACD683E6A277 /* Pods-Longinus-SwiftUI-Example-acknowledgements.markdown */,
+				4DCFC7DBD03BEBCDFB1125D0E2056F5F /* Pods-Longinus-SwiftUI-Example-acknowledgements.plist */,
+				06214397455952650AECEE3B77B75A70 /* Pods-Longinus-SwiftUI-Example-dummy.m */,
+				C2C63A3DE1C5B545A4899BE10106CA07 /* Pods-Longinus-SwiftUI-Example-frameworks.sh */,
+				0B1124EFB518C3D7D1126AA676B1D150 /* Pods-Longinus-SwiftUI-Example-Info.plist */,
+				3D20A9BBD43CBB730FF6CF8DECD1151A /* Pods-Longinus-SwiftUI-Example-umbrella.h */,
+				F228DA65FEF8CE97464BDD685774E2AA /* Pods-Longinus-SwiftUI-Example.debug.xcconfig */,
+				A963755CC82A68260F874E2253F73566 /* Pods-Longinus-SwiftUI-Example.release.xcconfig */,
 			);
-			name = "Pods-Longinus_Example";
-			path = "Target Support Files/Pods-Longinus_Example";
+			name = "Pods-Longinus-SwiftUI-Example";
+			path = "Target Support Files/Pods-Longinus-SwiftUI-Example";
 			sourceTree = "<group>";
 		};
-		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
+		794BA1D032CABFCBB77CC45C68C233A0 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
+				282216F27A3701AE4EB63946283A6948 /* Box.swift */,
+				4524620D1DDA5223A330E9EB4EF311B9 /* DeviceExtension.swift */,
+				03FB889C47EFDB05FA62298F3B28AD2F /* DispatchQueueExtension.swift */,
+				1DF2FE77C882C7A5BCC0510F1213A380 /* DispatchQueuePool.swift */,
+				14FC009F852BE8C3BA36B7B46F026532 /* DispatchSemaphore.swift */,
+				06B0938FDBBE687557789A883596436F /* LinkedMap.swift */,
+				DAC40AB128186EE129F04FBA5902EDD2 /* LonginusCompatible.swift */,
+				0CACAAA6C770FE53D4D04CF79C7F4CE9 /* LonginusPrint.swift */,
+				4E09ED83D6C485AC640F4F7EAFFB91A5 /* LonginusWeakProxy.swift */,
+				4C513657556F0BC705A0593FC61BEF6B /* Mutex.swift */,
+				76FBEA63A538DEB3A29DC63F21D752A1 /* Runtime.swift */,
+				2FEB4DC7223CFC4C7554BBF874061739 /* SQLiteUtil.swift */,
+				1A9A1D7CAB95819A3F8E73716AF14DB1 /* UIViewExtension.swift */,
+				66647298CFE815C9066D2E1F8B240E7A /* UnfairLock.swift */,
 			);
-			name = iOS;
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		8B34D8662C33E5D9A138767EF57FB9D8 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				A9AE58B477DD0DA15647DEA91E290E39 /* CALayer+Longinus.swift */,
+				3FCE1A29D7B868B4A1226F9107B75F97 /* ImageCacher.swift */,
+				7C98BA6521D5087502B8928BE14AF208 /* ImageLoadTask.swift */,
+				57D9C0F5D275FB733326F64D81D04D56 /* ImageWebCacheable.swift */,
+				3D481A822DD77240CA58639C0D8D50FA /* LonginusImageOptions.swift */,
+				F612593E7618CA7559617E79E637CE23 /* LonginusManager.swift */,
+				D0BB3E2213422457FC211FCE6E4C7490 /* UIButton+Longinus.swift */,
+				983702DAED7BB587C6B4C8926D316250 /* UIImageView+Longinus.swift */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		A6387616CA3AF1E6C7FAB69C10E89641 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				26618A9BA9AC7D43A5AC361A83B50045 /* Cacheable.swift */,
+				9648706B0E5B82E54A255A6871E0B699 /* DiskCache.swift */,
+				D391F166DA973D3E26F07FC9C19AA6BD /* KVStorage.swift */,
+				D54E6071CE06D524F40A15E04D921E76 /* MemoryCache.swift */,
+				ADC3A347154A498229169B3CDF9993C9 /* StringExtension.swift */,
+			);
+			name = Cache;
+			sourceTree = "<group>";
+		};
+		AAC5CBBD840495A1BE6C90BC33EE8D1C /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				7338AA7B292D20FEDFE5FBB885816529 /* Pods-Longinus-SwiftUI-Example */,
+				D0A01BFA01BBF419008217ADA9665BB7 /* Pods-Longinus_Example */,
+				39AEEBD63B4032AFEF1B7F84206B1AF9 /* Pods-Longinus_Tests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		C45C55BB5C7DAD4814B9178E65CA6737 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B5A35D51A77C430E8911A64662F41BD0 /* Longinus-3985d303.modulemap */,
+				D060EA2EF2DD5FC13BE1D25C9912F5ED /* Longinus-3985d303-dummy.m */,
+				33EB428504FC12FEB60A2E006B33DAE5 /* Longinus-3985d303-Info.plist */,
+				4C2D7B6380F3B46DED340642BFF25C2D /* Longinus-3985d303-prefix.pch */,
+				2C7C2CF7C426C6FA4EC1F36203F8D95B /* Longinus-3985d303-umbrella.h */,
+				BE2F12122484B84681A8A8E383365689 /* Longinus-3985d303.debug.xcconfig */,
+				ADDF44B200F3A5D465957FF989012B26 /* Longinus-3985d303.release.xcconfig */,
+				61CD093FA9861353D9AB183AA49C9207 /* Longinus.default-Cache-ImageCode-Networking-Utility.modulemap */,
+				655AF0062D667EF9AD9E492F4F197D23 /* Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m */,
+				D642FAE3BCBD1ED1866DE7B3F7585FD6 /* Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist */,
+				1E1FAA8C6FBFDCF0FD597F7436597BA8 /* Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch */,
+				C5407F99637465877216063415564553 /* Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h */,
+				580E560CC4778E901505CEAED9D5891F /* Longinus.default-Cache-ImageCode-Networking-Utility.debug.xcconfig */,
+				DAB791F678056FAFD2964F8B52BC8C1F /* Longinus.default-Cache-ImageCode-Networking-Utility.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/Longinus-3985d303";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				4FA0AC389DB905F06F38229AB4AD7A40 /* Development Pods */,
-				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				9829783E3B37751A061947DFD49886E2 /* Products */,
-				55CBB8C020AB7176F3D3048485FA5633 /* Targets Support Files */,
+				DB206AFF9C76091AAD29392F3F412960 /* Development Pods */,
+				1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */,
+				64E6A7898EBEA37AD9F2C16FC7D6BE09 /* Products */,
+				AAC5CBBD840495A1BE6C90BC33EE8D1C /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+		D0A01BFA01BBF419008217ADA9665BB7 /* Pods-Longinus_Example */ = {
 			isa = PBXGroup;
 			children = (
-				C0834CEBB1379A84116EF29F93051C60 /* iOS */,
+				023BB55B85AB9B7F9D63D97160336442 /* Pods-Longinus_Example.modulemap */,
+				5682511044C1D8CE09A1432B772D7171 /* Pods-Longinus_Example-acknowledgements.markdown */,
+				24150D234BC2219659FCDA85E27BC8D8 /* Pods-Longinus_Example-acknowledgements.plist */,
+				FDF219CD192941AB766C7C466C3A19D0 /* Pods-Longinus_Example-dummy.m */,
+				3B049F0FF8202DBAC14971B0D2B0443E /* Pods-Longinus_Example-frameworks.sh */,
+				FD5BC7430531E53F5261A106BC0B79A0 /* Pods-Longinus_Example-Info.plist */,
+				EA2391B246F345755F1CCF222E5AF2AA /* Pods-Longinus_Example-umbrella.h */,
+				E786338EBE95EAED9956F2CF58139D6B /* Pods-Longinus_Example.debug.xcconfig */,
+				F72B2952EB9BA6213491FAD1DAF8D782 /* Pods-Longinus_Example.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = "Pods-Longinus_Example";
+			path = "Target Support Files/Pods-Longinus_Example";
 			sourceTree = "<group>";
 		};
-		DD27FE7B82690D98B0A877FCBB58B1C9 /* General */ = {
+		D0FBFA694253FEF08E7C7B9E9AD29729 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				5F9FDE1E24FA8D780058FD84 /* LonginusImageOptions.swift */,
-				5F04639624D01CE3007452D8 /* CALayer+Longinus.swift */,
-				5F04639524D01CE3007452D8 /* UIButton+Longinus.swift */,
-				5F04639724D01CE3007452D8 /* UIImageView+Longinus.swift */,
-				5F04638F24D01B23007452D8 /* ImageLoadTask.swift */,
-				5F04639024D01B23007452D8 /* ImageWebCacheable.swift */,
-				5FADC53024D00A4B000240DD /* ImageCacher.swift */,
-				29C215C3494A5EAFC709AE717B5E17D0 /* LonginusManager.swift */,
+				B5498F919B8E1B4090AE750C97A46452 /* AuthenticationChallengeResponsable.swift */,
+				46091797F31E76B9D1434465F250DEB7 /* ImageDownloader.swift */,
+				C877EE2BF546FAC5FA9E0BFD814B8DFC /* ImageDownloadOperation.swift */,
+				CDC776950EA5FD94A6F4B0D476C469F5 /* ImageDownloadOperationQueue.swift */,
+				554A7769DD3272F2EC0CC9A7AFAD79BF /* ImageDownloadRedirectHandler.swift */,
+				0FC1ACA43CDD042459BDD1FE47F16B68 /* ImageDownloadRequestModifier.swift */,
+				C682954B1C88975596ABCBEBA734B434 /* ImageDownloadSessionDelegate.swift */,
+				52E8186A4746C85109D03FC058CD454F /* ImageWebCacheResourceable.swift */,
+				D7D1BF96C2BD5B3A4D2134F8132A8FF0 /* NetworkIndicatorManager.swift */,
 			);
-			name = General;
-			path = Longinus/Classes/General;
+			name = Networking;
 			sourceTree = "<group>";
 		};
-		FEF2AAD2E5CE21C30D06401815EF3CC9 /* Pods-Longinus_Tests */ = {
+		DB206AFF9C76091AAD29392F3F412960 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				220BC7B1B5BED5092260A231997E0BD9 /* Pods-Longinus_Tests.modulemap */,
-				70303AFAB3C8480A677B6293E15B68AB /* Pods-Longinus_Tests-acknowledgements.markdown */,
-				2038671C0A9E7E2C199B62EDB2A4D6EE /* Pods-Longinus_Tests-acknowledgements.plist */,
-				5068D075D186D1363A0E047F44BDCEB9 /* Pods-Longinus_Tests-dummy.m */,
-				8C522FF834074F70E805542CAA72EF3C /* Pods-Longinus_Tests-Info.plist */,
-				508FE13D756C19FB34DFAC73753DDDDB /* Pods-Longinus_Tests-umbrella.h */,
-				FABBAE65134C2427EB75C42AB23162D0 /* Pods-Longinus_Tests.debug.xcconfig */,
-				8305C3F284B180342D215116CF2A7016 /* Pods-Longinus_Tests.release.xcconfig */,
+				38F62AA234F0DAD714407827A171DF43 /* Longinus */,
 			);
-			name = "Pods-Longinus_Tests";
-			path = "Target Support Files/Pods-Longinus_Tests";
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		E2983683FD097A93297E2F5D4E382B36 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */,
+				312B988EF117AE4DE76A268D970131FE /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		F289BB97A60FC412942BB40B22AF6040 /* ImageCode */ = {
+			isa = PBXGroup;
+			children = (
+				E309B5B74BE45325B592A48821D8448E /* AnimatedImage.swift */,
+				348D384804F2DEACA4893123A5AB51A5 /* AnimatedImageView.swift */,
+				1CFB97592F3B0B7C8B2A2462EF5F67D1 /* DataExtension.swift */,
+				4E513D35E195C1DF461E7CFCA4286AF0 /* Image.swift */,
+				BFF9203BBFEB394CA9C1CA73841FBCA3 /* ImageCodeable.swift */,
+				CF5579E854F21B2FF9980BBDD7AB92F8 /* ImageCoderManager.swift */,
+				0F587D6B274E3E9882C4B14F973282A8 /* ImageGIFCoder.swift */,
+				BC1B3510773191A9338F18498B71B213 /* ImageIOCoder.swift */,
+				8B22C025DC33EBCAEC8A3AB9FA2C5412 /* ImageTransformer.swift */,
+			);
+			name = ImageCode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		0112A31FFE0ADC7C6223A2E3B9FAB186 /* Headers */ = {
+		504A61F990226254819F57717933996E /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A3937731B856764D67F32B9F6823A17 /* Longinus-umbrella.h in Headers */,
+				FD143B44D753EB46300715C1C537505D /* Pods-Longinus-SwiftUI-Example-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		08B3AD88A8047E521C91DB50952C06D0 /* Headers */ = {
+		6C4934D99DAC81DA71DA97B47078D163 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1DCE2EDD873ED67B1EFC96952BD3EBBB /* Pods-Longinus_Tests-umbrella.h in Headers */,
+				EE61951091A73EA3D6FA427217ADB967 /* Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4B8C2273926618E4D9399B13D5A1D2C1 /* Headers */ = {
+		6CB20AFCA2A80CBA49453DC14BB6C175 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4233A9697FA680B5D6BF48FC2AA9DC66 /* Pods-Longinus_Example-umbrella.h in Headers */,
+				620BF5E9CD3E06C3C28DE052C04CFA34 /* Longinus-3985d303-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2C6A92849DBA728A08E87C319B4EB0D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAFC4ECC20070878755ACE722A739EBB /* Pods-Longinus_Example-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C631BC2CC4E9C117A8A82AB4CFCEE27C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74E96E1715FF885160FBED3968450E9F /* Pods-Longinus_Tests-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		470D9BC3F2F4A0D92DD34F2A5F5D8771 /* Longinus */ = {
+		8DCD42843680E4F77B6A8DE17914C329 /* Longinus.default-Cache-ImageCode-Networking-Utility */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A03912456D2CA5A50BF3E3781A3F9A3B /* Build configuration list for PBXNativeTarget "Longinus" */;
+			buildConfigurationList = 7C47A4716559F56F21FE9DEA9D78CDFC /* Build configuration list for PBXNativeTarget "Longinus.default-Cache-ImageCode-Networking-Utility" */;
 			buildPhases = (
-				0112A31FFE0ADC7C6223A2E3B9FAB186 /* Headers */,
-				3E57236054E66C83A56B9A47D7EEAE45 /* Sources */,
-				32C033398987C3C6121BD8F888D26CE9 /* Frameworks */,
-				415A8E0C0BC6E65C69FB0EB8FF45D78F /* Resources */,
+				6C4934D99DAC81DA71DA97B47078D163 /* Headers */,
+				4305E467E32F0AB9594418840580EFFC /* Sources */,
+				F4F366188E65C4391A169F65AB4F0044 /* Frameworks */,
+				B42275F7CF05B5D20B16B3C5A8B745AB /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Longinus;
-			productName = Longinus;
-			productReference = A414B72E433A6EDE434F80FF56EA299E /* Longinus.framework */;
+			name = "Longinus.default-Cache-ImageCode-Networking-Utility";
+			productName = "Longinus.default-Cache-ImageCode-Networking-Utility";
+			productReference = 81B6EF763FB0FC037BCCED16655CEFC0 /* Longinus.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		AB4B752A90CC52534D34286C35D72690 /* Pods-Longinus_Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F77873572C0167643A9547991D42261 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Example" */;
+			buildConfigurationList = D1C9C7A6654D757C107A65CD585110AA /* Build configuration list for PBXNativeTarget "Pods-Longinus_Example" */;
 			buildPhases = (
-				4B8C2273926618E4D9399B13D5A1D2C1 /* Headers */,
-				03B78D797195686B6994F8A201596C63 /* Sources */,
-				182D006518D607EB29B0A8FDECB8B2BE /* Frameworks */,
-				98D4C79803E82C942E01346677817966 /* Resources */,
+				A2C6A92849DBA728A08E87C319B4EB0D /* Headers */,
+				14C41346619B3DAB8E7D0ACB6184D6B8 /* Sources */,
+				97FCB8153DD14C17BC12496032874BC5 /* Frameworks */,
+				40A4BB2F53DAAEECB4C051F58D1D9596 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				251B461CD900CAC03437011FA763C022 /* PBXTargetDependency */,
+				6DC6A7754A6350684228B0134EC8760C /* PBXTargetDependency */,
 			);
 			name = "Pods-Longinus_Example";
 			productName = "Pods-Longinus_Example";
 			productReference = 7D47B43055CF362788D212A67EB8DD1E /* Pods_Longinus_Example.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		EBAF74CA2BD26657FD776741A330F202 /* Pods-Longinus_Tests */ = {
+		B9A1705AEDE4500E6B58AB554939B8E5 /* Longinus-3985d303 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F366E0D50E4F19BB1056CAE117CC9E38 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Tests" */;
+			buildConfigurationList = 796C26699701AB1FCE3A17788872F058 /* Build configuration list for PBXNativeTarget "Longinus-3985d303" */;
 			buildPhases = (
-				08B3AD88A8047E521C91DB50952C06D0 /* Headers */,
-				E68B0E15D985757F6D24A99BE0887C73 /* Sources */,
-				370A5856AD9DB1B13E3C9DD20E83F9B3 /* Frameworks */,
-				D1C6864876F650137719DA1643C8CF8F /* Resources */,
+				6CB20AFCA2A80CBA49453DC14BB6C175 /* Headers */,
+				0DC70B69CAD95309678D49D10D8CD02D /* Sources */,
+				DCBB1FB3BF9DCB07CE00A1A6BF585670 /* Frameworks */,
+				641EF65A403B0599CF6686833A082961 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AFD565B040BF1845DD6A45C464FDAC62 /* PBXTargetDependency */,
+			);
+			name = "Longinus-3985d303";
+			productName = "Longinus-3985d303";
+			productReference = 29ABDDD64EB672BA448191A1B8E96DF7 /* Longinus.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C455772E26A8D1A79A14EB681CCFC307 /* Pods-Longinus-SwiftUI-Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 583A4F0E81A5D126F127FFF66F88ACF3 /* Build configuration list for PBXNativeTarget "Pods-Longinus-SwiftUI-Example" */;
+			buildPhases = (
+				504A61F990226254819F57717933996E /* Headers */,
+				1ACA87C3958A332076CCD148C9940A32 /* Sources */,
+				A871FA4F968199A1474F363FC455BD04 /* Frameworks */,
+				F3D82AB849C49A94A54CFB54D18D6A4A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37FF9AF2B26AB3461B836E86668F72A3 /* PBXTargetDependency */,
+			);
+			name = "Pods-Longinus-SwiftUI-Example";
+			productName = "Pods-Longinus-SwiftUI-Example";
+			productReference = 213A749FB697BF1EDB547DE8689C3063 /* Pods_Longinus_SwiftUI_Example.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EBAF74CA2BD26657FD776741A330F202 /* Pods-Longinus_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC4D05DB8DBEA628D211CC3B35AF0439 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Tests" */;
+			buildPhases = (
+				C631BC2CC4E9C117A8A82AB4CFCEE27C /* Headers */,
+				686EAFD9BE6D995F2119DF18610074AA /* Sources */,
+				C7104C14BF385F548677C421A8815787 /* Frameworks */,
+				D52E5819349EC75A8CA9C4C508502272 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2FC5D568ACE74242A94F5FDFD0129662 /* PBXTargetDependency */,
 			);
 			name = "Pods-Longinus_Tests";
 			productName = "Pods-Longinus_Tests";
@@ -504,11 +691,13 @@
 				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 9829783E3B37751A061947DFD49886E2 /* Products */;
+			productRefGroup = 64E6A7898EBEA37AD9F2C16FC7D6BE09 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				470D9BC3F2F4A0D92DD34F2A5F5D8771 /* Longinus */,
+				B9A1705AEDE4500E6B58AB554939B8E5 /* Longinus-3985d303 */,
+				8DCD42843680E4F77B6A8DE17914C329 /* Longinus.default-Cache-ImageCode-Networking-Utility */,
+				C455772E26A8D1A79A14EB681CCFC307 /* Pods-Longinus-SwiftUI-Example */,
 				AB4B752A90CC52534D34286C35D72690 /* Pods-Longinus_Example */,
 				EBAF74CA2BD26657FD776741A330F202 /* Pods-Longinus_Tests */,
 			);
@@ -516,21 +705,35 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		415A8E0C0BC6E65C69FB0EB8FF45D78F /* Resources */ = {
+		40A4BB2F53DAAEECB4C051F58D1D9596 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		98D4C79803E82C942E01346677817966 /* Resources */ = {
+		641EF65A403B0599CF6686833A082961 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1C6864876F650137719DA1643C8CF8F /* Resources */ = {
+		B42275F7CF05B5D20B16B3C5A8B745AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D52E5819349EC75A8CA9C4C508502272 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3D82AB849C49A94A54CFB54D18D6A4A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -540,98 +743,167 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		03B78D797195686B6994F8A201596C63 /* Sources */ = {
+		0DC70B69CAD95309678D49D10D8CD02D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA439842D223343F6C05B746B166C4F0 /* Pods-Longinus_Example-dummy.m in Sources */,
+				82CDD757619BD3AAB67293CCED7B271B /* AnimatedImage.swift in Sources */,
+				38C98CC48D67BB8025C336B651890ABB /* AnimatedImageView.swift in Sources */,
+				8D6F259CD1B1153B4091B5C0676D10AB /* AuthenticationChallengeResponsable.swift in Sources */,
+				ACDFA55782719AFEA7A897D2374E7CB2 /* Box.swift in Sources */,
+				325563EE37C0051097382F16081420AE /* Cacheable.swift in Sources */,
+				8783553B1882FD7824C48F97EDD41F24 /* CALayer+Longinus.swift in Sources */,
+				65334227D476A24EF286528C1AA58BEA /* DataExtension.swift in Sources */,
+				5A48BF4C03BAB3A5D6CECFFFF93A909E /* DeviceExtension.swift in Sources */,
+				C50E488C80605854CD1BA7DDAF511FBE /* DiskCache.swift in Sources */,
+				22C4192218D03878EE622E0E7C9BB346 /* DispatchQueueExtension.swift in Sources */,
+				079DECFB631D7265DAF3D38EDD045910 /* DispatchQueuePool.swift in Sources */,
+				F0867BCE68190223B3BFDC3ABF3A9840 /* DispatchSemaphore.swift in Sources */,
+				C65B04DC5337BB7A4DC8BFD6ED468750 /* Image.swift in Sources */,
+				BEA3465CCFFC77447E98022FDB7075A0 /* ImageBinder.swift in Sources */,
+				208ACA2F7E903BBC0894D4C2E2DF0091 /* ImageCacher.swift in Sources */,
+				6EADEA4A0FE54B21735744FF35476A55 /* ImageCodeable.swift in Sources */,
+				031D5F1333A0343EF0AF4709A5CFCEB3 /* ImageCoderManager.swift in Sources */,
+				46DB97F71260E1CE66935318227BC0D5 /* ImageDownloader.swift in Sources */,
+				9CD9DFD601D6E50824CF352AEA2E2C85 /* ImageDownloadOperation.swift in Sources */,
+				7FC5C9640E7672636FF8FD9FBDA7B721 /* ImageDownloadOperationQueue.swift in Sources */,
+				BA720F70D384FE991BD24DB245784001 /* ImageDownloadRedirectHandler.swift in Sources */,
+				E91D0DC76E2EBC10220AA0FAE34DC74C /* ImageDownloadRequestModifier.swift in Sources */,
+				7AEAE8EA6F0F37C1EA4846CA9BE7CA86 /* ImageDownloadSessionDelegate.swift in Sources */,
+				FBAE766F9CC906411C910BBB86A36380 /* ImageGIFCoder.swift in Sources */,
+				E96B12AB75C470F76FEF06663F7144F6 /* ImageIOCoder.swift in Sources */,
+				4AD74A317A6DEB969DB499B0A2AE015B /* ImageLoadTask.swift in Sources */,
+				A661991124C6DC7F9940E1A403EB64A7 /* ImageTransformer.swift in Sources */,
+				08DE0948F586AFE8CAA32A9BE92FC647 /* ImageWebCacheable.swift in Sources */,
+				06ECA554B3320B853196E59052F0C892 /* ImageWebCacheResourceable.swift in Sources */,
+				EC62385C04B0FF1A22C75AF080AC2CDB /* KVStorage.swift in Sources */,
+				CF59F6E0DB47028C8706045063B3F60C /* LGImage.swift in Sources */,
+				044CD2AE2B0DF3918146BE4A07C9543B /* LinkedMap.swift in Sources */,
+				5B1FD914F4A5EC4E45B7BC81140F30F2 /* Longinus-3985d303-dummy.m in Sources */,
+				774206C74A078AACCE7FC91F9C93F900 /* LonginusCompatible.swift in Sources */,
+				31543F9F2525F947711B183891F5D407 /* LonginusImageOptions.swift in Sources */,
+				E95C565B654189F47DF30287E91814AA /* LonginusManager.swift in Sources */,
+				0E01614EA83E08CAE12CC3099594DC39 /* LonginusPrint.swift in Sources */,
+				E32AFA769D493ACBA97B881425B1F393 /* LonginusWeakProxy.swift in Sources */,
+				D3FB2E6946971B2CF9C4C6CF5C206195 /* MemoryCache.swift in Sources */,
+				0B49AE5BC6E725D9EF7C9F74D387ED31 /* Mutex.swift in Sources */,
+				AF2AB1D13520C3FC8405B57817461C1C /* NetworkIndicatorManager.swift in Sources */,
+				24012541E6B2F7025891254C34429D03 /* Runtime.swift in Sources */,
+				6A8523A8E1FC2158EBA0B4EABBF88D65 /* SQLiteUtil.swift in Sources */,
+				F9E703DF13414C36A5D97834E90ACCBE /* StringExtension.swift in Sources */,
+				7B387C2335F13511832DDB53D760996B /* UIButton+Longinus.swift in Sources */,
+				172636D3E6B8891BA32DF236F72DE82B /* UIImageView+Longinus.swift in Sources */,
+				09C5F2E0BB65940E78C5991FCE9DF865 /* UIViewExtension.swift in Sources */,
+				CEAB60E26FF4C8EDC2D9FB61E7054407 /* UnfairLock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3E57236054E66C83A56B9A47D7EEAE45 /* Sources */ = {
+		14C41346619B3DAB8E7D0ACB6184D6B8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F04639A24D01CE3007452D8 /* UIImageView+Longinus.swift in Sources */,
-				5F59D3B924C4974600E8964B /* MemoryCache.swift in Sources */,
-				5F9FDE2724FAC3DF0058FD84 /* AuthenticationChallengeResponsable.swift in Sources */,
-				E8DBEB74175E89B6ECDE703BD1F48723 /* Box.swift in Sources */,
-				125FE30303724E5DFF2F379E02AA8FAE /* DispatchQueuePool.swift in Sources */,
-				5FADC58524D0169B000240DD /* ImageCoderManager.swift in Sources */,
-				5FADC53524D00DF0000240DD /* LonginusCompatible.swift in Sources */,
-				5FADC53324D00B70000240DD /* StringExtension.swift in Sources */,
-				5FADC58324D0169B000240DD /* AnimatedImage.swift in Sources */,
-				5FADC58624D0169B000240DD /* DataExtension.swift in Sources */,
-				EDF7B9B35046B4FED948DA505D1F200D /* ImageDownloader.swift in Sources */,
-				5FADC52F24D00896000240DD /* DispatchSemaphore.swift in Sources */,
-				5FADC58024D0169B000240DD /* Image.swift in Sources */,
-				5F59D3BA24C4974600E8964B /* DiskCache.swift in Sources */,
-				19F5AB12B6A03AB50EE298D1349B76CF /* ImageDownloadOperation.swift in Sources */,
-				5F9FDE2124FA8DA70058FD84 /* ImageDownloadRequestModifier.swift in Sources */,
-				051A2BF82490E72CDBA70A18230991E8 /* ImageDownloadOperationQueue.swift in Sources */,
-				5F7B29CA24D1419F0073E0D7 /* UnfairLock.swift in Sources */,
-				5FADC58824D0169B000240DD /* ImageGIFCoder.swift in Sources */,
-				5F59D3FE24C847E400E8964B /* LonginusPrint.swift in Sources */,
-				5F9FDE2324FAB7790058FD84 /* ImageDownloadSessionDelegate.swift in Sources */,
-				5FADC58724D0169B000240DD /* ImageIOCoder.swift in Sources */,
-				5F04639224D01B23007452D8 /* ImageWebCacheable.swift in Sources */,
-				5FADC58224D0169B000240DD /* ImageCodeable.swift in Sources */,
-				5F59D38724C41A3F00E8964B /* Mutex.swift in Sources */,
-				5F59D39B24C4510000E8964B /* SQLiteUtil.swift in Sources */,
-				5F04639924D01CE3007452D8 /* CALayer+Longinus.swift in Sources */,
-				B8B0641A1C4A80D474546D18964D63AA /* ImageWebCacheResourceable.swift in Sources */,
-				5F04639424D01BD8007452D8 /* NetworkIndicatorManager.swift in Sources */,
-				5F9FDE1F24FA8D780058FD84 /* LonginusImageOptions.swift in Sources */,
-				93956713A6766EFF2C02A705EFE6C9EE /* Longinus-dummy.m in Sources */,
-				5FADC53F24D01056000240DD /* DeviceExtension.swift in Sources */,
-				5F04639824D01CE3007452D8 /* UIButton+Longinus.swift in Sources */,
-				5F04639C24D0297E007452D8 /* DispatchQueueExtension.swift in Sources */,
-				5FADC58124D0169B000240DD /* ImageTransformer.swift in Sources */,
-				5FADC53D24D00FBD000240DD /* UIViewExtension.swift in Sources */,
-				5FADC58424D0169B000240DD /* AnimatedImageView.swift in Sources */,
-				51EC21D44B84559A181441952294F0F4 /* LonginusManager.swift in Sources */,
-				504867C41F27E7DDC6041621D8903D5B /* LonginusWeakProxy.swift in Sources */,
-				5F8528FC24C97819003B30D3 /* LinkedMap.swift in Sources */,
-				5ECFEB622171EFC172DE5415B777E6E5 /* Runtime.swift in Sources */,
-				5F59D3B624C4974600E8964B /* KVStorage.swift in Sources */,
-				5FADC53124D00A4B000240DD /* ImageCacher.swift in Sources */,
-				5F9FDE2524FABC270058FD84 /* ImageDownloadRedirectHandler.swift in Sources */,
-				5F04639124D01B23007452D8 /* ImageLoadTask.swift in Sources */,
-				5F59D3B824C4974600E8964B /* Cacheable.swift in Sources */,
+				4F8CBE85AE439FB75493059122D98E4A /* Pods-Longinus_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E68B0E15D985757F6D24A99BE0887C73 /* Sources */ = {
+		1ACA87C3958A332076CCD148C9940A32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F4CC85D21FDFFC1685A4C496E5692CC /* Pods-Longinus_Tests-dummy.m in Sources */,
+				D05D257E61A574A4C2CD91C088C2592D /* Pods-Longinus-SwiftUI-Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4305E467E32F0AB9594418840580EFFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0048A7854DFBA1B1C4A8EAAB48F58B26 /* AnimatedImage.swift in Sources */,
+				E83A2398764C0D4134B18B06D9636889 /* AnimatedImageView.swift in Sources */,
+				E5BD627C73354A55EF9720D62C7EA8BE /* AuthenticationChallengeResponsable.swift in Sources */,
+				322668438382116E8F70A8FFDFE848C1 /* Box.swift in Sources */,
+				C15092E02248F5FF8E9761AE8DFA92CC /* Cacheable.swift in Sources */,
+				5367020846BEFFC6D8B1C339610CB3EF /* CALayer+Longinus.swift in Sources */,
+				6CB5E84EDBEA9554F936BD5746364D06 /* DataExtension.swift in Sources */,
+				51C626E79DE9C471CA92C851371A96F5 /* DeviceExtension.swift in Sources */,
+				545C27E070650F93C95838635F06197D /* DiskCache.swift in Sources */,
+				F6B767BAAA4719F969D72A3D239B649A /* DispatchQueueExtension.swift in Sources */,
+				27DC66C81FCAB31E8C1047D700221216 /* DispatchQueuePool.swift in Sources */,
+				13D338DD6D2BA9428398DFA57B181B0A /* DispatchSemaphore.swift in Sources */,
+				F40BA3D88578A31F47F6AD1121CBDAA6 /* Image.swift in Sources */,
+				94814A3B80CBDFA2E176781275951DAD /* ImageCacher.swift in Sources */,
+				11898957C35C5892484C270CEC1DAA41 /* ImageCodeable.swift in Sources */,
+				D6F47DCDC036581EA6E5906309D85700 /* ImageCoderManager.swift in Sources */,
+				F6D39F57A9CAC8BE37DB38A18737E1FB /* ImageDownloader.swift in Sources */,
+				C156F408C5F7F36B452E89AF6B383CFD /* ImageDownloadOperation.swift in Sources */,
+				380E2A0017D442AC495A9F45421E8C1B /* ImageDownloadOperationQueue.swift in Sources */,
+				B104D83571243DD74B140BF5A0BF3097 /* ImageDownloadRedirectHandler.swift in Sources */,
+				62FE0DD303CBF4D090832D3AB9E32AF2 /* ImageDownloadRequestModifier.swift in Sources */,
+				D104795DDAD1D01243B751E7F6355C15 /* ImageDownloadSessionDelegate.swift in Sources */,
+				6F17EE3C38FFAA72DB54F6C9DD67FD7F /* ImageGIFCoder.swift in Sources */,
+				D37AF5FCE29140EB57FD1608B6F64F23 /* ImageIOCoder.swift in Sources */,
+				B48ED1F2861C44C5854D9E69972276D4 /* ImageLoadTask.swift in Sources */,
+				D295A2D9CEC1DF689F9426F27F98474A /* ImageTransformer.swift in Sources */,
+				2EF987F734F835A9665BA830185939A5 /* ImageWebCacheable.swift in Sources */,
+				97D2AA64068E03A1907382FA1AE2D2CD /* ImageWebCacheResourceable.swift in Sources */,
+				C65951CD78665A426CD55E678E748273 /* KVStorage.swift in Sources */,
+				05A6AFC2019919E862E35A97836A71F1 /* LinkedMap.swift in Sources */,
+				B05EBFFE01814FF0164350A40306D0DE /* Longinus.default-Cache-ImageCode-Networking-Utility-dummy.m in Sources */,
+				A1EDF42BA28103517A27EA9156F88BD4 /* LonginusCompatible.swift in Sources */,
+				5D5A6D2C5F9F5981DF314BED969FDF1C /* LonginusImageOptions.swift in Sources */,
+				BD61F501AEDE387EB8BBFA8CBC7A0233 /* LonginusManager.swift in Sources */,
+				C18BB38420EB9C58A30269B60687053C /* LonginusPrint.swift in Sources */,
+				A4984B69EEE2D486EABBF6C5FF59363A /* LonginusWeakProxy.swift in Sources */,
+				EF480F64782D1B6921AFCDFB80C01803 /* MemoryCache.swift in Sources */,
+				DA58BB12228D1A4E8C48F24CDF2DD070 /* Mutex.swift in Sources */,
+				4DD3AF9DE5CE1C22DCFEA70758D79B34 /* NetworkIndicatorManager.swift in Sources */,
+				937427BD3DEF2A33A26F8D8BAD8F04BE /* Runtime.swift in Sources */,
+				0C725E2694C6529AE3EBD2EA2A713C92 /* SQLiteUtil.swift in Sources */,
+				B3BDECC99DFCB4C2B993DC9815332B36 /* StringExtension.swift in Sources */,
+				ED5FE60AA2C3EB148B64343B0B7AD508 /* UIButton+Longinus.swift in Sources */,
+				94710DA8369796B3DDEF503F4DC4DE1E /* UIImageView+Longinus.swift in Sources */,
+				0EC42414FDC31C3FA2840085544B8B3E /* UIViewExtension.swift in Sources */,
+				5293937174F828B40D62C49126231D0C /* UnfairLock.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		686EAFD9BE6D995F2119DF18610074AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC7DF83501FA56E06FFB1DA957EC9BC2 /* Pods-Longinus_Tests-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		251B461CD900CAC03437011FA763C022 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Longinus;
-			target = 470D9BC3F2F4A0D92DD34F2A5F5D8771 /* Longinus */;
-			targetProxy = 806A8DE578DBB26482B4150B9724C9C5 /* PBXContainerItemProxy */;
-		};
-		AFD565B040BF1845DD6A45C464FDAC62 /* PBXTargetDependency */ = {
+		2FC5D568ACE74242A94F5FDFD0129662 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-Longinus_Example";
 			target = AB4B752A90CC52534D34286C35D72690 /* Pods-Longinus_Example */;
-			targetProxy = 9BA6F03526FA1334DA71587445A4A2C4 /* PBXContainerItemProxy */;
+			targetProxy = 7F74381A7E65CED3388B0B3EF5D71A5F /* PBXContainerItemProxy */;
+		};
+		37FF9AF2B26AB3461B836E86668F72A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Longinus-3985d303";
+			target = B9A1705AEDE4500E6B58AB554939B8E5 /* Longinus-3985d303 */;
+			targetProxy = 57D5CAD6008AEFCFAD01D27719402B09 /* PBXContainerItemProxy */;
+		};
+		6DC6A7754A6350684228B0134EC8760C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Longinus.default-Cache-ImageCode-Networking-Utility";
+			target = 8DCD42843680E4F77B6A8DE17914C329 /* Longinus.default-Cache-ImageCode-Networking-Utility */;
+			targetProxy = BC0D1632408440B28FE3455A5F7BF9BB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		10A188CFCB4802D71D9891A6ED64CE61 /* Release */ = {
+		16F73C548E524DC8F005063AD5DE3E97 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8305C3F284B180342D215116CF2A7016 /* Pods-Longinus_Tests.release.xcconfig */;
+			baseConfigurationReference = 580E560CC4778E901505CEAED9D5891F /* Longinus.default-Cache-ImageCode-Networking-Utility.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -641,31 +913,30 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests-Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				MODULEMAP_FILE = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility.modulemap";
+				PRODUCT_MODULE_NAME = Longinus;
+				PRODUCT_NAME = Longinus;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		128C8241B42CCA9680B062CA86291F0D /* Release */ = {
+		1CE76C4145AF250291B1D5E7538507D9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D25905984646587A1FA860052AF53CB7 /* Pods-Longinus_Example.release.xcconfig */;
+			baseConfigurationReference = F72B2952EB9BA6213491FAD1DAF8D782 /* Pods-Longinus_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -695,11 +966,13 @@
 			};
 			name = Release;
 		};
-		32BCCE9B07E8D87C20B8558E62A40CCC /* Debug */ = {
+		2FD1A3C53F4083E60D89E692C9E80C2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FABBAE65134C2427EB75C42AB23162D0 /* Pods-Longinus_Tests.debug.xcconfig */;
+			baseConfigurationReference = A963755CC82A68260F874E2253F73566 /* Pods-Longinus-SwiftUI-Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -709,12 +982,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-Longinus-SwiftUI-Example/Pods-Longinus-SwiftUI-Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-Longinus-SwiftUI-Example/Pods-Longinus-SwiftUI-Example.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -722,103 +995,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		45298C82F60920BB10AF5ADA8E4FDB30 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D5504DFA76476F1B20438704FEE95DE9 /* Pods-Longinus_Example.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		5B15183797E1FFAE5F77C292A225F5A9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 97B935585233A2F3FC8BBAB8F26C987A /* Longinus.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Longinus/Longinus-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Longinus/Longinus-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Longinus/Longinus.modulemap";
-				PRODUCT_MODULE_NAME = Longinus;
-				PRODUCT_NAME = Longinus;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		76D8155819DC345E860C9B97E2B63306 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E90B272A683A9B2CB4E7A360EAF31652 /* Longinus.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Longinus/Longinus-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Longinus/Longinus-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Longinus/Longinus.modulemap";
-				PRODUCT_MODULE_NAME = Longinus;
-				PRODUCT_NAME = Longinus;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -826,10 +1002,44 @@
 			};
 			name = Release;
 		};
-		B0087CB4594321EF41619F3181FE120E /* Release */ = {
+		4BDF309CAF354FCB8B931A0B8E30DCF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE2F12122484B84681A8A8E383365689 /* Longinus-3985d303.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Longinus-3985d303/Longinus-3985d303-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Longinus-3985d303/Longinus-3985d303-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Longinus-3985d303/Longinus-3985d303.modulemap";
+				PRODUCT_MODULE_NAME = Longinus;
+				PRODUCT_NAME = Longinus;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6ACE01E101CD05C2D9274B28BE586706 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -879,16 +1089,156 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
 		};
-		B8BCBD0110C2658BB5DAADB9B7D97B92 /* Debug */ = {
+		6DECD04BF24F8526FE9768D35347F096 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F228DA65FEF8CE97464BDD685774E2AA /* Pods-Longinus-SwiftUI-Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Longinus-SwiftUI-Example/Pods-Longinus-SwiftUI-Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Longinus-SwiftUI-Example/Pods-Longinus-SwiftUI-Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		76BB62E89A567DB0386797BC734A2DD8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ADDF44B200F3A5D465957FF989012B26 /* Longinus-3985d303.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Longinus-3985d303/Longinus-3985d303-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Longinus-3985d303/Longinus-3985d303-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Longinus-3985d303/Longinus-3985d303.modulemap";
+				PRODUCT_MODULE_NAME = Longinus;
+				PRODUCT_NAME = Longinus;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		95C3BE2E6DE197AC0AB173C9E77EBFAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3CDD93FCE308ACA5BB393BB6D6153A32 /* Pods-Longinus_Tests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		9D3C811BF2C06ECD6E3327B47004A8C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40F52C5708972E5F6F9EFE8B747817E6 /* Pods-Longinus_Tests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Tests/Pods-Longinus_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B1B259C5FB7465EF9C71163827046E70 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -949,41 +1299,126 @@
 			};
 			name = Debug;
 		};
+		CD6B8E466D67AE393168AA7C2C9EF78A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DAB791F678056FAFD2964F8B52BC8C1F /* Longinus.default-Cache-ImageCode-Networking-Utility.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Longinus.default-Cache-ImageCode-Networking-Utility/Longinus.default-Cache-ImageCode-Networking-Utility.modulemap";
+				PRODUCT_MODULE_NAME = Longinus;
+				PRODUCT_NAME = Longinus;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D16C81C179E7956E43F1E70E6F4394FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E786338EBE95EAED9956F2CF58139D6B /* Pods-Longinus_Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Longinus_Example/Pods-Longinus_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B8BCBD0110C2658BB5DAADB9B7D97B92 /* Debug */,
-				B0087CB4594321EF41619F3181FE120E /* Release */,
+				B1B259C5FB7465EF9C71163827046E70 /* Debug */,
+				6ACE01E101CD05C2D9274B28BE586706 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F77873572C0167643A9547991D42261 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Example" */ = {
+		583A4F0E81A5D126F127FFF66F88ACF3 /* Build configuration list for PBXNativeTarget "Pods-Longinus-SwiftUI-Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				45298C82F60920BB10AF5ADA8E4FDB30 /* Debug */,
-				128C8241B42CCA9680B062CA86291F0D /* Release */,
+				6DECD04BF24F8526FE9768D35347F096 /* Debug */,
+				2FD1A3C53F4083E60D89E692C9E80C2E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A03912456D2CA5A50BF3E3781A3F9A3B /* Build configuration list for PBXNativeTarget "Longinus" */ = {
+		796C26699701AB1FCE3A17788872F058 /* Build configuration list for PBXNativeTarget "Longinus-3985d303" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5B15183797E1FFAE5F77C292A225F5A9 /* Debug */,
-				76D8155819DC345E860C9B97E2B63306 /* Release */,
+				4BDF309CAF354FCB8B931A0B8E30DCF4 /* Debug */,
+				76BB62E89A567DB0386797BC734A2DD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F366E0D50E4F19BB1056CAE117CC9E38 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Tests" */ = {
+		7C47A4716559F56F21FE9DEA9D78CDFC /* Build configuration list for PBXNativeTarget "Longinus.default-Cache-ImageCode-Networking-Utility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				32BCCE9B07E8D87C20B8558E62A40CCC /* Debug */,
-				10A188CFCB4802D71D9891A6ED64CE61 /* Release */,
+				16F73C548E524DC8F005063AD5DE3E97 /* Debug */,
+				CD6B8E466D67AE393168AA7C2C9EF78A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC4D05DB8DBEA628D211CC3B35AF0439 /* Build configuration list for PBXNativeTarget "Pods-Longinus_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95C3BE2E6DE197AC0AB173C9E77EBFAF /* Debug */,
+				9D3C811BF2C06ECD6E3327B47004A8C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1C9C7A6654D757C107A65CD585110AA /* Build configuration list for PBXNativeTarget "Pods-Longinus_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D16C81C179E7956E43F1E70E6F4394FB /* Debug */,
+				1CE76C4145AF250291B1D5E7538507D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
