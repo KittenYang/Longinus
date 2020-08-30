@@ -248,6 +248,17 @@ extension DiskCache {
         storage?.remove(allItems: ())
         ioLock.unlock()
     }
+    
+    /**
+     Get every image disk cache modified date. You can use it in Http-Headers `If-Modified-Since` key-value pairs for reqeust newest image. Apache and Nginx use different policy to determine whether return newest images. You can write your own policy in `LonginusImageOptionItem.httpHeadersModifier`.
+     */
+    public func getCacheModifiedDateByKey(key: String) -> Date? {
+        guard let modTime = self.storage?.itemInfoForKey(key: key)?.modTime else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: TimeInterval(modTime))
+    }
+    
 }
 
 // MARK: CacheAsyncStandard

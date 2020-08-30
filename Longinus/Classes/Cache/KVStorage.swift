@@ -41,11 +41,11 @@ enum KVStorageValueType {
 struct KVStorageItem : Equatable {
     var key: String
     var value: Data?
-    var filename: String?
+    var filename: String? // filename (nil if inline)
     
-    var size = 0
-    var modTime = 0
-    var accessTime = 0
+    var size = 0 // value's size in bytes
+    var modTime = 0 // modification unix timestamp
+    var accessTime = 0 //last access unix timestamp
 }
 
 func ==(lhs: KVStorageItem, rhs: KVStorageItem) -> Bool {

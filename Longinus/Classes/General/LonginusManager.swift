@@ -595,8 +595,32 @@ extension LonginusManager {
                     self.urlBlacklistLock.unlock()
                 }
                 
-                self.complete(with: task, completion: completion, error: currentError)
-                self.remove(loadTask: task)
+                /// If options contain `.refreshCache` but request faild. For example, if http headers set `If-Modified-Since` key-value pairs but server return `304 Not Modified`, it should show last cached image if exist.
+                if optionsInfo.refreshCache {
+                    // Get last cached image if exist.
+                    self.imageCacher?.image(forKey: resource.cacheKey, cacheType: .disk) { [weak self, weak task] (result: ImageCacheQueryCompletionResult) in
+                        guard let self = self, let task = task, !task.isCancelled else { return }
+                        switch result {
+                        case let .disk(data: data):
+                            self.handle(imageData: data,
+                                        optionsInfo: optionsInfo,
+                                        cacheType: .disk,
+                                        forTask: task,
+                                        resource: resource,
+                                        transformer: transformer,
+                                        completion: completion)
+                            return
+                        default:
+                            self.complete(with: task, completion: completion, error: currentError)
+                            self.remove(loadTask: task)
+                            LGPrint("Error: illegal query disk data result when `optionsInfo.refreshCache` condition")
+                            break
+                        }
+                    }
+                } else {
+                    self.complete(with: task, completion: completion, error: currentError)
+                    self.remove(loadTask: task)
+                }
             } else {
                 LGPrint("Error: illegal result of download")
             }

@@ -74,9 +74,13 @@ public struct URLRequestModifier: ImageDownloadModifier {
 
 /// A modifier to modify URL
 public struct URLModifier: ImageDownloadModifier {
-    var url: URL? = nil
+    var url: URL?
     public func modified(for URL: URL?) -> URL? {
         return url
+    }
+    
+    public init(url: URL?) {
+        self.url = url
     }
 }
 
@@ -85,5 +89,9 @@ public struct URLHttpHeadersModifier: ImageDownloadModifier {
     var httpHeaders: [String : String]? = nil
     public func modified(for headers: [String : String]?) -> [String : String]? {
         return httpHeaders
+    }
+    
+    public init(httpHeaders: [String : String]?) {
+        self.httpHeaders = httpHeaders
     }
 }

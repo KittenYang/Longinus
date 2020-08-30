@@ -4295,7 +4295,8 @@ class ImageLinksPool {
     ]
 
     
-    static let imageLinks = ["https://wx3.sinaimg.cn/mw690/9ec9dea9gy1ga0l5oe5yqg20910611kx.gif",
+    static let imageLinks = ["https://oneyear2.kittenyang.com/photos/landscape-0.jpg",
+                             "https://wx3.sinaimg.cn/mw690/9ec9dea9gy1ga0l5oe5yqg20910611kx.gif",
                              "https://wx3.sinaimg.cn/mw690/9ec9dea9gy1gesbycqlzhg20cc06ydo4.gif",
                              "https://wx1.sinaimg.cn/large/b6fa1db2gy1fl6djvyembj20hs0nrjtr.jpg",
                              "https://ww3.sinaimg.cn/large/b6fa1db2gw1f7cnsbjm8jj20xc0m5450.jpg",
@@ -4313,7 +4314,8 @@ class ImageLinksPool {
                              "https://cdn.echoing.tech/images/03f1bf0ce245ecaa1a77bc65f1f3c3f7.jpeg",
                              "https://cdn.echoing.tech/images/2601ec780b0de0208292364c53228bd9.jpeg",
                              "https://cdn.echoing.tech/images/e51de2676cdbfe9cf81735d958bf01f5.jpeg",
-                             "https://cdn.echoing.tech/images/edc102ac88bb3e099cf0121d7337f0d6.jpeg"]
+                             "https://cdn.echoing.tech/images/edc102ac88bb3e099cf0121d7337f0d6.jpeg"
+    ]
     
     static func getImageLink(forIndex index: Int) -> URL? {
         if index < 0 || index >= imageLinks.count { return nil }

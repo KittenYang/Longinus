@@ -44,13 +44,31 @@ class LonginusExampleCell: UITableViewCell {
                                                                   borderWidth: 2.0,
                                                                   borderColor: UIColor.white,
                                                                   backgroundColor: UIColor.gray)
-        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation/*, .ignoreAnimatedImage*/], transformer: transformer, progress: { (data, expectedSize, image) in
+        
+        // let headerModifier = URLHttpHeadersModifier(httpHeaders:["If-Modified-Since": lastModifiedString(url: url), "Accept" : "image/*;q=0.8"])
+        self.webImageView.lg.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.progressiveBlur, .imageWithFadeAnimation/*, .ignoreAnimatedImage*/, /*.httpHeadersModifier(headerModifier), .refreshCache*/], transformer: transformer, progress: { (data, expectedSize, image) in
             if let partialData = data, let url = url {
                 let progress = min(1, Double(partialData.count) / Double(expectedSize))
                 print("\(url.absoluteString): \(progress)")
             }
         }) { (image, data, error, cacheType) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
         }
+    }
+    
+    private func lastModifiedString(url: URL?) -> String {
+        guard let key = url?.absoluteString,
+            let modDate = LonginusManager.shared.imageCacher?.diskCache?.getCacheModifiedDateByKey(key: key) else {
+            return ""
+        }
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(abbreviation: "GMT")
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss z"
+        let lastModifiedStr = formatter.string(from: modDate)
+        return lastModifiedStr
     }
     
 }
