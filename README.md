@@ -37,6 +37,7 @@ Longinus's goal is to become the Highest-Performance web image loading framework
 * High performance memory and disk image cache. Use LRU algorithm to manage. For disk cache, it use file system and sqlite for better performance.
 * Use FIFO queue to handle image downloading operation.
 * Smooth sliding without UI lags. High performance image caching and decoding to avoid main thread blocked.
+* SwiftUI support.
 
 ## Usage
 
@@ -61,6 +62,34 @@ let url = URL(string: "https://ww4.sinaimg.cn/bmiddle/eaeb7349jw1ewbhiu69i2g20b4
 let transformer = ImageTransformer.imageTransformerCommon(with: imageView.frame.size, borderWidth: 2.0, borderColor: .white)
 imageView.lg.setImage(with: url, options: [.progressiveBlur, .imageWithFadeAnimation], transformer: transformer)
 ```
+Usage in SwiftUI:
+```swift
+import struct Longinus.LGImage
+
+var body: some View {
+    LGImage(source: URL(string: "https://github.com/KittenYang/Template-Image-Set/blob/master/Landscape/landscape-\(index).jpg?raw=true"), placeholder: {
+            Image(systemName: "arrow.2.circlepath")
+                .font(.largeTitle) })
+        .onProgress(progress: { (data, expectedSize, _) in
+            print("Downloaded: \(data?.count ?? 0)/\(expectedSize)")
+        })
+        .onCompletion(completion: { (image, data, error, cacheType) in
+            if let error = error {
+                print(error)
+            }
+            if let _ = image {
+                print("Success！")
+            }
+        })
+        .resizable()
+        .cancelOnDisappear(true)
+        .aspectRatio(contentMode: .fill)
+        .frame(width: 300, height: 300)
+        .cornerRadius(20)
+        .shadow(radius: 5)
+}
+
+```
 
 # Requirements
 * iOS 9.0+
@@ -79,8 +108,13 @@ target 'MyApp' do
   # your other pod
   # ...
   pod 'Longinus'
+  # SwiftUI support is provided in a sub-spec. 
+  # So instead of specifying pod 'Longinus', 
+  # you need:
+  # pod 'Longinus/SwiftUI'
 end
 ```
+
 Then, run the following command:
 
 ```
