@@ -1,0 +1,6 @@
+framework module Longinus {
+  umbrella header "Longinus.default-Cache-ImageCode-Networking-Utility-umbrella.h"
+
+  export *
+  module * { export * }
+}
