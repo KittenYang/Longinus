@@ -92,8 +92,9 @@ var body: some View {
 ```
 
 # Requirements
-* iOS 9.0+
+* iOS 10.0+
 * Swift 5.0+
+* SwiftUI 13.0+
 
 # Installation
 ## CocoaPods
@@ -101,7 +102,7 @@ var body: some View {
 Longinus is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
+platform :ios, '10.0'
 use_frameworks!
 
 target 'MyApp' do
