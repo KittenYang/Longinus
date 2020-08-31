@@ -428,18 +428,6 @@ public class LonginusManager {
     }
     
     /**
-     Remove the image load task from normal tasks sets and preloadTasks dic
-     */
-    func remove(loadTask: ImageLoadTask) {
-        releaseQueue.async { [weak self] in
-            self?.taskLock.lock()
-            self?.tasks.remove(loadTask)
-            self?.preloadTasks.removeValue(forKey: loadTask.url.absoluteString)
-            self?.taskLock.unlock()
-        }
-    }
-
-    /**
      Cancel preloading task by the url
      - Parameters:
         - url: The url request need to cancel
@@ -475,33 +463,67 @@ public class LonginusManager {
         }
     }
     
-    public func queryImageFromCacheWithType(byKey key: String, cacheType: ImageCacheType, completion: @escaping (QueryImageCacheResult)->Void) {
-        self.imageCacher?.image(forKey: key, cacheType: cacheType, completion: { [weak self] (result) in
-            switch result {
-            case .all(let image, let data):
-                completion(QueryImageCacheResult(image: image, data: data, cacheType: ImageCacheType.all))
-            case .disk(let data):
-                self?.coderQueue.async { [weak self] in
-                    var finalImage: UIImage? = self?.imageCoder.decodedImage(with: data)
-                    if let animatedImage = finalImage as? AnimatedImage {
-                        DispatchQueue.main.lg.safeAsync {
-                            completion(QueryImageCacheResult(image: animatedImage, data: data, cacheType: ImageCacheType.disk))
+    /**
+     Returns the `QueryImageCacheResult` associated with a given key.
+     If the image is not in memory, this method may blocks the calling thread until
+     file read finished.
+     
+     @param key A string identifying the image. If nil, just return nil.
+     @return The `QueryImageCacheResult` associated with key.
+     */
+    public func queryImageFromCacheWithType(byKey key: String, cacheType: ImageCacheType = .all) -> QueryImageCacheResult {
+        if cacheType.contains(.memory) {
+            let image = imageCacher?.memoryCache.query(key: key)
+            return QueryImageCacheResult(image: image, cacheType: .memory)
+        }
+        if cacheType.contains(.disk) {
+            if let data = imageCacher?.diskCache?.query(key: key) {
+                var finalImage: UIImage? = self.imageCoder.decodedImage(with: data)
+                if let animatedImage = finalImage as? AnimatedImage {
+                    if cacheType.contains(.memory) {
+                        imageCacher?.store(animatedImage, data: nil, forKey: key, cacheType: .memory, completion: nil)
+                    }
+                    return QueryImageCacheResult(image: animatedImage, cacheType: .disk)
+                } else {
+                    if let _decodedImage = finalImage {
+                        finalImage = self.imageCoder.decompressedImage(with: _decodedImage, data: data)
+                        if cacheType.contains(.memory) {
+                            imageCacher?.store(finalImage, data: nil, forKey: key, cacheType: .memory, completion: nil)
                         }
-                    } else {
-                        if let _decodedImage = finalImage {
-                            finalImage = self?.imageCoder.decompressedImage(with: _decodedImage, data: data)
-                            DispatchQueue.main.lg.safeAsync {
-                                completion(QueryImageCacheResult(image: finalImage, data: data, cacheType: ImageCacheType.disk))
-                            }
-                        }
+                        return QueryImageCacheResult(image: finalImage, cacheType: .disk)
                     }
                 }
-            case .memory(let image):
-                completion(QueryImageCacheResult(image: image, cacheType: ImageCacheType.memory))
-            case .none:
-                completion(QueryImageCacheResult(error: NSError(domain: LonginusImageErrorDomain, code: 1001, userInfo: [NSLocalizedDescriptionKey : "No cached image finded either in disk or memory"])))
             }
-        })
+        }
+        return QueryImageCacheResult(error: NSError(domain: LonginusImageErrorDomain, code: 1001, userInfo: [NSLocalizedDescriptionKey : "No cached image finded either in disk or memory"]))
+    }
+    
+    /**
+     Asynchronously get the `QueryImageCacheResult` associated with a given key.
+     
+     @param key   A string identifying the image. If nil, just return nil.
+     @param type  The cache type.
+     @param completion A completion block which will be called on main thread.
+     */
+    public func queryImageFromCacheWithType(byKey key: String, cacheType: ImageCacheType, completion: @escaping (QueryImageCacheResult)->Void) {
+        DispatchQueue.global().async {
+            let result = self.queryImageFromCacheWithType(byKey: key, cacheType: cacheType)
+            DispatchQueue.main.lg.safeAsync {
+                completion(result)
+            }
+        }
+    }
+    
+    /**
+     Remove the image load task from normal tasks sets and preloadTasks dic
+     */
+    func remove(loadTask: ImageLoadTask) {
+        releaseQueue.async { [weak self] in
+            self?.taskLock.lock()
+            self?.tasks.remove(loadTask)
+            self?.preloadTasks.removeValue(forKey: loadTask.url.absoluteString)
+            self?.taskLock.unlock()
+        }
     }
 
 }
