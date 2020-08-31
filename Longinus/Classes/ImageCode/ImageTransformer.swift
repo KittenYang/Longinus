@@ -520,9 +520,10 @@ public extension LonginusExtension where Base: UIImage {
     func roundCornerRadius(radius: CGFloat,
                            corners: UIRectCorner,
                            borderWidth: CGFloat,
-                           borderColor: UIColor) -> UIImage? {
+                           borderColor: UIColor,
+                           backgroundColor: UIColor? = .clear) -> UIImage? {
         let minLength = min(self.size.width, self.size.height)
-        return commonEditedImage(with: CGSize(width: minLength, height: minLength), corner: corners, cornerRadius: radius, borderWidth: borderWidth, borderColor: borderColor)
+        return commonEditedImage(with: CGSize(width: minLength, height: minLength), corner: corners, cornerRadius: radius, borderWidth: borderWidth, borderColor: borderColor, backgroundColor: backgroundColor)
     }
     
     func commonEditedImage(with displaySize: CGSize,
@@ -532,7 +533,7 @@ public extension LonginusExtension where Base: UIImage {
                            cornerRadius: CGFloat = 0,
                            borderWidth: CGFloat = 0,
                            borderColor: UIColor? = nil,
-                           backgroundColor: UIColor? = nil) -> UIImage? {
+                           backgroundColor: UIColor? = .clear) -> UIImage? {
         return autoreleasepool { () -> UIImage? in
             guard displaySize.width > 0,
                 displaySize.height > 0,
