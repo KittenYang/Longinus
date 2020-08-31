@@ -39,7 +39,7 @@ public extension LonginusExtension where Base: CALayer {
                          progress: ImageDownloaderProgressBlock? = nil,
                          completion: ImageManagerCompletionBlock? = nil) {
         let setImageBlock: LonginusSetImageBlock = { [weak base] (image) in
-            if let base = base { base.contents = image }
+            if let base = base { base.contents = image?.cgImage }
         }
         
         let setShowTransitionBlock: LonginusSetShowTransitionBlock = { [weak base] (image) in
