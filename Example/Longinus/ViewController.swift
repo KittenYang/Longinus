@@ -127,5 +127,15 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let url = ImageLinksPool.getImageLink(forIndex: indexPath.row % ImageLinksPool.imageLinks.count)?.absoluteString {
+            LonginusManager.shared.queryImageFromCacheWithType(byKey: url, cacheType: .disk) { (result) in
+                if let imageFormat = result.imageFormat {
+                    print("\(imageFormat) image get!!!!!!")
+                }
+            }
+        }
+    }
+    
     
 }

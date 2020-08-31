@@ -30,11 +30,11 @@ import UIKit
 /**
  LonginusExtension to AnimatedImage. You can access these variables or functions by `lg` property.
  */
-extension LonginusExtension where Base: AnimatedImage {
+public extension LonginusExtension where Base: AnimatedImage {
     /**
      A ImageTransformer to edit image frames
      */
-    public var transformer: ImageTransformer? {
+    var transformer: ImageTransformer? {
         get {
             base.lock.lock()
             let t = base.transformer
@@ -54,12 +54,12 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
      The originalImageData of AnimatedImage
      */
-    public var originalImageData: Data? { return base.decoder.imageData }
+    var originalImageData: Data? { return base.decoder.imageData }
     
     /**
      Current cache size in bytes
      */
-    public var currentCacheSize: Int64 {
+    var currentCacheSize: Int64 {
         base.lock.lock()
         let size = base.currentCacheSize!
         base.lock.unlock()
@@ -69,7 +69,7 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
      Update max cache size in bytes to fit device freeMemory
      */
-    public func updateCacheSizeIfNeeded() {
+    func updateCacheSizeIfNeeded() {
         base.lock.lock()
         defer { base.lock.unlock() }
         if !base.autoUpdateMaxCacheSize { return }
@@ -79,7 +79,7 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
     Preload specific frame image to memory.
     */
-    public func preloadImageFrame(fromIndex startIndex: Int) {
+    func preloadImageFrame(fromIndex startIndex: Int) {
         if startIndex >= base.frameCount ?? 0 { return }
         base.lock.lock()
         let shouldReturn = (base.preloadTask != nil || base.cachedFrameCount >= base.frameCount ?? 0)
@@ -152,7 +152,7 @@ extension LonginusExtension where Base: AnimatedImage {
     If the image is shared by lots of image views (such as emoticon), preload all
     frames will reduce the CPU cost.
     */
-    public func preloadAllImageFrames() {
+    func preloadAllImageFrames() {
         base.lock.lock()
         base.autoUpdateMaxCacheSize = false
         base.maxCacheSize = .max
@@ -174,14 +174,14 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
      Weak refrence view to `views` NSHashTable
      */
-    public func didAddToView(_ view: AnimatedImageView) {
+    func didAddToView(_ view: AnimatedImageView) {
         base.views.add(view)
     }
     
     /**
      Remove view from `views` NSHashTable. If `views` is empty, cancel the preload work and clear cached buffer
      */
-    public func didRemoveFromView(_ view: AnimatedImageView) {
+    func didRemoveFromView(_ view: AnimatedImageView) {
         base.views.remove(view)
         if base.views.count <= 0 {
             cancelPreloadTask()
@@ -192,7 +192,7 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
      Cancel preload task
      */
-    public func cancelPreloadTask() {
+    func cancelPreloadTask() {
         base.lock.lock()
         if base.preloadTask != nil {
             OSAtomicIncrement32(&base.sentinel)
@@ -207,7 +207,7 @@ extension LonginusExtension where Base: AnimatedImage {
      - Parameters:
         - completion: A closure called when clearing is finished
      */
-    public func clearAsynchronously(completion: (() -> Void)?) {
+    func clearAsynchronously(completion: (() -> Void)?) {
         DispatchQueuePool.default.async { [weak base] in
             guard let base = base else { return }
             base.lg.clear()
@@ -218,7 +218,7 @@ extension LonginusExtension where Base: AnimatedImage {
     /**
      Removes all image frames from cache synchronously
      */
-    public func clear() {
+    func clear() {
         base.lock.lock()
         for i in 0..<base.frames.count {
             base.frames[i].image = nil

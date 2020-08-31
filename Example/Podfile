@@ -1,6 +1,7 @@
 use_frameworks!
 
 target 'Longinus_Example' do
+  platform :ios, '10.0'
   pod 'Longinus', :path => '../'
 
   target 'Longinus_Tests' do
@@ -11,5 +12,6 @@ target 'Longinus_Example' do
 end
 
 target 'Longinus-SwiftUI-Example' do
+  platform :ios, '13.0'
   pod 'Longinus/SwiftUI', :path => '../'
 end

@@ -28,8 +28,8 @@
 import UIKit
 
 extension UIImageView: ImageWebCacheable {}
-extension LonginusExtension where Base: UIImageView {
-    public func setImage(with resource: ImageWebCacheResourceable?,
+public extension LonginusExtension where Base: UIImageView {
+    func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
                          options: LonginusImageOptions? = nil,
                          transformer: ImageTransformer? = nil,
@@ -64,7 +64,7 @@ extension LonginusExtension where Base: UIImageView {
                       completion: completion)
     }
     
-    public func setHighlightedImage(with resource: ImageWebCacheResourceable,
+    func setHighlightedImage(with resource: ImageWebCacheResourceable,
                                     placeholder: UIImage? = nil,
                                     options: LonginusImageOptions? = nil,
                                     transformer: ImageTransformer? = nil,
@@ -101,15 +101,15 @@ extension LonginusExtension where Base: UIImageView {
     }
     
     /// Cancels highlighted image loading task
-    public func cancelHighlightedImageLoadTask() {
+    func cancelHighlightedImageLoadTask() {
         base.webCacheOperation.task(forKey: highlightedImageLoadTaskKey)?.cancel()
     }
     
-    public var highlightedImageLoadTaskKey: String { return base.classForCoder.description() + "Highlighted" }
+    var highlightedImageLoadTaskKey: String { return base.classForCoder.description() + "Highlighted" }
     
-    public func cancelImageLoadTask() {
+    func cancelImageLoadTask() {
         base.webCacheOperation.task(forKey: imageLoadTaskKey)?.cancel()
     }
     
-    public var imageLoadTaskKey: String { return base.classForCoder.description() }
+    var imageLoadTaskKey: String { return base.classForCoder.description() }
 }

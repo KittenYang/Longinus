@@ -47,7 +47,7 @@ public class ImageIOCoder: ImageCodeable {
         image?.lg.imageFormat = data.lg.imageFormat
         return image
     }
-    // 绘制到画布上，从画布上取图片，避免系统的缓存
+    
     public func decompressedImage(with image: UIImage, data: Data) -> UIImage? {
         guard let sourceImage = image.cgImage, let cgimage = ImageIOCoder.decompressedImage(sourceImage) else {
             return image

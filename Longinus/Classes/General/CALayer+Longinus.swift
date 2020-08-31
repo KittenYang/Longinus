@@ -28,11 +28,11 @@
 import Foundation
 
 extension CALayer: ImageWebCacheable {}
-extension LonginusExtension where Base: CALayer {
+public extension LonginusExtension where Base: CALayer {
     
-    public var imageLoadTaskKey: String { return base.classForCoder.description() }
+    var imageLoadTaskKey: String { return base.classForCoder.description() }
     
-    public func setImage(with resource: ImageWebCacheResourceable?,
+    func setImage(with resource: ImageWebCacheResourceable?,
                          placeholder: UIImage? = nil,
                          options: LonginusImageOptions? = nil,
                          transformer: ImageTransformer? = nil,
@@ -67,7 +67,7 @@ extension LonginusExtension where Base: CALayer {
     }
     
     /// Cancels image loading task
-    public func cancelImageLoadTask() {
+    func cancelImageLoadTask() {
         base.webCacheOperation.task(forKey: imageLoadTaskKey)?.cancel()
     }
     

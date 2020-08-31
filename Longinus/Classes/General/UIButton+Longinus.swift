@@ -28,13 +28,13 @@
 import Foundation
 
 extension UIButton: ImageWebCacheable {}
-extension LonginusExtension where Base: UIButton {
+public extension LonginusExtension where Base: UIButton {
     
-    public func imageLoadTaskKey(forState state: UIControl.State) -> String {
+    func imageLoadTaskKey(forState state: UIControl.State) -> String {
         return base.classForCoder.description() + "Image\(state.rawValue)"
     }
     
-    public func setImage(with resource: ImageWebCacheResourceable?,
+    func setImage(with resource: ImageWebCacheResourceable?,
                          forState state: UIControl.State,
                          placeholder: UIImage? = nil,
                          options: LonginusImageOptions? = nil,
@@ -71,12 +71,12 @@ extension LonginusExtension where Base: UIButton {
                  completion: completion)
     }
     
-    public func cancelImageLoadTask(forState state: UIControl.State) {
+    func cancelImageLoadTask(forState state: UIControl.State) {
         let key = imageLoadTaskKey(forState: state)
         base.webCacheOperation.task(forKey: key)?.cancel()
     }
     
-    public func setBackgroundImage(with resource: ImageWebCacheResourceable,
+    func setBackgroundImage(with resource: ImageWebCacheResourceable,
                                    forState state: UIControl.State,
                                    placeholder: UIImage? = nil,
                                    options: LonginusImageOptions? = nil,
@@ -113,12 +113,12 @@ extension LonginusExtension where Base: UIButton {
                       completion: completion)
     }
     
-    public func cancelBackgroundImageLoadTask(forState state: UIControl.State) {
+    func cancelBackgroundImageLoadTask(forState state: UIControl.State) {
         let key = backgroundImageLoadTaskKey(forState: state)
         base.webCacheOperation.task(forKey: key)?.cancel()
     }
     
-    public func backgroundImageLoadTaskKey(forState state: UIControl.State) -> String {
+    func backgroundImageLoadTaskKey(forState state: UIControl.State) -> String {
         return base.classForCoder.description() + "BackgroundImage\(state.rawValue)"
     }
 

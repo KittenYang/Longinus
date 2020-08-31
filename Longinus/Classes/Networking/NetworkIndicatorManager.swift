@@ -54,7 +54,7 @@ class NetworkIndicatorManager {
             let bundlePathExtension: String = bundleUrl.pathExtension
             isAppExtension = bundlePathExtension == "appex"
         }
-        return isAppExtension ? nil : UIApplication.shared
+        return isAppExtension ? nil : LonginusExtension<UIApplication>.shared
     }()
     
     
@@ -97,4 +97,14 @@ class NetworkIndicatorManager {
         return networkIndicatorInfo?.count ?? 0
     }
 
+}
+
+// MARK: - For App Extensions
+extension UIApplication: LonginusCompatible { }
+public extension LonginusExtension where Base: UIApplication {
+    static var shared: UIApplication? {
+        let selector = NSSelectorFromString("sharedApplication")
+        guard Base.responds(to: selector) else { return nil }
+        return Base.perform(selector).takeUnretainedValue() as? UIApplication
+    }
 }

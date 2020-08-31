@@ -30,7 +30,7 @@ import UIKit
 private var imageFormatKey: Void?
 private var imageEditKey: Void?
 
-extension LonginusExtension where Base: UIImage {
+public extension LonginusExtension where Base: UIImage {
     var cgImage: CGImage? { return base.cgImage }
     var size: CGSize { return base.size }
     var scale: CGFloat { return base.scale }
@@ -55,13 +55,13 @@ extension LonginusExtension where Base: UIImage {
     
 }
 
-extension LonginusExtension where Base: CGImage {
+public extension LonginusExtension where Base: CGImage {
     var containsAlpha: Bool {
         return !(base.alphaInfo == .none || base.alphaInfo == .noneSkipFirst || base.alphaInfo == .noneSkipLast)
     }
 }
 
-extension LonginusExtension where Base == UIImage.Orientation {
+public extension LonginusExtension where Base == UIImage.Orientation {
     var cgImageOrientation: CGImagePropertyOrientation {
         switch base {
         case .up: return .up
@@ -77,7 +77,7 @@ extension LonginusExtension where Base == UIImage.Orientation {
     }
 }
 
-extension LonginusExtension where Base == CGImagePropertyOrientation {
+public extension LonginusExtension where Base == CGImagePropertyOrientation {
     var uiImageOrientation: UIImage.Orientation {
         switch base {
         case .up: return .up

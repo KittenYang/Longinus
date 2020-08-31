@@ -28,16 +28,15 @@
 import Foundation
 
 /**
-DiskCache is a thread-safe cache that stores key-value pairs backed by SQLite
-and file system.
-
-DiskCache has these features:
-
-* It use LRU (least-recently-used) to remove objects.
-* It can be controlled by cost, count, and age.
-* It can automatically decide the storage type (sqlite/file) for each object to get
-     better performance.
-*/
+ DiskCache is a thread-safe cache that stores key-value pairs backed by SQLite
+ and file system.
+ 
+ DiskCache has these features:
+ 
+ * It use LRU (least-recently-used) to remove objects.
+ * It can be controlled by cost, count, and age.
+ * It can automatically decide the storage type (sqlite/file) for each object to get better performance.
+ */
 public class DiskCache: DiskCacheable {
     
     /*
@@ -47,35 +46,35 @@ public class DiskCache: DiskCacheable {
     public typealias Value = Data
     
     /**
-    The maximum total cost that the cache can hold before it starts evicting objects.
-    
-    @discussion The default value is `Int32.max`, which means no limit.
-    This is not a strict limit — if the cache goes over the limit, some objects in the
-    cache could be evicted later in background queue.
-    */
+     The maximum total cost that the cache can hold before it starts evicting objects.
+     
+     @discussion The default value is `Int32.max`, which means no limit.
+     This is not a strict limit — if the cache goes over the limit, some objects in the
+     cache could be evicted later in background queue.
+     */
     public var costLimit: Int32
     
     /**
-    The maximum number of objects the cache should hold.
-    
-    @discussion The default value is `Int32.max`, which means no limit.
-    This is not a strict limit — if the cache goes over the limit, some objects in the
-    cache could be evicted later in background queue.
-    */
+     The maximum number of objects the cache should hold.
+     
+     @discussion The default value is `Int32.max`, which means no limit.
+     This is not a strict limit — if the cache goes over the limit, some objects in the
+     cache could be evicted later in background queue.
+     */
     public var countLimit: Int32
     
     /**
-    The maximum expiry time of objects in cache.
-    
-    @discussion The default value is `.never`, which means no limit.
-    This is not a strict limit — if an object goes over the limit, the objects could
-    be evicted later in background queue.
-    */
+     The maximum expiry time of objects in cache.
+     
+     @discussion The default value is `.never`, which means no limit.
+     This is not a strict limit — if an object goes over the limit, the objects could
+     be evicted later in background queue.
+     */
     public var ageLimit: CacheAge
     
     /**
-    The auto trim check time interval in seconds. Default is 60 (1 minute).
-    */
+     The auto trim check time interval in seconds. Default is 60 (1 minute).
+     */
     public var autoTrimInterval: TimeInterval
     
     /**
@@ -91,7 +90,8 @@ public class DiskCache: DiskCacheable {
     }
     
     /**
-    Get the totalCount of storage.
+     Get the totalCount of storage.
+     This method may blocks the calling thread until file read finished.
     */
     public var totalCount: Int32 {
         _ = ioLock.lock()
@@ -101,13 +101,42 @@ public class DiskCache: DiskCacheable {
     }
     
     /**
-    Get the totalCost of storage.
-    */
+     Get the number of objects in this cache.
+     This method returns immediately and invoke the passed block in background queue
+     when the operation finished.
+     
+     @param handler  A handler which will be invoked in background queue when finished.
+     */
+    public func totalCountWithHandler(handler: @escaping (Int32)->Void) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            handler(self.totalCount)
+        }
+    }
+    
+    /**
+     Get the totalCost (in bytes) of objects in this cache.
+     This method may blocks the calling thread until file read finished.
+     */
     public var totalCost: Int32 {
         _ = ioLock.lock()
         let count = storage?.totalItemSize ?? 0
         defer { ioLock.unlock() }
         return count
+    }
+    
+    /**
+    Get the total cost (in bytes) of objects in this cache.
+    This method returns immediately and invoke the passed block in background queue
+    when the operation finished.
+    
+    @param handler  A handler which will be invoked in background queue when finished.
+    */
+    public func totalCostWithHandler(handler: @escaping (Int32)->Void) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            handler(self.totalCost)
+        }
     }
     
     /*

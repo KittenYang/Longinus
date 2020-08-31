@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.1.3'
+  s.version          = '1.1.4'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
@@ -49,16 +49,7 @@ Pod::Spec.new do |s|
   
   # ---- subspec -----
   s.subspec 'General' do |ss|
-       ss.source_files = ["Longinus/Classes/**/*.swift"]
-       ss.exclude_files = [
-       "Longinus/Classes/Utility/*.swift",
-       "Longinus/Classes/Cache/*.swift",
-       "Longinus/Classes/ImageCode/*.swift",
-       "Longinus/Classes/Networking/*.swift",
-       "Longinus/Classes/SwiftUI/*.swift"]
-       ss.dependency "Longinus/Utility"
-       ss.dependency "Longinus/Cache"
-       ss.dependency "Longinus/ImageCode"
+       ss.source_files = ["Longinus/Classes/General/*.swift"]
        ss.dependency "Longinus/Networking"
   end
   

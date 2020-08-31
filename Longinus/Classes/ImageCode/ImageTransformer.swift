@@ -500,6 +500,14 @@ public extension LonginusExtension where Base: UIImage {
         return image
     }
     
+    func roundCornerRadius(radius: CGFloat,
+                           corners: UIRectCorner,
+                           borderWidth: CGFloat,
+                           borderColor: UIColor) -> UIImage? {
+        let minLength = min(self.size.width, self.size.height)
+        return commonEditedImage(with: CGSize(width: minLength, height: minLength), corner: corners, cornerRadius: radius, borderWidth: borderWidth, borderColor: borderColor)
+    }
+    
     func commonEditedImage(with displaySize: CGSize,
                            fillContentMode: LonginusExtension<UIView>.FillContentMode = .center,
                            maxResolution: Int = 0,
@@ -519,6 +527,7 @@ public extension LonginusExtension where Base: UIImage {
             } else {
                 bitmapInfo = CGBitmapInfo(rawValue: bitmapInfo.rawValue | CGImageAlphaInfo.noneSkipFirst.rawValue)
             }
+            let cornerRadius = min(cornerRadius, displaySize.height/2)
             // Make sure resolution is not too small
             let currentMaxResolution = max(maxResolution, Int(displaySize.width * displaySize.height * 7))
             let resolutionRatio = sqrt(CGFloat(sourceImage.width * sourceImage.height) / CGFloat(currentMaxResolution))

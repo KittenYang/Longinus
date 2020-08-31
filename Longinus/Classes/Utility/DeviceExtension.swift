@@ -28,7 +28,7 @@
 import UIKit
 
 extension UIDevice: LonginusCompatible { }
-extension LonginusExtension where Base: UIDevice {
+public extension LonginusExtension where Base: UIDevice {
     static var totalMemory: Int64 {
         return Int64(ProcessInfo().physicalMemory)
     }

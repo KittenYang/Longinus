@@ -85,6 +85,10 @@ public enum LonginusImageOptionItem {
     
     /// Do not decode image
     /// This may used for image downloading without display.
+    /// By defalut, Longinus will decode the downloaded image data and do a off-screen
+    /// rendering to extract pixel information in background. This can speed up display,
+    /// but will cost more time to prepare the image for using. If image not for displaying,
+    /// you can use this option.
     case ignoreImageDecoding
     
     /// Set the image to view with a fade animation.

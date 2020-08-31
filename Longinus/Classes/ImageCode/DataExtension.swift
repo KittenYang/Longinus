@@ -27,7 +27,7 @@
 
 import Foundation
 
-extension LonginusExtension where Base == Data {
+public extension LonginusExtension where Base == Data {
     var imageFormat: ImageFormat {
         guard base.count > 8 else { return .unknown }
         
@@ -53,7 +53,7 @@ extension LonginusExtension where Base == Data {
         return .unknown
     }
     
-    public func contains(jpeg marker: ImageFormat.JPEGMarker) -> Bool {
+    func contains(jpeg marker: ImageFormat.JPEGMarker) -> Bool {
         guard imageFormat == .JPEG else {
             return false
         }

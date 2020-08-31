@@ -27,6 +27,34 @@
 
 import UIKit
 
+/// Represents the result of a Longinus query image task.
+public struct QueryImageCacheResult {
+
+    /// Gets the image object of this result.
+    public private(set) var image: UIImage?
+    
+    /// Gets the image format of this result.
+    public private(set) var imageFormat: ImageFormat? = .unknown
+    
+    /// If image cached on disk. return the cached data by the way if needed.
+    public private(set) var data: Data?
+    
+    /// Whether query error happened.
+    public private(set) var error: Error?
+
+    /// Gets the cache type of the image.
+    public private(set) var cacheType: ImageCacheType = .none
+    
+    init(image: UIImage? = nil, data: Data? = nil, error: Error? = nil, cacheType: ImageCacheType = .none) {
+        self.image = image
+        self.imageFormat = image?.lg.imageFormat
+        self.data = data
+        self.error = error
+        self.cacheType = cacheType
+    }
+
+}
+
 /**
 A manager to create and manage web image operation.
 */
@@ -445,6 +473,35 @@ public class LonginusManager {
         for task in currentTasks {
             task.cancel()
         }
+    }
+    
+    public func queryImageFromCacheWithType(byKey key: String, cacheType: ImageCacheType, completion: @escaping (QueryImageCacheResult)->Void) {
+        self.imageCacher?.image(forKey: key, cacheType: cacheType, completion: { [weak self] (result) in
+            switch result {
+            case .all(let image, let data):
+                completion(QueryImageCacheResult(image: image, data: data, cacheType: ImageCacheType.all))
+            case .disk(let data):
+                self?.coderQueue.async { [weak self] in
+                    var finalImage: UIImage? = self?.imageCoder.decodedImage(with: data)
+                    if let animatedImage = finalImage as? AnimatedImage {
+                        DispatchQueue.main.lg.safeAsync {
+                            completion(QueryImageCacheResult(image: animatedImage, data: data, cacheType: ImageCacheType.disk))
+                        }
+                    } else {
+                        if let _decodedImage = finalImage {
+                            finalImage = self?.imageCoder.decompressedImage(with: _decodedImage, data: data)
+                            DispatchQueue.main.lg.safeAsync {
+                                completion(QueryImageCacheResult(image: finalImage, data: data, cacheType: ImageCacheType.disk))
+                            }
+                        }
+                    }
+                }
+            case .memory(let image):
+                completion(QueryImageCacheResult(image: image, cacheType: ImageCacheType.memory))
+            case .none:
+                completion(QueryImageCacheResult(error: NSError(domain: LonginusImageErrorDomain, code: 1001, userInfo: [NSLocalizedDescriptionKey : "No cached image finded either in disk or memory"])))
+            }
+        })
     }
 
 }
