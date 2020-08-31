@@ -59,7 +59,7 @@ public struct ImageTransformer {
 }
 
 // MARK: ImageTransformer Extension Methods
-extension ImageTransformer {
+public extension ImageTransformer {
     /*
      Crop
      */
@@ -74,7 +74,7 @@ extension ImageTransformer {
     /*
      Resize
      */
-    static public func imageTransformerResize(with size: CGSize) -> ImageTransformer {
+    static func imageTransformerResize(with size: CGSize) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: size) { return currentImage }
             return image
@@ -82,15 +82,15 @@ extension ImageTransformer {
         return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(size)", transform: transform)
     }
     
-    static public func imageTransformerResize(with displaySize: CGSize, contentMode: UIView.ContentMode) -> ImageTransformer {
+    static func imageTransformerResize(with displaySize: CGSize, contentMode: UIView.ContentMode) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: displaySize, contentMode: contentMode) { return currentImage }
             return image
         }
         return ImageTransformer(key: "\(LonginusPrefixID).resize.size=\(displaySize),contentMode=\(contentMode.rawValue)", transform: transform)
     }
-
-    static public func imageTransformerResize(with displaySize: CGSize, fillContentMode: LonginusExtension<UIView>.FillContentMode) -> ImageTransformer {
+    
+    static func imageTransformerResize(with displaySize: CGSize, fillContentMode: LonginusExtension<UIView>.FillContentMode) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.resizedImage(with: displaySize, fillContentMode: fillContentMode) { return currentImage }
             return image
@@ -101,7 +101,7 @@ extension ImageTransformer {
     /*
      Rotate
      */
-    static public func imageTransformerRotate(withAngle angle: CGFloat, fitSize: Bool) -> ImageTransformer {
+    static func imageTransformerRotate(withAngle angle: CGFloat, fitSize: Bool) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.rotatedImage(withAngle: angle, fitSize: fitSize) { return currentImage }
             return image
@@ -112,7 +112,7 @@ extension ImageTransformer {
     /*
      Flip
      */
-    static public func imageTransformerFlip(withHorizontal horizontal: Bool, vertical: Bool) -> ImageTransformer {
+    static func imageTransformerFlip(withHorizontal horizontal: Bool, vertical: Bool) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.flippedImage(withHorizontal: horizontal, vertical: vertical) { return currentImage }
             return image
@@ -123,7 +123,7 @@ extension ImageTransformer {
     /*
      Tint
      */
-    static public func imageTransformerTint(with color: UIColor, blendMode: CGBlendMode = .normal) -> ImageTransformer {
+    static func imageTransformerTint(with color: UIColor, blendMode: CGBlendMode = .normal) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.tintedImage(with: color, blendMode: blendMode) { return currentImage }
             return image
@@ -134,11 +134,11 @@ extension ImageTransformer {
     /*
      GradientlyTint
      */
-    static public func imageTransformerGradientlyTint(with colors: [UIColor],
-                                                      locations: [CGFloat],
-                                                      start: CGPoint = CGPoint(x: 0.5, y: 0),
-                                                      end: CGPoint = CGPoint(x: 0.5, y: 1),
-                                                      blendMode: CGBlendMode = .normal) -> ImageTransformer {
+    static func imageTransformerGradientlyTint(with colors: [UIColor],
+                                               locations: [CGFloat],
+                                               start: CGPoint = CGPoint(x: 0.5, y: 0),
+                                               end: CGPoint = CGPoint(x: 0.5, y: 1),
+                                               blendMode: CGBlendMode = .normal) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.gradientlyTintedImage(with: colors,
                                                                  locations: locations,
@@ -155,7 +155,7 @@ extension ImageTransformer {
     /*
      Overlay
      */
-    static public func imageTransformerOverlay(with overlayImage: UIImage, blendMode: CGBlendMode = .normal, alpha: CGFloat) -> ImageTransformer {
+    static func imageTransformerOverlay(with overlayImage: UIImage, blendMode: CGBlendMode = .normal, alpha: CGFloat) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.overlaidImage(with: overlayImage, blendMode: blendMode, alpha: alpha) { return currentImage }
             return image
@@ -166,14 +166,14 @@ extension ImageTransformer {
     /*
      Common
      */
-    static public func imageTransformerCommon(with displaySize: CGSize,
-                                              fillContentMode: LonginusExtension<UIView>.FillContentMode = .center,
-                                              maxResolution: Int = 0,
-                                              corner: UIRectCorner = UIRectCorner(rawValue: 0),
-                                              cornerRadius: CGFloat = 0,
-                                              borderWidth: CGFloat = 0,
-                                              borderColor: UIColor? = nil,
-                                              backgroundColor: UIColor? = nil) -> ImageTransformer {
+    static func imageTransformerCommon(with displaySize: CGSize,
+                                       fillContentMode: LonginusExtension<UIView>.FillContentMode = .center,
+                                       maxResolution: Int = 0,
+                                       corner: UIRectCorner = UIRectCorner(rawValue: 0),
+                                       cornerRadius: CGFloat = 0,
+                                       borderWidth: CGFloat = 0,
+                                       borderColor: UIColor? = nil,
+                                       backgroundColor: UIColor? = nil) -> ImageTransformer {
         let transform: ImageTransformMethod = { (image) in
             if let currentImage = image.lg.commonEditedImage(with: displaySize,
                                                              fillContentMode: fillContentMode,
@@ -193,27 +193,27 @@ extension ImageTransformer {
 }
 
 // MARK: UIImage Extension Methods
-extension LonginusExtension where Base: UIImage {
+public extension LonginusExtension where Base: UIImage {
     
-    public var imageByBlurExtraLight: UIImage? {
+    var imageByBlurExtraLight: UIImage? {
         return image(byBlurRadius: 40.0, tintColor: UIColor(white: 0.97, alpha: 0.82), tintMode: .normal, saturation: 1.8, maskImage: nil)
     }
     
-    public var imageByBlurLight: UIImage? {
+    var imageByBlurLight: UIImage? {
         return image(byBlurRadius: 60.0, tintColor: UIColor(white: 1.0, alpha: 0.3), tintMode: .normal, saturation: 1.8, maskImage: nil)
     }
     
-    public var imageByBlurDark: UIImage? {
+    var imageByBlurDark: UIImage? {
         return image(byBlurRadius: 40.0, tintColor: UIColor(white: 0.11, alpha: 0.73), tintMode: .normal, saturation: 1.8, maskImage: nil)
     }
     
     /// https://github.com/ibireme/YYCategories.git
     /// UIImage+YY
-    public func image(byBlurRadius blurRadius:CGFloat,
-                      tintColor:UIColor?,
-                      tintMode tintBlendMode:CGBlendMode,
-                      saturation:CGFloat,
-                      maskImage:UIImage?) -> UIImage? {
+    func image(byBlurRadius blurRadius:CGFloat,
+               tintColor:UIColor?,
+               tintMode tintBlendMode:CGBlendMode,
+               saturation:CGFloat,
+               maskImage:UIImage?) -> UIImage? {
         if size.height < 1 || size.height < 1 {
             LGPrint("lg_image  error: invalid size: \(size). Both dimensions must be >= 1: \(base.description) ")
             return nil
