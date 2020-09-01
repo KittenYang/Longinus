@@ -76,6 +76,7 @@ public class ImageGIFCoder {
         return nil
     }
     
+    public init() {}
 }
 
 extension ImageGIFCoder: ImageCodeable {
