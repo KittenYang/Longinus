@@ -81,6 +81,7 @@ public class ImageIOCoder: ImageCodeable {
         return ImageIOCoder()
     }
     
+    public init() {}
 }
 
 public extension ImageIOCoder {
