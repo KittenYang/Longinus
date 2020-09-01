@@ -130,7 +130,8 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let url = ImageLinksPool.getImageLink(forIndex: indexPath.row % ImageLinksPool.imageLinks.count)?.absoluteString {
             LonginusManager.shared.queryImageFromCacheWithType(byKey: url, cacheType: .disk) { (result) in
-                if let imageFormat = result.imageFormat {
+                if let imageFormat = result.imageFormat, let _ = result.image {
+//                    let newImage = image.lg.roundCornerRadius(radius: 100.0, corners: .allCorners, borderWidth: 4.0, borderColor: .white)
                     print("\(imageFormat) image get!!!!!!")
                 }
             }

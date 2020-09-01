@@ -540,7 +540,7 @@ public extension LonginusExtension where Base: UIImage {
                 let sourceImage = cgImage?.cropping(to: rectToDisplay(with: displaySize, fillContentMode: fillContentMode)) else { return nil }
             var bitmapInfo = sourceImage.bitmapInfo
             bitmapInfo.remove(.alphaInfoMask)
-            if sourceImage.lg.containsAlpha {
+            if sourceImage.lg.containsAlpha || backgroundColor == UIColor.clear {
                 bitmapInfo = CGBitmapInfo(rawValue: bitmapInfo.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue)
             } else {
                 bitmapInfo = CGBitmapInfo(rawValue: bitmapInfo.rawValue | CGImageAlphaInfo.noneSkipFirst.rawValue)
