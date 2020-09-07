@@ -13,6 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      
+    - name: setup-cocoapods
+      uses: maxim-lobanov/setup-cocoapods@v1.1
+      with:
+        podfile-path: Example/Podfile.lock
+        
+    - name: Install Dependencies
+      run: |
+         cd Example
+         pod install --repo-update
+         
     - name: Xcodebuild Action
       uses: sersoft-gmbh/xcodebuild-action@v1.1
       with:
