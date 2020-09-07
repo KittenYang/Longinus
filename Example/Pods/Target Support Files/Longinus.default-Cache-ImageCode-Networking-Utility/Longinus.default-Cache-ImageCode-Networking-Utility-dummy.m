@@ -1,5 +1,0 @@
-#import <Foundation/Foundation.h>
-@interface PodsDummy_Longinus_default_Cache_ImageCode_Networking_Utility : NSObject
-@end
-@implementation PodsDummy_Longinus_default_Cache_ImageCode_Networking_Utility
-@end

@@ -1,6 +1,0 @@
-framework module Longinus {
-  umbrella header "Longinus-3985d303-umbrella.h"
-
-  export *
-  module * { export * }
-}
