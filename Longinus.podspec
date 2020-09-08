@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.1.9'
+  s.version          = '1.1.10'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
@@ -76,6 +76,7 @@ Pod::Spec.new do |s|
   s.subspec 'SwiftUI' do |ss|
        ss.source_files = 'Longinus/Classes/SwiftUI/*.swift'
        ss.dependency "Longinus/General"
+       ss.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-weak_framework SwiftUI' }
   end
 
   
