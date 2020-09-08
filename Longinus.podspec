@@ -76,6 +76,7 @@ Pod::Spec.new do |s|
   s.subspec 'SwiftUI' do |ss|
        ss.source_files = 'Longinus/Classes/SwiftUI/*.swift'
        ss.dependency "Longinus/General"
+       ss.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-weak_framework SwiftUI' }
   end
 
   
