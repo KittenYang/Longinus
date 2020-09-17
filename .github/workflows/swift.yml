@@ -8,7 +8,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['platform=iOS Simulator, name=iPhone 11']
+        destination: ['iOS Simulator,name=iPhone 8']
         swift-version: [5.0]
 
     steps:
