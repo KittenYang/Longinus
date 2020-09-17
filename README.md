@@ -10,6 +10,13 @@
   <a href="https://cocoapods.org/pods/Longinus">
     <img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/>
   </a>
+  <a href="https://github.com/Carthage/Carthage/">
+    <img src="https://img.shields.io/badge/Carthage-compatible-orange?style=for-the-badge">
+  </a>
+  <a href="https://swift.org/package-manager/">
+    <img src="https://img.shields.io/badge/SPM-compatible-ff69b4?style=for-the-badge">
+  </a> 
+  <br />
   <a href="https://cocoapods.org/pods/Longinus">
     <img src="https://img.shields.io/cocoapods/l/Longinus.svg?style=for-the-badge"/>
   </a>
@@ -125,6 +132,25 @@ $ pod install
 You should open the {Project}.xcworkspace instead of the {Project}.xcodeproj after you installed anything from CocoaPods.
 
 For more information about how to use CocoaPods, I suggest this [tutorial](http://www.raywenderlich.com/64546/introduction-to-cocoapods-2).
+
+## Carthage
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager for Cocoa application. To install the carthage tool, you can use [Homebrew](http://brew.sh/).
+
+To integrate Longinus into your Xcode project using Carthage, specify it in your Cartfile:
+
+```
+github "KittenYang/Longinus" ~> 1.0
+```
+Then, run the following command to build the Longinus framework:
+
+```
+$ carthage update
+```
+
+## Swift Package Manager
+From Xcode 11, you can use [Swift Package Manager](https://swift.org/package-manager/) to add Longinus to your project.
+
+Select File > Swift Packages > Add Package Dependency. Enter `https://github.com/KittenYang/Longinus.git` in the "Choose Package Repository" dialog.
 
 # Benchmark
 I tested some popular web image loading frameworks on iOS platform from some aspects.
