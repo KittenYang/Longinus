@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.1.10'
+  s.version          = '1.1.11'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
@@ -49,32 +49,32 @@ Pod::Spec.new do |s|
   
   # ---- subspec -----
   s.subspec 'General' do |ss|
-       ss.source_files = ["Longinus/Classes/General/*.swift"]
+       ss.source_files = ["Sources/General/*.swift"]
        ss.dependency "Longinus/Networking"
   end
   
   s.subspec 'Cache' do |ss|
-      ss.source_files = 'Longinus/Classes/Cache/*.swift'
+      ss.source_files = 'Sources/Cache/*.swift'
       ss.dependency "Longinus/Utility"
   end
   
   s.subspec 'ImageCode' do |ss|
-       ss.source_files = 'Longinus/Classes/ImageCode/*.swift'
+       ss.source_files = 'Sources/ImageCode/*.swift'
        ss.dependency "Longinus/Utility"
   end
   
   s.subspec 'Networking' do |ss|
-       ss.source_files = 'Longinus/Classes/Networking/*.swift'
+       ss.source_files = 'Sources/Networking/*.swift'
        ss.dependency "Longinus/ImageCode"
        ss.dependency "Longinus/Cache"
   end
   
   s.subspec 'Utility' do |ss|
-       ss.source_files = 'Longinus/Classes/Utility/*.swift'
+       ss.source_files = 'Sources/Utility/*.swift'
   end
   
   s.subspec 'SwiftUI' do |ss|
-       ss.source_files = 'Longinus/Classes/SwiftUI/*.swift'
+       ss.source_files = 'Sources/SwiftUI/*.swift'
        ss.dependency "Longinus/General"
        ss.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-weak_framework SwiftUI' }
   end

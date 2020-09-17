@@ -14,11 +14,11 @@
 		5F59D3E924C6ED5400E8964B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F59D3E724C6ED5400E8964B /* LaunchScreen.storyboard */; };
 		5F59D3F124C7F29B00E8964B /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3F024C7F29B00E8964B /* MainTableViewController.swift */; };
 		5F59D3F324C7FBA600E8964B /* ImageViewCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3F224C7FBA600E8964B /* ImageViewCollectionViewController.swift */; };
-		5F59D3F524C8110D00E8964B /* ImageLinksPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3F424C8110D00E8964B /* ImageLinksPool.swift */; };
-		5F59D3F924C8112600E8964B /* SafeDisplayLinkProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3F724C8112600E8964B /* SafeDisplayLinkProxy.swift */; };
-		5F59D3FA24C8112600E8964B /* FPSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3F824C8112600E8964B /* FPSLabel.swift */; };
 		5F59D3FC24C8234500E8964B /* WebImageLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D3FB24C8234500E8964B /* WebImageLoadingViewController.swift */; };
 		5F59D40224C89CB400E8964B /* CacheIOViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F59D40124C89CB400E8964B /* CacheIOViewController.swift */; };
+		5FF7610325139F43009B2939 /* SafeDisplayLinkProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF7610025139F43009B2939 /* SafeDisplayLinkProxy.swift */; };
+		5FF7610425139F43009B2939 /* FPSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF7610125139F43009B2939 /* FPSLabel.swift */; };
+		5FF7610525139F43009B2939 /* ImageLinksPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF7610225139F43009B2939 /* ImageLinksPool.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,12 +31,12 @@
 		5F59D3EA24C6ED5400E8964B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F59D3F024C7F29B00E8964B /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		5F59D3F224C7FBA600E8964B /* ImageViewCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCollectionViewController.swift; sourceTree = "<group>"; };
-		5F59D3F424C8110D00E8964B /* ImageLinksPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageLinksPool.swift; path = ../../Example/Longinus/ImageLinksPool.swift; sourceTree = "<group>"; };
-		5F59D3F724C8112600E8964B /* SafeDisplayLinkProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeDisplayLinkProxy.swift; sourceTree = "<group>"; };
-		5F59D3F824C8112600E8964B /* FPSLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPSLabel.swift; sourceTree = "<group>"; };
 		5F59D3FB24C8234500E8964B /* WebImageLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageLoadingViewController.swift; sourceTree = "<group>"; };
 		5F59D40124C89CB400E8964B /* CacheIOViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheIOViewController.swift; sourceTree = "<group>"; };
 		5FADC51F24CD6C23000240DD /* Benchmark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Benchmark.entitlements; sourceTree = "<group>"; };
+		5FF7610025139F43009B2939 /* SafeDisplayLinkProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeDisplayLinkProxy.swift; sourceTree = "<group>"; };
+		5FF7610125139F43009B2939 /* FPSLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPSLabel.swift; sourceTree = "<group>"; };
+		5FF7610225139F43009B2939 /* ImageLinksPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageLinksPool.swift; path = ../../LonginusExample/LonginusExample/ImageLinksPool.swift; sourceTree = "<group>"; };
 		74FFA012E461AEBAD6E3EB10 /* Pods_Benchmark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Benchmark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8018CADC7F4B9678CBC40C37 /* Pods-Benchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benchmark.release.xcconfig"; path = "Target Support Files/Pods-Benchmark/Pods-Benchmark.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,9 +74,9 @@
 		5F59D3DB24C6ED5000E8964B /* Benchmark */ = {
 			isa = PBXGroup;
 			children = (
+				5FF7610225139F43009B2939 /* ImageLinksPool.swift */,
+				5FF760FF25139F43009B2939 /* Utilities */,
 				5FADC51F24CD6C23000240DD /* Benchmark.entitlements */,
-				5F59D3F624C8112600E8964B /* Utilities */,
-				5F59D3F424C8110D00E8964B /* ImageLinksPool.swift */,
 				5F59D3DC24C6ED5000E8964B /* AppDelegate.swift */,
 				5F59D3F024C7F29B00E8964B /* MainTableViewController.swift */,
 				5F59D3F224C7FBA600E8964B /* ImageViewCollectionViewController.swift */,
@@ -90,14 +90,14 @@
 			path = Benchmark;
 			sourceTree = "<group>";
 		};
-		5F59D3F624C8112600E8964B /* Utilities */ = {
+		5FF760FF25139F43009B2939 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				5F59D3F724C8112600E8964B /* SafeDisplayLinkProxy.swift */,
-				5F59D3F824C8112600E8964B /* FPSLabel.swift */,
+				5FF7610025139F43009B2939 /* SafeDisplayLinkProxy.swift */,
+				5FF7610125139F43009B2939 /* FPSLabel.swift */,
 			);
 			name = Utilities;
-			path = ../../Example/Longinus/Utilities;
+			path = ../../LonginusExample/LonginusExample/Utilities;
 			sourceTree = "<group>";
 		};
 		79F57BF9AD07DC49FAB8428C /* Frameworks */ = {
@@ -234,11 +234,11 @@
 			files = (
 				5F59D3F124C7F29B00E8964B /* MainTableViewController.swift in Sources */,
 				5F59D3DD24C6ED5000E8964B /* AppDelegate.swift in Sources */,
-				5F59D3F524C8110D00E8964B /* ImageLinksPool.swift in Sources */,
 				5F59D3FC24C8234500E8964B /* WebImageLoadingViewController.swift in Sources */,
-				5F59D3F924C8112600E8964B /* SafeDisplayLinkProxy.swift in Sources */,
-				5F59D3FA24C8112600E8964B /* FPSLabel.swift in Sources */,
 				5F59D3F324C7FBA600E8964B /* ImageViewCollectionViewController.swift in Sources */,
+				5FF7610325139F43009B2939 /* SafeDisplayLinkProxy.swift in Sources */,
+				5FF7610525139F43009B2939 /* ImageLinksPool.swift in Sources */,
+				5FF7610425139F43009B2939 /* FPSLabel.swift in Sources */,
 				5F59D40224C89CB400E8964B /* CacheIOViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
