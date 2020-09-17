@@ -18,6 +18,7 @@ profile
 DerivedData
 *.hmap
 *.ipa
+.swiftpm
 
 # Bundler
 .bundle
@@ -26,6 +27,7 @@ DerivedData
 # Carthage/Checkouts
 
 Carthage/Build
+Longinus.framework.zip
 
 # We recommend against adding the Pods directory to your .gitignore. However
 # you should judge for yourself, the pros and cons are mentioned at:
