@@ -245,9 +245,11 @@ open class AnimatedImageView: UIImageView {
     }
     
     override open func display(_ layer: CALayer) {
-        if currentFrame != nil {
-            layer.contents = currentFrame?.cgImage
+        if let frame = currentFrame ?? self.image {
+            layer.contentsScale = frame.scale;
+            layer.contents = frame.cgImage
         }
+            
     }
     
     /**
