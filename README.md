@@ -11,10 +11,10 @@
     <img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/>
   </a>
   <a href="https://github.com/Carthage/Carthage/">
-    <img src="https://img.shields.io/badge/Carthage-compatible-orange?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Carthage-compatible-ff69b4?style=for-the-badge">
   </a>
   <a href="https://swift.org/package-manager/">
-    <img src="https://img.shields.io/badge/SPM-compatible-ff69b4?style=for-the-badge">
+    <img src="https://img.shields.io/badge/SPM-compatible-orange?style=for-the-badge">
   </a> 
   <br />
   <a href="https://cocoapods.org/pods/Longinus">
