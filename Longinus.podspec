@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Longinus'
-  s.version          = '1.1.11'
+  s.version          = '1.1.12'
   s.summary          = 'Longinus is a pure-Swift high-performance asynchronous web image loading and caching framework.'
 
 # This description is used to generate tags and improve search results.
