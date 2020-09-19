@@ -4,25 +4,17 @@
 </a>
 </p>
 <p align="center">
-  <a href="https://travis-ci.org/kittenyang@icloud.com/Longinus">
-    <a href="https://github.com/KittenYang/Longinus/actions?query=workflow%3Abuild"><img src="https://img.shields.io/github/workflow/status/KittenYang/Longinus/build/master?style=for-the-badge"></a>
-  </a>
-  <a href="https://cocoapods.org/pods/Longinus">
-    <img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/>
-  </a>
-  <a href="https://github.com/Carthage/Carthage/">
-    <img src="https://img.shields.io/badge/Carthage-compatible-ff69b4?style=for-the-badge">
-  </a>
-  <a href="https://swift.org/package-manager/">
-    <img src="https://img.shields.io/badge/SPM-compatible-orange?style=for-the-badge">
-  </a> 
+  <a href="https://github.com/KittenYang/Longinus/actions?query=workflow%3Abuild"><img src="https://img.shields.io/github/workflow/status/KittenYang/Longinus/build/master?style=for-the-badge"></a>
+  <a href="https://github.com/KittenYang/Longinus/graphs/contributors"><img src="https://img.shields.io/github/contributors/KittenYang/Longinus.svg?style=for-the-badge"></a>
+  <a href="https://github.com/KittenYang/Longinus/network/members"><img src="https://img.shields.io/github/forks/KittenYang/Longinus.svg?style=for-the-badge"></a>  
+  <a href="https://github.com/KittenYang/Longinus/stargazers"><img src="https://img.shields.io/github/stars/KittenYang/Longinus.svg?style=for-the-badge"></a>  
   <br />
-  <a href="https://cocoapods.org/pods/Longinus">
-    <img src="https://img.shields.io/cocoapods/l/Longinus.svg?style=for-the-badge"/>
-  </a>
-  <a href="https://cocoapods.org/pods/Longinus">
-    <img src="https://img.shields.io/cocoapods/p/Longinus.svg?style=for-the-badge"/>
-  </a>
+  <a href="https://cocoapods.org/pods/Longinus"><img src="https://img.shields.io/cocoapods/v/Longinus.svg?style=for-the-badge"/></a>
+  <a href="https://github.com/Carthage/Carthage/"><img src="https://img.shields.io/badge/Carthage-compatible-ff69b4?style=for-the-badge"></a>
+  <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-orange?style=for-the-badge"></a> 
+  <br />
+  <a href="https://cocoapods.org/pods/Longinus"><img src="https://img.shields.io/cocoapods/l/Longinus.svg?style=for-the-badge"/></a>
+  <a href="https://cocoapods.org/pods/Longinus"><img src="https://img.shields.io/cocoapods/p/Longinus.svg?style=for-the-badge"/></a>
 </p>
 
 
