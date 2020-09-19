@@ -150,7 +150,7 @@ I tested some popular web image loading frameworks on iOS platform from some asp
 * Memory&Disk read/write/delete speed.
 * Scrolling 4000 images UI fps.
 
-Here is the tested results. 
+Here is the tested results. *(Lower is better)*
 
 *Note: The test device is iPhone 11, running on iOS 13.3*
 
