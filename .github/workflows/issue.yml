@@ -1,0 +1,18 @@
+name: Create Issues
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: feishu bot action
+      run: |
+        curl -X POST -H 'Content-type: application/json' -d '{"title": "Longius get a new issue or pr", "text": "pls have a look" }' https://open.feishu.cn/open-apis/bot/hook/fe0132511ef2487a9bf6c0e5da99edbe      
