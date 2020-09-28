@@ -473,8 +473,9 @@ public class LonginusManager {
      */
     public func queryImageFromCacheWithType(byKey key: String, cacheType: ImageCacheType = .all) -> QueryImageCacheResult {
         if cacheType.contains(.memory) {
-            let image = imageCacher?.memoryCache.query(key: key)
-            return QueryImageCacheResult(image: image, cacheType: .memory)
+            if let image = imageCacher?.memoryCache.query(key: key) {
+                return QueryImageCacheResult(image: image, cacheType: .memory)
+            }
         }
         if cacheType.contains(.disk) {
             if let data = imageCacher?.diskCache?.query(key: key) {
