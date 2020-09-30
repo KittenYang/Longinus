@@ -63,6 +63,14 @@ imageView.lg.setImage(with: url, options: [.progressiveBlur, .imageWithFadeAnima
 ```
 Usage in SwiftUI:
 ```swift
+import SwiftUI
+
+// 1. If you are using SPM or Carthage, the SwiftUI support is defined in a new module.
+import LonginusSwiftUI
+
+// 2. If you are using CocoaPods, in which the SwiftUI support is defined in the Longinus module.
+//    Here we choose to just import the `LGImage` type instead of the whole module, 
+//    to prevent the conflicting between `Longinus.View` and `SwiftUI.View`
 import struct Longinus.LGImage
 
 var body: some View {
