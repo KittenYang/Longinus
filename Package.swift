@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "Longinus",
             targets: ["Longinus"]),
+        .library(
+            name: "LonginusSwiftUI",
+            targets: ["LonginusSwiftUI"]),
     ],
     targets: [
         .target(
@@ -17,7 +20,7 @@ let package = Package(
             path: "Sources",
             exclude: ["SwiftUI"]),
         .target(
-            name: "Longinus-SwiftUI",
+            name: "LonginusSwiftUI",
             dependencies: ["Longinus"],
             path: "Sources",
             sources: ["SwiftUI"]
