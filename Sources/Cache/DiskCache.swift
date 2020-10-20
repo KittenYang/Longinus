@@ -94,7 +94,7 @@ public class DiskCache: DiskCacheable {
      This method may blocks the calling thread until file read finished.
     */
     public var totalCount: Int32 {
-        _ = ioLock.lock()
+        ioLock.lock()
         let count = storage?.totalItemCount ?? 0
         defer { ioLock.unlock() }
         return count
@@ -119,7 +119,7 @@ public class DiskCache: DiskCacheable {
      This method may blocks the calling thread until file read finished.
      */
     public var totalCost: Int32 {
-        _ = ioLock.lock()
+        ioLock.lock()
         let count = storage?.totalItemSize ?? 0
         defer { ioLock.unlock() }
         return count
@@ -201,7 +201,7 @@ public class DiskCache: DiskCacheable {
     }
     
     @objc private func appWillBeTerminated() {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage = nil
         ioLock.unlock()
     }
@@ -218,7 +218,7 @@ extension DiskCache {
      Check whether disk contains object with the specific key.
      */
     public func containsObject(key: Key) -> Bool {
-        _ = ioLock.lock()
+        ioLock.lock()
         defer { ioLock.unlock() }
         return storage?.containItemforKey(key: key) ?? false
     }
@@ -227,7 +227,7 @@ extension DiskCache {
      Query the object from disk with the specific key.
      */
     public func query(key: Key) -> Value? {
-        _ = ioLock.lock()
+        ioLock.lock()
         let value = storage?.itemValueForKey(key: key)
         ioLock.unlock()
         return value
@@ -245,7 +245,7 @@ extension DiskCache {
         if value.count > sizeThreshold {
             filename = key.lg_sha256
         }
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.save(key: key, value: value, filename: filename)
         ioLock.unlock()
     }
@@ -263,7 +263,7 @@ extension DiskCache {
      Remove object with the specific key.
      */
     public func remove(key: Key) {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.remove(forKey: key)
         ioLock.unlock()
     }
@@ -273,7 +273,7 @@ extension DiskCache {
      This method may blocks the calling thread until file delete finished.
      */
     public func removeAll() {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.remove(allItems: ())
         ioLock.unlock()
     }
@@ -379,7 +379,7 @@ extension DiskCache: AutoTrimable {
     */
     
     func trimToCount(_ count: Int32) {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.remove(toFitCount: count)
         ioLock.unlock()
     }
@@ -392,7 +392,7 @@ extension DiskCache: AutoTrimable {
         - cost: The total cost allowed to remain after the cache has been trimmed.
     */
     func trimToCost(_ cost: Int32) {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.remove(toFitSize: cost)
         ioLock.unlock()
     }
@@ -405,7 +405,7 @@ extension DiskCache: AutoTrimable {
         - age: The age of the object.
     */
     func trimToAge(_ age: CacheAge) {
-        _ = ioLock.lock()
+        ioLock.lock()
         storage?.remove(earlierThan: age.timeInterval)
         ioLock.unlock()
     }

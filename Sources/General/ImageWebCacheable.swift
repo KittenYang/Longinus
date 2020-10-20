@@ -67,14 +67,14 @@ public extension ImageWebCacheable {
         webCacheOperation.task(forKey: taskKey)?.cancel()
         webCacheOperation.setDownloadProgress(0 ,forKey: taskKey)
         guard let resource = resource else {
-            DispatchQueue.main.lg.safeSync { [weak self] in
+            DispatchQueue.main.lg.safeAsync { [weak self] in
                 if self != nil { setImage(placeholder) }
             }
             return
         }
         let optionInfo = LonginusParsedImageOptionsInfo(options)
         if !optionInfo.ignorePlaceholder {
-            DispatchQueue.main.lg.safeSync { [weak self] in
+            DispatchQueue.main.lg.safeAsync { [weak self] in
                 if self != nil { setImage(placeholder) }
             }
         }
