@@ -10,7 +10,7 @@ import UIKit
 import Longinus
 import YYWebImage
 import SDWebImage
-import Kingfisher
+//import Kingfisher
 
 class MainTableViewController: UITableViewController {
 
@@ -116,10 +116,10 @@ class MainTableViewController: UITableViewController {
         if indexPath.row == menu.count {
             loading.startAnimating()
             LonginusManager.shared.imageCacher?.removeAll()
-            KingfisherManager.shared.cache.clearMemoryCache()
-            KingfisherManager.shared.cache.clearDiskCache()
-            SDWebImageManager.shared().imageCache?.clearMemory()
-            SDWebImageManager.shared().imageCache?.clearDisk(onCompletion: nil)
+//            KingfisherManager.shared.cache.clearMemoryCache()
+//            KingfisherManager.shared.cache.clearDiskCache()
+            SDWebImageManager.shared.imageCache.clear(with: .disk, completion: nil)
+//            SDWebImageManager.shared.imageCache.clearDisk(onCompletion: nil)
             YYWebImageManager.shared().cache?.memoryCache.removeAllObjects()
             YYWebImageManager.shared().cache?.diskCache.removeAllObjects()
             loading.stopAnimating()

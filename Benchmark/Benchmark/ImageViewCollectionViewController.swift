@@ -10,7 +10,7 @@ import UIKit
 import Longinus
 import YYWebImage
 import SDWebImage
-import Kingfisher
+//import Kingfisher
 import BBWebImage
 
 private let reuseIdentifier = "Cell"
@@ -161,13 +161,13 @@ class ImageWallCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var kfImageView: Kingfisher.AnimatedImageView = {
-        var imageView = Kingfisher.AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
-        imageView.webImageType = .kingfisher
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+//    private lazy var kfImageView: Kingfisher.AnimatedImageView = {
+//        var imageView = Kingfisher.AnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
+//        imageView.webImageType = .kingfisher
+//        imageView.contentMode = .scaleAspectFill
+//        imageView.clipsToBounds = true
+//        return imageView
+//    }()
     
     private lazy var yyImageView: YYAnimatedImageView = {
         var imageView = YYAnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
@@ -177,8 +177,8 @@ class ImageWallCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var sdImageView: FLAnimatedImageView = {
-        var imageView = FLAnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
+    private lazy var sdImageView: SDAnimatedImageView = {
+        var imageView = SDAnimatedImageView(frame: CGRect(origin: .zero, size: frame.size))
         imageView.webImageType = .sdwebimage
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -198,7 +198,7 @@ class ImageWallCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(lgImageView)
-        contentView.addSubview(kfImageView)
+//        contentView.addSubview(kfImageView)
         contentView.addSubview(yyImageView)
         contentView.addSubview(sdImageView)
         contentView.addSubview(bbImageView)
@@ -206,7 +206,7 @@ class ImageWallCell: UICollectionViewCell {
     
     private func updateCurrentBenmarkType(type: WebImageType) {
         if currentType == type { return }
-        let all = [lgImageView, kfImageView, yyImageView, sdImageView, bbImageView]
+        let all = [lgImageView,/* kfImageView,*/ yyImageView, sdImageView, bbImageView]
         all.forEach { (imv) in
             imv.isHidden = imv.webImageType != type
             if !imv.isHidden {
@@ -235,7 +235,8 @@ class ImageWallCell: UICollectionViewCell {
                     backgroundColor: UIColor.gray)
             lgImageView.lg.setImage(with: url, placeholder: placeholder, options: [.imageWithFadeAnimation, .showNetworkActivity], transformer: transformer, progress: nil, completion: nil)
         case .kingfisher:
-            kfImageView.kf.setImage(with: url, placeholder: placeholder)
+            break
+//            kfImageView.kf.setImage(with: url, placeholder: placeholder)
         case .sdwebimage:
             sdImageView.sd_setImage(with: url, placeholderImage: placeholder, options: [], completed: nil)
         case .yywebimage:

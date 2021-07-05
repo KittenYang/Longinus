@@ -10,7 +10,7 @@ import UIKit
 import Longinus
 import YYWebImage
 import SDWebImage
-import Kingfisher
+//import Kingfisher
 import BBWebImage
 
 class ConsoleLabelViewController: UIViewController {
@@ -76,8 +76,8 @@ class ConsoleLabelViewController: UIViewController {
     
     private func cancelAll() {
         LonginusManager.shared.cancelAll()
-        KingfisherManager.shared.downloader.cancelAll()
-        SDWebImageManager.shared().cancelAll()
+//        KingfisherManager.shared.downloader.cancelAll()
+        SDWebImageManager.shared.cancelAll()
         YYWebImageManager.shared().queue?.cancelAllOperations()
         BBWebImageManager.shared.cancelAll()
     }
@@ -103,8 +103,7 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
     }
     
     func runTestFromBeginning() {
-        SDWebImageManager.shared().imageCache?.clearMemory()
-        SDWebImageManager.shared().imageCache?.clearDisk(onCompletion: nil)
+        SDWebImageManager.shared.imageCache.clear(with: .all, completion: nil)
         self.runTest(type: .longinus)
     }
     
@@ -167,28 +166,35 @@ class WebImageLoadingViewController: ConsoleLabelViewController {
                     done(image: image, error: error)
                 }
             case .kingfisher:
-                KingfisherManager.shared.retrieveImage(
-                    with: url,
-                    options: [.forceRefresh],
-                    progressBlock: { (receivedSize, expectedSize) in
-                    progress(receivedSize: Int(receivedSize), Int(expectedSize))
-                }, downloadTaskUpdated: nil) { (result) in
-                    switch result {
-                    case .success(let _result):
-                        done(image: _result.image, error: nil)
-                    case .failure(let _error):
-                        done(image: nil, error: _error)
-                    }
-                }
+                break
+//                KingfisherManager.shared.retrieveImage(
+//                    with: url,
+//                    options: [.forceRefresh],
+//                    progressBlock: { (receivedSize, expectedSize) in
+//                    progress(receivedSize: Int(receivedSize), Int(expectedSize))
+//                }, downloadTaskUpdated: nil) { (result) in
+//                    switch result {
+//                    case .success(let _result):
+//                        done(image: _result.image, error: nil)
+//                    case .failure(let _error):
+//                        done(image: nil, error: _error)
+//                    }
+//                }
             case .sdwebimage:
-                SDWebImageManager.shared().loadImage(
-                    with: url,
-                    options: [.cacheMemoryOnly,.refreshCached],
-                    progress: { (receivedSize, expectedSize, url) in
-                    progress(receivedSize: Int(receivedSize), Int(expectedSize))
-                }) { (image, data, error, cacheType, finished, imageURL) in
-                    done(image: image, error: error)
-                }
+                break
+//                SDWebImageManager.shared.loadImage(with: url, options: [.cacheMemoryOnly,.refreshCached], progress: { (receivedSize, expectedSize, url) in
+//                    progress(receivedSize: Int(receivedSize), Int(expectedSize))
+//                }) { (image, data, error, cacheType, finished, imageURL) in
+//                    done(image: image, error: error)
+//                }
+//                SDWebImageManager.shared.loadImage(
+//                    with: url,
+//                    options: [.cacheMemoryOnly,.refreshCached],
+//                    progress: { (receivedSize, expectedSize, url) in
+//                    progress(receivedSize: Int(receivedSize), Int(expectedSize))
+//                }) { (image, data, error, cacheType, finished, imageURL) in
+//                    done(image: image, error: error)
+//                }
             case .yywebimage:
                 YYWebImageManager.shared().requestImage(
                     with: url,

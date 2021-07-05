@@ -10,7 +10,7 @@ import UIKit
 import Longinus
 import YYWebImage
 import SDWebImage
-import Kingfisher
+//import Kingfisher
 import BBWebImage
 
 class CacheIOViewController: ConsoleLabelViewController {
@@ -152,14 +152,14 @@ class CacheIOViewController: ConsoleLabelViewController {
             var startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                SDWebImageManager.shared().imageCache?.store(item.1, imageData: nil, forKey: item.0, toDisk: false, completion: nil)
+                SDWebImageManager.shared.imageCache.store(item.1, imageData: nil, forKey: item.0, cacheType: SDImageCacheType.memory, completion: nil)
             }
             storeTime += CACurrentMediaTime() - startTime
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                let image = SDWebImageManager.shared().imageCache?.imageFromMemoryCache(forKey: item.0)
+                let image = SDWebImageManager.shared.imageCache.queryImage(forKey: item.0, options: [], context: nil, cacheType: .memory, completion: nil)
                 if image == nil { LGPrint("💊 SDWebImage 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
@@ -167,7 +167,8 @@ class CacheIOViewController: ConsoleLabelViewController {
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                SDWebImageManager.shared().imageCache?.removeImage(forKey: item.0, fromDisk: false, withCompletion: nil)
+                SDWebImageManager.shared.imageCache.removeImage(forKey: item.0, cacheType: .memory, completion: nil)
+//                SDWebImageManager.shared().imageCache?.removeImage(forKey: item.0, fromDisk: false, withCompletion: nil)
             }
             removeTime += CACurrentMediaTime() - startTime
         }
@@ -180,25 +181,25 @@ class CacheIOViewController: ConsoleLabelViewController {
             var startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                KingfisherManager.shared.cache.store(item.1,
-                                                     forKey: item.0,
-                                                     options: KingfisherParsedOptionsInfo([.cacheMemoryOnly]),
-                                                     toDisk: false)
+//                KingfisherManager.shared.cache.store(item.1,
+//                                                     forKey: item.0,
+//                                                     options: KingfisherParsedOptionsInfo([.cacheMemoryOnly]),
+//                                                     toDisk: false)
             }
             storeTime += CACurrentMediaTime() - startTime
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                let image = KingfisherManager.shared.cache.retrieveImageInMemoryCache(forKey: item.0)
-                if image == nil { LGPrint("💊 Kingfisher 取到图片为空") }
+//                let image = KingfisherManager.shared.cache.retrieveImageInMemoryCache(forKey: item.0)
+//                if image == nil { LGPrint("💊 Kingfisher 取到图片为空") }
             }
             getTime += CACurrentMediaTime() - startTime
             
             startTime = CACurrentMediaTime()
             for item in allTestImages {
                 if exited { return }
-                KingfisherManager.shared.cache.removeImage(forKey: item.0, fromMemory: true, fromDisk: false, completionHandler: nil)
+//                KingfisherManager.shared.cache.removeImage(forKey: item.0, fromMemory: true, fromDisk: false, completionHandler: nil)
             }
             removeTime += CACurrentMediaTime() - startTime
         }
@@ -389,14 +390,15 @@ class CacheIOViewController: ConsoleLabelViewController {
             }
         case .sdwebimage:
             // SDWebImage
-            SDWebImageManager.shared().imageCache?.config.shouldCacheImagesInMemory = false
+//            SDWebImageManager.shared.imageCache.shouldca
+//            SDWebImageManager.shared().imageCache?.config.shouldCacheImagesInMemory = false
             func testStore(_ completion: @escaping NoParamterBlock) {
                 print("\n\n\(type.name) 开始磁盘存储")
                 var i = allTestImages.count
                 for (index, item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    SDWebImageManager.shared().imageCache?.store(item.1, imageData: nil, forKey: item.0, toDisk: true) {
+                    SDWebImageManager.shared.imageCache.store(item.1, imageData: nil, forKey: item.0, cacheType: .disk) {
                         print("\(type.name) 保存第\(index)张完成")
                         i -= 1
                         if i == 0 {
@@ -412,15 +414,15 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index, item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    SDWebImageManager.shared().imageCache?.queryCacheOperation(forKey: item.0) { (image, _, _) in
-                        print("\(type.name) 读取第\(index)张完成")
-                        assert(image != nil)
-                        i -= 1
-                        if i == 0 {
-                            getTime += CACurrentMediaTime() - startTime
-                            completion()
-                        }
-                    }
+//                    SDWebImageManager.shared.imageCache.queryCacheOperation(forKey: item.0) { (image, _, _) in
+//                        print("\(type.name) 读取第\(index)张完成")
+//                        assert(image != nil)
+//                        i -= 1
+//                        if i == 0 {
+//                            getTime += CACurrentMediaTime() - startTime
+//                            completion()
+//                        }
+//                    }
                 }
             }
             func testRemove(_ completion: @escaping NoParamterBlock) {
@@ -429,14 +431,14 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index,item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    SDWebImageManager.shared().imageCache?.removeImage(forKey: item.0, fromDisk: true) {
-                        print("\(type.name) 清理第\(index)张完成")
-                        i -= 1
-                        if i == 0 {
-                            removeTime += CACurrentMediaTime() - startTime
-                            completion()
-                        }
-                    }
+//                    SDWebImageManager.shared().imageCache?.removeImage(forKey: item.0, fromDisk: true) {
+//                        print("\(type.name) 清理第\(index)张完成")
+//                        i -= 1
+//                        if i == 0 {
+//                            removeTime += CACurrentMediaTime() - startTime
+//                            completion()
+//                        }
+//                    }
                 }
             }
             testStore {
@@ -454,15 +456,15 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index, item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    KingfisherManager.shared.cache.store(item.1, original: nil, forKey: item.0, toDisk: true) {
-                        print("\(type.name) 保存第\(index)张完成")
-                        i -= 1
-                        if i == 0 {
-                            storeTime += CACurrentMediaTime() - startTime
-                            KingfisherManager.shared.cache.clearMemoryCache()
-                            completion()
-                        }
-                    }
+//                    KingfisherManager.shared.cache.store(item.1, original: nil, forKey: item.0, toDisk: true) {
+//                        print("\(type.name) 保存第\(index)张完成")
+//                        i -= 1
+//                        if i == 0 {
+//                            storeTime += CACurrentMediaTime() - startTime
+//                            KingfisherManager.shared.cache.clearMemoryCache()
+//                            completion()
+//                        }
+//                    }
                 }
             }
             func testGet(_ completion: @escaping NoParamterBlock) {
@@ -471,15 +473,15 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index, item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    KingfisherManager.shared.cache.retrieveImage(forKey: item.0, options: nil) { (image, _) in
-                        print("\(type.name) 读取第\(index)张完成")
-                        assert(image != nil)
-                        i -= 1
-                        if i == 0 {
-                            getTime += CACurrentMediaTime() - startTime
-                            completion()
-                        }
-                    }
+//                    KingfisherManager.shared.cache.retrieveImage(forKey: item.0, options: nil) { (image, _) in
+//                        print("\(type.name) 读取第\(index)张完成")
+//                        assert(image != nil)
+//                        i -= 1
+//                        if i == 0 {
+//                            getTime += CACurrentMediaTime() - startTime
+//                            completion()
+//                        }
+//                    }
                 }
             }
             func testRemove(_ completion: @escaping NoParamterBlock) {
@@ -488,14 +490,14 @@ class CacheIOViewController: ConsoleLabelViewController {
                 for (index,item) in allTestImages.enumerated() {
                     if exited { return }
                     let startTime = CACurrentMediaTime()
-                    KingfisherManager.shared.cache.removeImage(forKey: item.0, fromMemory: false, fromDisk: true) {
-                        print("\(type.name) 清理第\(index)张完成")
-                        i -= 1
-                        if i == 0 {
-                            removeTime += CACurrentMediaTime() - startTime
-                            completion()
-                        }
-                    }
+//                    KingfisherManager.shared.cache.removeImage(forKey: item.0, fromMemory: false, fromDisk: true) {
+//                        print("\(type.name) 清理第\(index)张完成")
+//                        i -= 1
+//                        if i == 0 {
+//                            removeTime += CACurrentMediaTime() - startTime
+//                            completion()
+//                        }
+//                    }
                 }
             }
             testStore {

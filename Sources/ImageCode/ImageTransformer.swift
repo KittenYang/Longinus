@@ -231,7 +231,7 @@ public extension LonginusExtension where Base: UIImage {
                tintMode tintBlendMode:CGBlendMode,
                saturation:CGFloat,
                maskImage:UIImage?) -> UIImage? {
-        if size.height < 1 || size.height < 1 {
+        if size.width < 1 || size.height < 1 {
             LGPrint("lg_image  error: invalid size: \(size). Both dimensions must be >= 1: \(base.description) ")
             return nil
         }
