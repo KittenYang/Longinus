@@ -43,6 +43,12 @@ public extension LonginusExtension where Base == Data {
         {
             return .JPEG
             
+        } else if buffer[0] == 0x52, // Google Storage JPEG
+            buffer[1] == 0x49,
+            buffer[2] == 0x46
+        {
+            return .JPEG
+            
         } else if buffer[0] == ImageFormat.HeaderData.GIF[0],
             buffer[1] == ImageFormat.HeaderData.GIF[1],
             buffer[2] == ImageFormat.HeaderData.GIF[2]
