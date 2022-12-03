@@ -306,7 +306,6 @@ public class AnimatedImage: UIImage, AnimatedImageCodeable {
     }
     
     deinit {
-        lg.cancelPreloadTask()
         NotificationCenter.default.removeObserver(self)
     }
     
