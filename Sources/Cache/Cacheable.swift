@@ -81,7 +81,7 @@ public protocol CacheAsyncStandard {
 /*
 Represents cache trimable ablity.
 */
-protocol AutoTrimable: class {
+protocol AutoTrimable: AnyObject {
     var countLimit: Int32 { get }
     var costLimit: Int32 { get }
     var ageLimit: CacheAge { get }
