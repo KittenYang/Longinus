@@ -34,7 +34,7 @@ struct SwiftUIList : View {
     let index = 0 ..< 20
 
     var body: some View {
-        List(index) { i in
+		List(index,id: \.self) { i in
             ListCell(index: i)
         }.navigationBarTitle(Text("SwiftUI List"), displayMode: .inline)
     }
