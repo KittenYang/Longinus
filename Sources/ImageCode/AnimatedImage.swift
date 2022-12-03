@@ -254,7 +254,7 @@ public class AnimatedImage: UIImage, AnimatedImageCodeable {
     fileprivate var frames: [AnimatedImageFrame]!
     fileprivate(set) var decoder: (ImageCodeable & AnimatedImageCodeable)!
     fileprivate(set) var views: NSHashTable<AnimatedImageView>!
-    fileprivate(set) var lock: DispatchSemaphore!
+    fileprivate(set) var lock: DispatchSemaphore = DispatchSemaphore(value: 1)
     fileprivate(set) var sentinel: Int32!
     fileprivate(set) var preloadTask: (() -> Void)?
     
@@ -342,7 +342,6 @@ public class AnimatedImage: UIImage, AnimatedImageCodeable {
         frames = imageFrames
         decoder = currentDecoder
         views = NSHashTable(options: .weakMemory)
-        lock = DispatchSemaphore(value: 1)
         sentinel = 0
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
