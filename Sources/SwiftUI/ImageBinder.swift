@@ -28,7 +28,6 @@
 #if canImport(SwiftUI) && canImport(Combine)
 import Combine
 import SwiftUI
-import Longinus
 
 @available(iOS 13.0, *)
 extension LGImage {

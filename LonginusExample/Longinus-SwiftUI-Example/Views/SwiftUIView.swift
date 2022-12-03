@@ -37,7 +37,7 @@ struct SwiftUIView : View {
         VStack {
             LGImage(source: URL(string: "https://github.com/KittenYang/Template-Image-Set/blob/master/Landscape/landscape-\(index).jpg?raw=true"), placeholder: {
                     Image(systemName: "arrow.2.circlepath")
-                        .font(.largeTitle) })
+				.font(.largeTitle) },options: [.imageWithFadeAnimation])
                 .onProgress(progress: { (data, expectedSize, _) in
                     DispatchQueue.main.async {
                         self.progressValue = Float((data?.count ?? 0) / expectedSize)
